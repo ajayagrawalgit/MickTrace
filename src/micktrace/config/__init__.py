@@ -1,0 +1,1 @@
+"""Configuration system for micktrace."""
