@@ -130,8 +130,7 @@ def main():
 
     logger.info("=== Micktrace Example Complete ===")
 
-    print("
-Check 'example.log' for the complete log output!")
+    print("Check 'example.log' for the complete log output!")
 
 
 if __name__ == "__main__":
