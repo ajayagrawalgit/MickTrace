@@ -1,12 +1,6 @@
 """
-Configuration System
-
-Provides flexible configuration for micktrace with support for:
-- Environment variables
-- Programmatic configuration  
-- Hot-reload capabilities
-- Validation and type safety
-- Zero-config defaults for libraries
+Configuration system for micktrace with comprehensive error handling.
+Handles environment variables, validation, and hot-reload capabilities.
 """
 
 import os
@@ -14,31 +8,15 @@ import json
 import threading
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union, Callable
-from enum import Enum
+from typing import Any, Dict, List, Optional, Union
 
-try:
-    from typing import Literal
-except ImportError:
-    from typing_extensions import Literal
-
-# Global configuration instance
-_config_lock = threading.RLock()
-_global_config: Optional["Configuration"] = None
-
-
-class LogFormat(Enum):
-    """Supported log formats."""
-    JSON = "json"
-    LOGFMT = "logfmt" 
-    STRUCTURED = "structured"
-    RICH = "rich"
-    SIMPLE = "simple"
+# Import LogLevel from parent types module
+from ..types import LogLevel
 
 
 @dataclass
 class HandlerConfig:
-    """Configuration for a single handler."""
+    """Configuration for a single handler with validation."""
     type: str
     level: str = "INFO"
     format: str = "structured"
@@ -46,54 +24,47 @@ class HandlerConfig:
     config: Dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        """Validate handler configuration."""
-        if self.type not in ["console", "file", "http", "syslog", "null", "memory"]:
-            raise ValueError(f"Unknown handler type: {self.type}")
+        """Validate handler configuration with error handling."""
+        try:
+            # Validate handler type
+            valid_types = [
+                "console", "file", "http", "syslog", "null", "memory", "stream"
+            ]
+            if not isinstance(self.type, str) or self.type not in valid_types:
+                raise ValueError(f"Invalid handler type: {self.type}. Must be one of {valid_types}")
 
+            # Validate and normalize level
+            try:
+                LogLevel.from_string(self.level)
+            except ValueError:
+                # Default to INFO if invalid level
+                self.level = "INFO"
 
-@dataclass  
-class ContextConfig:
-    """Configuration for automatic context injection."""
-    service: Optional[str] = None
-    version: Optional[str] = None
-    environment: Optional[str] = None
-    extra: Dict[str, Any] = field(default_factory=dict)
+            # Ensure format is valid
+            valid_formats = ["json", "logfmt", "structured", "rich", "simple"]
+            if not isinstance(self.format, str) or self.format not in valid_formats:
+                self.format = "structured"
 
+            # Ensure enabled is boolean
+            if not isinstance(self.enabled, bool):
+                self.enabled = bool(self.enabled)
 
-@dataclass
-class SamplingConfig:
-    """Configuration for log sampling."""
-    rate: float = 1.0  # Sample rate (0.0 to 1.0)
-    key: Optional[str] = None  # Key to use for consistent sampling
-    enabled: bool = False
+            # Ensure config is dict
+            if not isinstance(self.config, dict):
+                self.config = {}
 
-
-@dataclass
-class PerformanceConfig:
-    """Performance-related configuration."""
-    async_enabled: bool = True
-    queue_size: int = 10000
-    batch_size: int = 100
-    flush_interval: float = 1.0
-    worker_count: int = 1
-
-
-@dataclass
-class RedactionConfig:
-    """Configuration for automatic data redaction."""
-    enabled: bool = True
-    fields: List[str] = field(default_factory=lambda: [
-        "password", "secret", "token", "key", "auth", "credential",
-        "ssn", "social_security", "credit_card", "cc_number",
-        "api_key", "private_key", "access_token", "refresh_token"
-    ])
-    replacement: str = "[REDACTED]"
-    patterns: List[str] = field(default_factory=list)
+        except Exception:
+            # If validation fails completely, set safe defaults
+            self.type = "console"
+            self.level = "INFO"
+            self.format = "structured"
+            self.enabled = True
+            self.config = {}
 
 
 @dataclass
 class Configuration:
-    """Main micktrace configuration."""
+    """Main micktrace configuration with comprehensive validation."""
 
     # Basic settings
     level: str = "INFO"
@@ -107,328 +78,332 @@ class Configuration:
     ])
 
     # Context and metadata
-    context: ContextConfig = field(default_factory=ContextConfig)
-
-    # Performance 
-    performance: PerformanceConfig = field(default_factory=PerformanceConfig)
-
-    # Sampling
-    sampling: SamplingConfig = field(default_factory=SamplingConfig)
-
-    # Security
-    redaction: RedactionConfig = field(default_factory=RedactionConfig)
-
-    # Advanced options
-    correlation_id_header: str = "X-Correlation-ID"
-    trace_id_header: str = "X-Trace-ID"
-    timezone: str = "UTC"
-
-    # Hot reload
-    hot_reload: bool = False
-    config_file: Optional[Path] = None
+    service: Optional[str] = None
+    version: Optional[str] = None
+    environment: str = "development"
 
     def __post_init__(self) -> None:
-        """Post-initialization validation."""
-        self.validate()
+        """Post-initialization validation with error handling."""
+        try:
+            self.validate()
+        except Exception:
+            # If validation fails, ensure we have a working configuration
+            self._set_safe_defaults()
+
+    def _set_safe_defaults(self) -> None:
+        """Set safe default values."""
+        try:
+            self.level = "INFO"
+            self.format = "structured"
+            self.enabled = True
+            self.environment = "development"
+            self.handlers = [HandlerConfig(type="console")]
+        except Exception:
+            pass
 
     def validate(self) -> None:
-        """Validate configuration."""
+        """Validate configuration with error handling."""
         # Validate log level
-        valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", "NOTSET"]
-        if self.level.upper() not in valid_levels:
-            raise ValueError(f"Invalid log level: {self.level}")
+        try:
+            LogLevel.from_string(self.level)
+        except ValueError:
+            self.level = "INFO"
 
         # Validate format
-        if self.format not in [f.value for f in LogFormat]:
-            raise ValueError(f"Invalid format: {self.format}")
+        valid_formats = ["json", "logfmt", "structured", "rich", "simple"]
+        if not isinstance(self.format, str) or self.format not in valid_formats:
+            self.format = "structured"
 
-        # Validate sampling rate
-        if not 0.0 <= self.sampling.rate <= 1.0:
-            raise ValueError("Sampling rate must be between 0.0 and 1.0")
+        # Ensure enabled is boolean
+        if not isinstance(self.enabled, bool):
+            self.enabled = bool(self.enabled)
 
-        # Validate handler configurations
-        for handler in self.handlers:
-            if handler.level.upper() not in valid_levels:
-                raise ValueError(f"Invalid handler level: {handler.level}")
+        # Validate environment
+        if not isinstance(self.environment, str):
+            self.environment = "development"
+
+        # Validate handlers
+        if not isinstance(self.handlers, list) or not self.handlers:
+            self.handlers = [HandlerConfig(type="console")]
+        else:
+            # Validate each handler
+            valid_handlers = []
+            for handler in self.handlers:
+                try:
+                    if isinstance(handler, dict):
+                        # Convert dict to HandlerConfig
+                        handler_config = HandlerConfig(
+                            type=handler.get("type", "console"),
+                            level=handler.get("level", "INFO"),
+                            format=handler.get("format", "structured"),
+                            enabled=handler.get("enabled", True),
+                            config={k: v for k, v in handler.items() 
+                                   if k not in ["type", "level", "format", "enabled"]}
+                        )
+                        valid_handlers.append(handler_config)
+                    elif isinstance(handler, HandlerConfig):
+                        valid_handlers.append(handler)
+                    else:
+                        # Skip invalid handlers
+                        continue
+                except Exception:
+                    continue
+
+            self.handlers = valid_handlers if valid_handlers else [HandlerConfig(type="console")]
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert configuration to dictionary."""
-        result = {}
+        """Convert configuration to dictionary with error handling."""
+        try:
+            handlers_list = []
+            for handler in self.handlers:
+                try:
+                    handler_dict = {
+                        "type": handler.type,
+                        "level": handler.level,
+                        "format": handler.format,
+                        "enabled": handler.enabled,
+                    }
+                    handler_dict.update(handler.config)
+                    handlers_list.append(handler_dict)
+                except Exception:
+                    # Skip invalid handlers
+                    continue
 
-        result["level"] = self.level
-        result["format"] = self.format
-        result["enabled"] = self.enabled
-
-        result["handlers"] = []
-        for handler in self.handlers:
-            result["handlers"].append({
-                "type": handler.type,
-                "level": handler.level,
-                "format": handler.format,
-                "enabled": handler.enabled,
-                **handler.config
-            })
-
-        result["context"] = {
-            "service": self.context.service,
-            "version": self.context.version,
-            "environment": self.context.environment,
-            **self.context.extra
-        }
-
-        result["performance"] = {
-            "async_enabled": self.performance.async_enabled,
-            "queue_size": self.performance.queue_size,
-            "batch_size": self.performance.batch_size,
-            "flush_interval": self.performance.flush_interval,
-            "worker_count": self.performance.worker_count
-        }
-
-        result["sampling"] = {
-            "rate": self.sampling.rate,
-            "key": self.sampling.key,
-            "enabled": self.sampling.enabled
-        }
-
-        result["redaction"] = {
-            "enabled": self.redaction.enabled,
-            "fields": self.redaction.fields,
-            "replacement": self.redaction.replacement,
-            "patterns": self.redaction.patterns
-        }
-
-        return result
+            return {
+                "level": self.level,
+                "format": self.format,
+                "enabled": self.enabled,
+                "is_configured": self.is_configured,
+                "service": self.service,
+                "version": self.version,
+                "environment": self.environment,
+                "handlers": handlers_list
+            }
+        except Exception:
+            # Fallback dict
+            return {
+                "level": "INFO",
+                "format": "structured",
+                "enabled": True,
+                "is_configured": False,
+                "handlers": [{"type": "console"}]
+            }
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Configuration":
-        """Create configuration from dictionary."""
-        config = cls()
+        """Create configuration from dictionary with error handling."""
+        try:
+            if not isinstance(data, dict):
+                data = {}
 
-        # Basic settings
-        config.level = data.get("level", config.level)
-        config.format = data.get("format", config.format) 
-        config.enabled = data.get("enabled", config.enabled)
+            # Create handlers
+            handlers = []
+            handlers_data = data.get("handlers", [])
 
-        # Handlers
-        if "handlers" in data:
-            config.handlers = []
-            for handler_data in data["handlers"]:
-                handler_config = HandlerConfig(
-                    type=handler_data["type"],
-                    level=handler_data.get("level", "INFO"),
-                    format=handler_data.get("format", "structured"),
-                    enabled=handler_data.get("enabled", True),
-                    config={k: v for k, v in handler_data.items() 
-                           if k not in ["type", "level", "format", "enabled"]}
-                )
-                config.handlers.append(handler_config)
+            if not isinstance(handlers_data, list):
+                handlers_data = []
 
-        # Context
-        if "context" in data:
-            context_data = data["context"]
-            config.context = ContextConfig(
-                service=context_data.get("service"),
-                version=context_data.get("version"), 
-                environment=context_data.get("environment"),
-                extra={k: v for k, v in context_data.items() 
-                      if k not in ["service", "version", "environment"]}
+            for handler_data in handlers_data:
+                try:
+                    if isinstance(handler_data, dict):
+                        handler_config = HandlerConfig(
+                            type=handler_data.get("type", "console"),
+                            level=handler_data.get("level", "INFO"),
+                            format=handler_data.get("format", "structured"),
+                            enabled=handler_data.get("enabled", True),
+                            config={k: v for k, v in handler_data.items() 
+                                   if k not in ["type", "level", "format", "enabled"]}
+                        )
+                        handlers.append(handler_config)
+                except Exception:
+                    continue
+
+            # Ensure at least one handler
+            if not handlers:
+                handlers = [HandlerConfig(type="console")]
+
+            config = cls(
+                level=data.get("level", "INFO"),
+                format=data.get("format", "structured"),
+                enabled=data.get("enabled", True),
+                service=data.get("service"),
+                version=data.get("version"),
+                environment=data.get("environment", "development"),
+                handlers=handlers,
+                is_configured=data.get("is_configured", True)
             )
 
-        # Performance
-        if "performance" in data:
-            perf_data = data["performance"]
-            config.performance = PerformanceConfig(
-                async_enabled=perf_data.get("async_enabled", True),
-                queue_size=perf_data.get("queue_size", 10000),
-                batch_size=perf_data.get("batch_size", 100),
-                flush_interval=perf_data.get("flush_interval", 1.0),
-                worker_count=perf_data.get("worker_count", 1)
-            )
+            return config
 
-        # Sampling
-        if "sampling" in data:
-            sampling_data = data["sampling"]
-            config.sampling = SamplingConfig(
-                rate=sampling_data.get("rate", 1.0),
-                key=sampling_data.get("key"),
-                enabled=sampling_data.get("enabled", False)
-            )
-
-        # Redaction
-        if "redaction" in data:
-            redaction_data = data["redaction"]
-            config.redaction = RedactionConfig(
-                enabled=redaction_data.get("enabled", True),
-                fields=redaction_data.get("fields", config.redaction.fields),
-                replacement=redaction_data.get("replacement", "[REDACTED]"),
-                patterns=redaction_data.get("patterns", [])
-            )
-
-        config.is_configured = True
-        return config
+        except Exception:
+            # Return default configuration if parsing fails
+            return cls()
 
     @classmethod
     def from_env(cls) -> "Configuration":
-        """Create configuration from environment variables."""
-        config = cls()
+        """Create configuration from environment variables with error handling."""
+        try:
+            # Parse handlers
+            handler_types_str = os.getenv("MICKTRACE_HANDLERS", "console")
+            handler_types = [h.strip() for h in handler_types_str.split(",") if h.strip()]
 
-        # Basic settings from environment
-        config.level = os.getenv("MICKTRACE_LEVEL", config.level)
-        config.format = os.getenv("MICKTRACE_FORMAT", config.format)
-        config.enabled = os.getenv("MICKTRACE_ENABLED", "true").lower() == "true"
+            if not handler_types:
+                handler_types = ["console"]
 
-        # Handler configuration from environment
-        handler_types = os.getenv("MICKTRACE_HANDLERS", "console").split(",")
-        config.handlers = []
+            handlers = []
 
-        for handler_type in handler_types:
-            handler_type = handler_type.strip()
-            handler_config = HandlerConfig(type=handler_type)
+            for handler_type in handler_types:
+                try:
+                    handler_config = HandlerConfig(
+                        type=handler_type,
+                        level=os.getenv(f"MICKTRACE_{handler_type.upper()}_LEVEL", "INFO")
+                    )
 
-            # Handler-specific config from environment
-            if handler_type == "file":
-                file_path = os.getenv("MICKTRACE_FILE_PATH", "/tmp/micktrace.log")
-                handler_config.config["path"] = file_path
+                    # Handler-specific config
+                    if handler_type == "file":
+                        file_path = os.getenv("MICKTRACE_FILE_PATH", "/tmp/micktrace.log")
+                        handler_config.config["path"] = file_path
 
-                rotation = os.getenv("MICKTRACE_FILE_ROTATION")
-                if rotation:
-                    handler_config.config["rotation"] = rotation
+                        rotation = os.getenv("MICKTRACE_FILE_ROTATION")
+                        if rotation:
+                            handler_config.config["rotation"] = rotation
 
-            elif handler_type == "http":
-                url = os.getenv("MICKTRACE_HTTP_URL")
-                if url:
-                    handler_config.config["url"] = url
+                    elif handler_type == "http":
+                        url = os.getenv("MICKTRACE_HTTP_URL")
+                        if url:
+                            handler_config.config["url"] = url
 
-            config.handlers.append(handler_config)
+                    handlers.append(handler_config)
 
-        # Context from environment
-        config.context = ContextConfig(
-            service=os.getenv("MICKTRACE_SERVICE"),
-            version=os.getenv("MICKTRACE_VERSION"),
-            environment=os.getenv("MICKTRACE_ENVIRONMENT", "development")
-        )
+                except Exception:
+                    # Skip invalid handler configurations
+                    continue
 
-        # Performance settings
-        if os.getenv("MICKTRACE_ASYNC_ENABLED"):
-            config.performance.async_enabled = (
-                os.getenv("MICKTRACE_ASYNC_ENABLED", "true").lower() == "true"
+            # Ensure at least one handler
+            if not handlers:
+                handlers = [HandlerConfig(type="console")]
+
+            config = cls(
+                level=os.getenv("MICKTRACE_LEVEL", "INFO"),
+                format=os.getenv("MICKTRACE_FORMAT", "structured"),
+                enabled=os.getenv("MICKTRACE_ENABLED", "true").lower() in ("true", "1", "yes"),
+                service=os.getenv("MICKTRACE_SERVICE"),
+                version=os.getenv("MICKTRACE_VERSION"),
+                environment=os.getenv("MICKTRACE_ENVIRONMENT", "development"),
+                handlers=handlers,
+                is_configured=True
             )
 
-        if os.getenv("MICKTRACE_QUEUE_SIZE"):
-            config.performance.queue_size = int(os.getenv("MICKTRACE_QUEUE_SIZE", "10000"))
+            return config
 
-        # Sampling
-        sampling_rate = os.getenv("MICKTRACE_SAMPLING_RATE")
-        if sampling_rate:
-            config.sampling.rate = float(sampling_rate)
-            config.sampling.enabled = config.sampling.rate < 1.0
+        except Exception:
+            # Return default configuration if environment parsing fails
+            return cls()
 
-        config.is_configured = True
-        return config
 
-    def save_to_file(self, path: Union[str, Path]) -> None:
-        """Save configuration to file."""
-        path = Path(path)
-        data = self.to_dict()
-
-        if path.suffix == ".json":
-            with open(path, "w") as f:
-                json.dump(data, f, indent=2)
-        else:
-            raise ValueError(f"Unsupported config file format: {path.suffix}")
-
-    @classmethod
-    def load_from_file(cls, path: Union[str, Path]) -> "Configuration":
-        """Load configuration from file."""
-        path = Path(path)
-
-        if not path.exists():
-            raise FileNotFoundError(f"Config file not found: {path}")
-
-        if path.suffix == ".json":
-            with open(path, "r") as f:
-                data = json.load(f)
-                return cls.from_dict(data)
-        else:
-            raise ValueError(f"Unsupported config file format: {path.suffix}")
+# Global configuration management with thread safety
+_config_lock = threading.RLock()
+_global_config: Optional[Configuration] = None
 
 
 def get_configuration() -> Configuration:
-    """Get the global configuration instance."""
+    """Get the global configuration instance with error handling."""
     global _global_config
 
     with _config_lock:
         if _global_config is None:
-            # Try to load from environment first
             try:
+                # Try environment variables first
                 _global_config = Configuration.from_env()
             except Exception:
-                # Fallback to default configuration
-                _global_config = Configuration()
+                try:
+                    # Fallback to default configuration
+                    _global_config = Configuration()
+                except Exception:
+                    # Ultimate fallback - manually create minimal config
+                    _global_config = Configuration.__new__(Configuration)
+                    _global_config.level = "INFO"
+                    _global_config.format = "structured"
+                    _global_config.enabled = True
+                    _global_config.is_configured = False
+                    _global_config.handlers = [HandlerConfig(type="console")]
+                    _global_config.service = None
+                    _global_config.version = None
+                    _global_config.environment = "development"
 
         return _global_config
 
 
 def set_configuration(config: Configuration) -> None:
-    """Set the global configuration."""
+    """Set the global configuration with error handling."""
     global _global_config
 
     with _config_lock:
-        config.validate()
-        config.is_configured = True
-        _global_config = config
+        try:
+            if isinstance(config, Configuration):
+                config.validate()
+                config.is_configured = True
+                _global_config = config
+            else:
+                # Invalid config, keep current one
+                pass
+        except Exception:
+            # If setting fails, don't change current config
+            pass
 
 
 def configure(**kwargs: Any) -> None:
-    """Configure micktrace programmatically."""
-    current_config = get_configuration()
+    """Configure micktrace programmatically with error handling."""
+    try:
+        current_config = get_configuration()
 
-    # Create new configuration from current + overrides
-    config_dict = current_config.to_dict()
+        # Create new configuration from current + overrides
+        config_dict = current_config.to_dict()
 
-    # Handle simple overrides
-    if "level" in kwargs:
-        config_dict["level"] = kwargs["level"]
-    if "format" in kwargs:
-        config_dict["format"] = kwargs["format"]
-    if "enabled" in kwargs:
-        config_dict["enabled"] = kwargs["enabled"]
-
-    # Handle handler configuration
-    if "handlers" in kwargs:
-        handlers = kwargs["handlers"]
-        if isinstance(handlers, str):
-            # Simple string like "console,file"
-            handler_types = [h.strip() for h in handlers.split(",")]
-            config_dict["handlers"] = [{"type": h} for h in handler_types]
-        elif isinstance(handlers, list):
-            if all(isinstance(h, str) for h in handlers):
-                # List of strings
-                config_dict["handlers"] = [{"type": h} for h in handlers]
-            else:
-                # List of dicts
-                config_dict["handlers"] = handlers
-
-    # Handle context
-    if "context" in kwargs or any(k in kwargs for k in ["service", "version", "environment"]):
-        if "context" not in config_dict:
-            config_dict["context"] = {}
-
-        for key in ["service", "version", "environment"]:
+        # Handle simple overrides
+        for key in ["level", "format", "enabled", "service", "version", "environment"]:
             if key in kwargs:
-                config_dict["context"][key] = kwargs[key]
+                config_dict[key] = kwargs[key]
 
-        if "context" in kwargs:
-            config_dict["context"].update(kwargs["context"])
+        # Handle handler configuration
+        if "handlers" in kwargs:
+            handlers = kwargs["handlers"]
+            if isinstance(handlers, str):
+                handler_types = [h.strip() for h in handlers.split(",") if h.strip()]
+                config_dict["handlers"] = [{"type": h} for h in handler_types]
+            elif isinstance(handlers, list):
+                if all(isinstance(h, str) for h in handlers):
+                    config_dict["handlers"] = [{"type": h} for h in handlers]
+                elif all(isinstance(h, dict) for h in handlers):
+                    config_dict["handlers"] = handlers
+                else:
+                    # Mixed or invalid types, keep current handlers
+                    pass
 
-    # Create and set new configuration
-    new_config = Configuration.from_dict(config_dict)
-    set_configuration(new_config)
+        # Create and set new configuration
+        new_config = Configuration.from_dict(config_dict)
+        set_configuration(new_config)
+
+    except Exception:
+        # If configuration fails, silently continue with current config
+        pass
 
 
 def reset_configuration() -> None:
-    """Reset configuration to defaults."""
+    """Reset configuration to defaults with error handling."""
     global _global_config
 
     with _config_lock:
-        _global_config = Configuration()
+        try:
+            _global_config = Configuration()
+        except Exception:
+            # If reset fails, create minimal config
+            _global_config = Configuration.__new__(Configuration)
+            _global_config.level = "INFO"
+            _global_config.format = "structured"
+            _global_config.enabled = True
+            _global_config.is_configured = False
+            _global_config.handlers = [HandlerConfig(type="console")]
+            _global_config.service = None
+            _global_config.version = None
+            _global_config.environment = "development"

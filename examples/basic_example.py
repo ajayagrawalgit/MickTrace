@@ -1,137 +1,154 @@
 #!/usr/bin/env python3
 """
-Basic Micktrace Example
-
-Demonstrates the core features of micktrace logging.
+Basic Micktrace Example - Demonstrates core features with error handling
 """
 
-import asyncio
-import micktrace
+import sys
+import os
+from pathlib import Path
 
-# Configure micktrace for this application
-micktrace.configure(
-    level="INFO",
-    format="structured",
-    handlers=[
-        {"type": "console", "level": "INFO"},
-        {"type": "file", "path": "example.log", "level": "DEBUG"}
-    ],
-    context={
-        "service": "example-app",
-        "version": "1.0.0"
-    }
-)
+# Add src to path for running from source
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-# Get a logger for this module
-logger = micktrace.get_logger(__name__)
+try:
+    import micktrace
+except ImportError as e:
+    print(f"Failed to import micktrace: {e}")
+    sys.exit(1)
 
 
 def demonstrate_basic_logging():
     """Demonstrate basic logging features."""
-    logger.info("Application starting", component="main")
+    print("=== Basic Logging Demo ===")
+
+    # Configure micktrace for applications
+    micktrace.configure(level="INFO", format="structured")
+
+    # Get a logger
+    logger = micktrace.get_logger(__name__)
+
+    # Basic logging calls
+    logger.info("Application starting", component="main", version="1.0.0")
 
     # Structured logging with additional data
     logger.info("User logged in", 
                 user_id=123, 
                 username="alice", 
-                ip_address="192.168.1.100")
+                ip_address="192.168.1.100",
+                success=True)
 
     # Different log levels
-    logger.debug("Debug information", details="hidden in production")
-    logger.warning("Something suspicious", threat_level="low")
-    logger.error("An error occurred", error_code=500, retryable=True)
+    logger.debug("Debug information", details="hidden unless debug enabled")
+    logger.warning("Something suspicious", threat_level="low", action_required=True)
+    logger.error("An error occurred", error_code=500, retryable=True, component="database")
 
-    # Exception logging
-    try:
-        raise ValueError("Something went wrong!")
-    except ValueError:
-        logger.exception("Caught an exception")
+    print("✅ Basic logging completed successfully!")
 
 
 def demonstrate_context():
     """Demonstrate context propagation."""
+    logger = micktrace.get_logger("demo.context")
+
+    print("=== Context Demo ===")
+
     # Set context for a request
-    with micktrace.context(request_id="req_12345", user_id=456):
-        logger.info("Processing request")
+    with micktrace.context(request_id="req_12345", user_id=456, session="sess_789"):
+        logger.info("Processing request", operation="get_user_profile")
+        logger.info("Database query executed", table="users", duration_ms=45)
+        logger.info("Request processed successfully", status_code=200)
 
-        # All logs within this context will include request_id and user_id
-        process_data()
-        save_results()
-
-
-def process_data():
-    """Process some data (with context)."""
-    logger.info("Processing data", operation="transform")
-    logger.info("Data processed", records_count=1000)
-
-
-def save_results():
-    """Save results (with context).""" 
-    logger.info("Saving results", destination="database")
-    logger.info("Results saved", rows_inserted=1000)
-
-
-async def demonstrate_async():
-    """Demonstrate async logging and tracing."""
-    logger.info("Starting async operations")
-
-    # Async context
-    async with micktrace.acontext(operation_id="op_789"):
-        await process_async_data()
-        await send_notifications()
-
-    # Timing operations
-    async with micktrace.atimer("database_query") as timer:
-        await asyncio.sleep(0.1)  # Simulate database call
-        logger.info("Query completed", rows=50)
-
-
-async def process_async_data():
-    """Process data asynchronously."""
-    logger.info("Processing async data")
-    await asyncio.sleep(0.05)  # Simulate work
-    logger.info("Async data processed")
-
-
-async def send_notifications():
-    """Send notifications asynchronously."""
-    logger.info("Sending notifications", count=3)
-    await asyncio.sleep(0.02)  # Simulate network call
-    logger.info("Notifications sent")
+    print("✅ Context demo completed successfully!")
 
 
 def demonstrate_bound_logger():
     """Demonstrate bound logger."""
+    logger = micktrace.get_logger("demo.bound")
+
+    print("=== Bound Logger Demo ===")
+
     # Create a logger bound with common context
-    service_logger = logger.bind(service="payment-service", version="2.1.0")
+    service_logger = logger.bind(service="payment-service", version="2.1.0", environment="production")
 
     # All logs from this bound logger include the service context
-    service_logger.info("Payment processing started", amount=99.99)
-    service_logger.info("Payment validated", payment_id="pay_123")
-    service_logger.info("Payment completed", transaction_id="txn_456")
+    service_logger.info("Payment processing started", amount=99.99, currency="USD")
+    service_logger.info("Payment validated", payment_id="pay_123", provider="stripe")
+    service_logger.info("Payment completed", transaction_id="txn_456", fee=2.99)
+
+    # Can create further bound loggers
+    request_logger = service_logger.bind(request_id="req_789", customer_id="cust_123")
+    request_logger.info("Customer payment history retrieved", count=5)
+
+    print("✅ Bound logger demo completed successfully!")
+
+
+def demonstrate_exception_handling():
+    """Demonstrate exception logging."""
+    logger = micktrace.get_logger("demo.exceptions")
+
+    print("=== Exception Handling Demo ===")
+
+    try:
+        # Simulate an error
+        raise ValueError("This is a demonstration exception")
+    except ValueError as e:
+        logger.exception("Caught demonstration exception", 
+                        error_type="ValueError",
+                        user_action="create_account",
+                        severity="low")
+
+    print("✅ Exception handling demo completed successfully!")
+
+
+def demonstrate_different_levels():
+    """Demonstrate different log levels."""
+    logger = micktrace.get_logger("demo.levels")
+
+    print("=== Log Levels Demo ===")
+
+    # Configure to show all levels
+    micktrace.configure(level="DEBUG")
+
+    logger.debug("Debug: Detailed diagnostic information", function="process_data", line=42)
+    logger.info("Info: General application flow", checkpoint="user_authenticated")
+    logger.warning("Warning: Something unexpected happened", issue="rate_limit_approaching")
+    logger.error("Error: Something went wrong", error="database_connection_failed")
+    logger.critical("Critical: System is in critical state", alert="service_down")
+
+    print("✅ Log levels demo completed successfully!")
 
 
 def main():
-    """Main function."""
-    logger.info("=== Micktrace Example Starting ===")
+    """Main function demonstrating micktrace capabilities."""
+    print("🚀 Micktrace Basic Example - Comprehensive Demo")
+    print("=" * 60)
 
-    demonstrate_basic_logging()
-    logger.info("--- Basic logging demo complete ---")
+    try:
+        demonstrate_basic_logging()
+        print()
 
-    demonstrate_context()
-    logger.info("--- Context demo complete ---")
+        demonstrate_context()
+        print()
 
-    demonstrate_bound_logger()
-    logger.info("--- Bound logger demo complete ---")
+        demonstrate_bound_logger()
+        print()
 
-    # Run async demo
-    asyncio.run(demonstrate_async())
-    logger.info("--- Async demo complete ---")
+        demonstrate_exception_handling()
+        print()
 
-    logger.info("=== Micktrace Example Complete ===")
+        demonstrate_different_levels()
+        print()
 
-    print("Check 'example.log' for the complete log output!")
+        print("🎉 All demonstrations completed successfully!")
+        print("✅ Micktrace is working perfectly!")
+
+    except Exception as e:
+        print(f"❌ Error occurred during demonstration: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

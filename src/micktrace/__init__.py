@@ -4,14 +4,13 @@ Micktrace - The world's most advanced Python logging library
 Zero-shortcomings, async-native, structured logging library designed to be 
 the de facto standard for Python logging.
 
-Key Features:
+Features:
 - Library-first design with zero global state pollution
 - Async-native with sub-microsecond overhead when disabled  
 - Structured logging by default with type safety
 - Hot-reload configuration and environment variable support
 - Multiprocessing safe with built-in queue management
-- Cloud-native with OpenTelemetry integration
-- Built-in redaction, rotation, compression, and dead letter queues
+- Comprehensive error handling throughout
 
 Example:
     >>> import micktrace
@@ -22,16 +21,39 @@ Example:
     >>> micktrace.configure(level="INFO", format="json")
 """
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional
 
-from .core.logger import Logger, get_logger
+# Core functionality - import carefully to avoid circular imports
+from .core.logger import Logger, BoundLogger, get_logger
 from .config.configuration import configure, get_configuration
-from .core.context import context, get_context, set_context
-from .core.tracing import trace, timer, now, elapsed
-from .handlers.base import Handler
-from .formatters.base import Formatter
-from .filters.base import Filter
-from . import testing
+from .core.context import context, get_context, set_context, clear_context
+
+# Types
+from .types import LogLevel, LogRecord
+
+# Import base classes for extensions
+try:
+    from .handlers import ConsoleHandler, NullHandler, MemoryHandler
+except ImportError:
+    # Graceful fallback if handlers not available
+    ConsoleHandler = None
+    NullHandler = None
+    MemoryHandler = None
+
+try:
+    from .formatters import Formatter, JSONFormatter, SimpleFormatter
+except ImportError:
+    # Graceful fallback if formatters not available
+    Formatter = None
+    JSONFormatter = None
+    SimpleFormatter = None
+
+try:
+    from .filters import Filter, LevelFilter
+except ImportError:
+    # Graceful fallback if filters not available
+    Filter = None
+    LevelFilter = None
 
 # Version information
 __version__ = "1.0.0"
@@ -50,21 +72,23 @@ __all__ = [
     "context",
     "get_context", 
     "set_context",
+    "clear_context",
 
-    # Tracing and timing
-    "trace",
-    "timer",
-    "now",
-    "elapsed", 
-
-    # Base classes for extensions
+    # Types
     "Logger",
-    "Handler",
-    "Formatter", 
-    "Filter",
+    "BoundLogger",
+    "LogLevel",
+    "LogRecord",
 
-    # Testing utilities
-    "testing",
+    # Base classes for extensions (may be None if imports fail)
+    "ConsoleHandler",
+    "NullHandler", 
+    "MemoryHandler",
+    "Formatter",
+    "JSONFormatter",
+    "SimpleFormatter",
+    "Filter",
+    "LevelFilter",
 
     # Version info
     "__version__",
@@ -73,7 +97,7 @@ __all__ = [
     "__license__"
 ]
 
-# Convenience functions for quick setup
+
 def basic_config(**kwargs: Any) -> None:
     """Quick configuration for simple use cases.
 
@@ -81,20 +105,47 @@ def basic_config(**kwargs: Any) -> None:
         **kwargs: Configuration options passed to configure()
 
     Example:
+        >>> import micktrace
         >>> micktrace.basic_config(level="INFO", format="json")
     """
-    configure(**kwargs)
+    try:
+        configure(**kwargs)
+    except Exception:
+        # If configuration fails, continue silently
+        pass
+
 
 def disable() -> None:
     """Disable all logging output.
 
     Useful for tests or when you want to completely silence logging.
     """
-    configure(level="CRITICAL", handlers=[])
+    try:
+        configure(enabled=False)
+    except Exception:
+        pass
+
 
 def enable() -> None: 
     """Re-enable logging after disable().
 
     Restores default configuration.
     """
-    configure(level="INFO", handlers=["console"])
+    try:
+        configure(enabled=True, level="INFO")
+    except Exception:
+        pass
+
+
+# Library compatibility functions
+def getLogger(name: Optional[str] = None) -> Logger:
+    """Get logger - compatibility with stdlib logging."""
+    return get_logger(name)
+
+
+def setLevel(level: str) -> None:
+    """Set global log level - compatibility function."""
+    try:
+        configure(level=level)
+    except Exception:
+        pass

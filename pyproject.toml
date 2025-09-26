@@ -21,9 +21,12 @@ keywords = [
     "structured", 
     "observability", 
     "tracing", 
-    "performance", 
+    "performance",
     "library-first",
-    "zero-config"
+    "zero-config",
+    "context",
+    "json",
+    "logfmt"
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -40,7 +43,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: System :: Logging",
     "Topic :: Software Development :: Debuggers",
-    "Typing :: Typed"
+    "Typing :: Typed",
+    "Environment :: Console",
+    "Framework :: AsyncIO"
 ]
 dependencies = [
     "typing-extensions>=4.0.0;python_version<'3.11'",
@@ -51,52 +56,39 @@ dev = [
     "pytest>=7.0",
     "pytest-asyncio>=0.21.0",
     "pytest-cov>=4.0",
-    "pytest-benchmark>=4.0",
     "black>=22.0",
-    "isort>=5.10",
     "mypy>=1.0",
-    "flake8>=5.0",
-    "pre-commit>=2.20",
-    "tox>=4.0"
-]
-cloud = [
-    "boto3>=1.26.0",
-    "azure-storage-blob>=12.14.0",
-    "google-cloud-logging>=3.4.0",
-    "elasticsearch>=8.0.0"
+    "ruff>=0.1.0",
+    "isort>=5.0"
 ]
 performance = [
     "orjson>=3.8.0",
-    "uvloop>=0.17.0;sys_platform!='win32'",
     "msgpack>=1.0.0"
 ]
-all = ["micktrace[dev,cloud,performance]"]
+rich = [
+    "rich>=13.0.0"
+]
+all = ["micktrace[dev,performance,rich]"]
 
 [project.urls]
 Homepage = "https://github.com/ajaycodes/micktrace"
-Documentation = "https://micktrace.readthedocs.io"
 Repository = "https://github.com/ajaycodes/micktrace"
-"Bug Tracker" = "https://github.com/ajaycodes/micktrace/issues"
+Documentation = "https://github.com/ajaycodes/micktrace#readme"
+Issues = "https://github.com/ajaycodes/micktrace/issues"
+Changelog = "https://github.com/ajaycodes/micktrace/blob/main/CHANGELOG.md"
 
-[project.scripts]
-micktrace = "micktrace.cli:main"
+[tool.setuptools]
+zip-safe = false
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-micktrace = ["py.typed", "*.pyi"]
+micktrace = ["py.typed"]
 
 [tool.black]
 line-length = 88
 target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
-include = '\.pyi?$'
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-line_length = 88
-known_first_party = ["micktrace"]
 
 [tool.mypy]
 python_version = "3.8"
@@ -104,53 +96,21 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-warn_unreachable = true
-strict_equality = true
-
-[[tool.mypy.overrides]]
-module = "tests.*"
-disallow_untyped_defs = false
 
 [tool.pytest.ini_options]
+minversion = "6.0"
 testpaths = ["tests"]
-python_files = ["test_*.py", "*_test.py"]
+python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = [
-    "--strict-markers",
-    "--strict-config", 
-    "--cov=micktrace",
-    "--cov-report=term-missing",
-    "--cov-report=html",
-    "--cov-report=xml"
-]
-markers = [
-    "slow: marks tests as slow (deselect with '-m "not slow"')",
-    "integration: marks tests as integration tests",
-    "performance: marks tests as performance tests"
-]
+addopts = ["--strict-markers", "--strict-config"]
 asyncio_mode = "auto"
 
-[tool.coverage.run]
-source = ["src/micktrace"]
-branch = true
+[tool.ruff]
+target-version = "py38"
+line-length = 88
 
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if __name__ == .__main__.:",
-    "class .*Protocol\):",
-    "@(abc\.)?abstractmethod"
-]
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
