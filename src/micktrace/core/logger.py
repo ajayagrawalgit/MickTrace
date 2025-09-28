@@ -1,16 +1,18 @@
-"""
-Core Logger implementation with zero circular imports and perfect error handling.
-"""
+"""Core Logger implementation with comprehensive error handling and zero circular dependencies."""
 
 import inspect
 import sys
 import time
 import traceback
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Union, Awaitable
 
 from ..types import LogLevel, LogRecord
 from ..config.configuration import get_configuration
 from .context import get_context
+from ..handlers.handlers import FileHandler
+from ..handlers.rotating import RotatingFileHandler
+from ..handlers import ConsoleHandler, NullHandler, MemoryHandler
 
 
 class Logger:
@@ -18,39 +20,76 @@ class Logger:
 
     _loggers: Dict[str, "Logger"] = {}
     _library_loggers: Dict[str, "Logger"] = {}
+    _handler_map: Dict[str, Any] = {
+        'console': ConsoleHandler,
+        'file': FileHandler,
+        'null': NullHandler,
+        'memory': MemoryHandler,
+        'rotating_file': RotatingFileHandler
+    }
 
-    def __init__(self, name: str, level: Optional[Union[str, LogLevel]] = None, is_library: bool = False) -> None:
+    @classmethod
+    def create_handler(cls, handler_type: str, handler_config: Dict[str, Any]) -> Any:
+        """Create a handler instance from configuration."""
+        handler_name = handler_config.get('name', handler_type)
+        level = LogLevel.from_string(handler_config.get('level', 'INFO'))
+        enabled = handler_config.get('enabled', True)
+
+        # Skip disabled handlers
+        if not enabled or handler_type not in cls._handler_map:
+            return None
+            
+        # Build config - merge any remaining configs
+        config = handler_config.copy()
+        for key in ['type', 'name', 'level', 'enabled', 'format', 'filters', 'formatter']:
+            config.pop(key, None)
+
+        handler_class = cls._handler_map[handler_type]
+        return handler_class(name=handler_name, level=level, **config)
+
+    @classmethod
+    def get(cls, name: str) -> "Logger":
+        """Get or create a logger instance."""
+        if not name or not isinstance(name, str):
+            name = "root"
+            
+        is_library = any(name.startswith(lib) for lib in ['micktrace'])
+        logger_store = cls._library_loggers if is_library else cls._loggers
+        
+        if name in logger_store:
+            return logger_store[name]
+
+        logger = cls(name, is_library=is_library)
+        logger_store[name] = logger
+        return logger
+
+    def __init__(self, name: str, level: Optional[Union[str, LogLevel]] = None, 
+                 is_library: bool = False, bound_data: Optional[Dict[str, Any]] = None) -> None:
+        """Initialize a new logger instance."""
         self.name = str(name) if name else "unknown"
         self.is_library = bool(is_library)
         self._level = self._normalize_level(level) if level else LogLevel.NOTSET
         self._handlers: List[Any] = []
+        self._filters: List[Any] = []  # Initialize filters list
         self._config_cache_time = 0.0
         self._cached_config = None
         self._cache_ttl = 1.0
+        self._bound_data = bound_data or {}
+        
+        # Add context manager
+        from .context import get_context
+        self.context = get_context
 
-    @classmethod
-    def get(cls, name: str) -> "Logger":
-        """Get or create a logger instance with error handling."""
         try:
-            if not name or not isinstance(name, str):
-                name = "root"
-            if name not in cls._loggers:
-                cls._loggers[name] = cls(name)
-            return cls._loggers[name]
+            config = self._get_config()
+            if hasattr(config, 'handlers'):
+                for handler_config in config.handlers:
+                    if isinstance(handler_config, dict):
+                        handler = self.create_handler(handler_config.get('type', ''), handler_config)
+                        if handler:
+                            self._handlers.append(handler)
         except Exception:
-            return cls("error_logger")
-
-    @classmethod 
-    def for_library(cls, name: str) -> "Logger":
-        """Get a library-safe logger."""
-        try:
-            if not name or not isinstance(name, str):
-                name = "library"
-            if name not in cls._library_loggers:
-                cls._library_loggers[name] = cls(name, is_library=True)
-            return cls._library_loggers[name]
-        except Exception:
-            return cls("library_error", is_library=True)
+            pass
 
     def _get_config(self):
         """Get configuration with caching for performance."""
@@ -80,14 +119,28 @@ class Logger:
                         return log_level
                 closest = min(LogLevel, key=lambda x: abs(x.value - level))
                 return closest
-            else:
-                return LogLevel.INFO
+            return LogLevel.INFO
         except Exception:
             return LogLevel.INFO
 
+    def add_filter(self, filter_obj: Any) -> None:
+        """Add a filter to the logger.
+        
+        Args:
+            filter_obj: Filter object that implements should_sample(record) method
+        """
+        if hasattr(filter_obj, 'should_sample'):
+            self._filters.append(filter_obj)
+            
+    def remove_filter(self, filter_obj: Any) -> None:
+        """Remove a filter from the logger."""
+        if filter_obj in self._filters:
+            self._filters.remove(filter_obj)
+            
     def _should_log(self, level: LogLevel) -> bool:
         """Check if we should log at the given level."""
         try:
+            # Check basic logging conditions
             if self.is_library:
                 config = self._get_config()
                 if not getattr(config, 'is_configured', False):
@@ -98,7 +151,10 @@ class Logger:
                 return False
 
             effective_level = self._get_effective_level()
-            return level >= effective_level
+            if level < effective_level:
+                return False
+                
+            return True
         except Exception:
             return level >= LogLevel.ERROR
 
@@ -116,7 +172,6 @@ class Logger:
     def _get_caller_info(self) -> Dict[str, Any]:
         """Get information about the calling code."""
         caller_info = {"filename": "unknown", "lineno": 0, "function": "unknown", "module": "unknown"}
-
         try:
             frame = inspect.currentframe()
             stack_depth = 0
@@ -144,7 +199,7 @@ class Logger:
 
         return caller_info
 
-    def _create_record(self, level: LogLevel, message: str, extra: Optional[Dict[str, Any]] = None, 
+    def _create_record(self, level: LogLevel, message: str, extra: Optional[Dict[str, Any]] = None,
                       exc_info: Optional[Union[bool, tuple, BaseException]] = None) -> LogRecord:
         """Create a log record."""
         try:
@@ -205,22 +260,9 @@ class Logger:
                 exception=None
             )
 
-    def _log(self, level: LogLevel, message: str, exc_info: Optional[Union[bool, tuple, BaseException]] = None, 
-             **kwargs: Any) -> Optional[Awaitable[None]]:
-        """Internal logging method."""
-        try:
-            if not self._should_log(level):
-                return None
-            record = self._create_record(level, message, kwargs, exc_info)
-            self._emit_simple(record)
-        except Exception:
-            pass
-        return None
-
     def _emit_simple(self, record: LogRecord) -> None:
         """Simple emit for basic functionality."""
         try:
-            from datetime import datetime
             try:
                 dt = datetime.fromtimestamp(record.timestamp)
                 timestamp_str = dt.strftime("%Y-%m-%d %H:%M:%S")
@@ -237,7 +279,7 @@ class Logger:
                             try:
                                 data_parts.append(f"{key}={value}")
                             except Exception:
-                                data_parts.append(f"{key}=<error>")
+                                data_parts.append(f"{key}=<e>")
                     if data_parts:
                         parts.append(" ".join(data_parts))
                 except Exception:
@@ -247,12 +289,40 @@ class Logger:
             print(message)
         except Exception:
             try:
-                # Fixed: Use string concatenation instead of complex f-string
                 record_message = getattr(record, 'message', 'error')
                 fallback_msg = "LOG: " + str(record_message)
                 print(fallback_msg)
             except Exception:
                 pass
+
+    def _log(self, level: LogLevel, message: str, exc_info: Optional[Union[bool, tuple, BaseException]] = None,
+             **kwargs: Any) -> Optional[Awaitable[None]]:
+        """Internal logging method."""
+        try:
+            if not self._should_log(level):
+                return None
+
+            record = self._create_record(level, message, kwargs, exc_info)
+            
+            # Apply filters
+            for filter_obj in self._filters:
+                try:
+                    if not filter_obj.should_sample(record):
+                        return None
+                except Exception:
+                    pass
+            
+            self._emit_simple(record)
+
+            for handler in self._handlers:
+                try:
+                    handler.handle(record)
+                except Exception:
+                    pass
+
+        except Exception:
+            pass
+        return None
 
     def debug(self, message: str, exc_info: Optional[Union[bool, tuple, BaseException]] = None, **kwargs: Any) -> Optional[Awaitable[None]]:
         """Log a DEBUG level message."""
@@ -421,3 +491,8 @@ def get_logger(name: Optional[str] = None) -> Logger:
         return Logger.get(name)
     except Exception:
         return Logger("fallback")
+
+
+def bind(**kwargs: Any) -> Logger:
+    """Create a new logger with bound context."""
+    return get_logger().bind(**kwargs)

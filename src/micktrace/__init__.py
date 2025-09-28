@@ -24,9 +24,15 @@ Example:
 from typing import Any, Dict, Optional
 
 # Core functionality - import carefully to avoid circular imports
-from .core.logger import Logger, BoundLogger, get_logger
+from .core.logger import Logger, BoundLogger, get_logger, bind
 from .config.configuration import configure, get_configuration
-from .core.context import context, get_context, set_context, clear_context
+from .core.context import (
+    context,
+    acontext,
+    get_context,
+    set_context,
+    clear_context
+)
 
 # Types
 from .types import LogLevel, LogRecord
@@ -67,9 +73,11 @@ __all__ = [
     "get_logger",
     "configure", 
     "get_configuration",
+    "bind",
 
     # Context management
     "context",
+    "acontext",
     "get_context", 
     "set_context",
     "clear_context",

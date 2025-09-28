@@ -7,18 +7,64 @@ import asyncio
 import threading
 from contextlib import contextmanager, asynccontextmanager
 from contextvars import ContextVar, Token
-from typing import Any, Dict, List, Optional, Union, Iterator, AsyncIterator
+from copy import deepcopy
+from typing import Any, Callable, Dict, List, Optional, Union, Iterator, AsyncIterator
 from uuid import uuid4
+
+class ContextProvider:
+    """Dynamic context provider that can inject context based on runtime conditions."""
+    
+    def __init__(self, provider_func: Callable[[], Dict[str, Any]], refresh_interval: Optional[float] = None):
+        """Initialize a context provider.
+        
+        Args:
+            provider_func: Function that returns a dict of context values
+            refresh_interval: How often to refresh the context (in seconds), or None for every call
+        """
+        self.provider_func = provider_func
+        self.refresh_interval = refresh_interval
+        self._last_refresh = 0
+        self._cache: Dict[str, Any] = {}
+        
+    def get_context(self) -> Dict[str, Any]:
+        """Get the current context from the provider."""
+        import time
+        current_time = time.time()
+        
+        if (self.refresh_interval is None or 
+            current_time - self._last_refresh > self.refresh_interval):
+            try:
+                self._cache = self.provider_func()
+                self._last_refresh = current_time
+            except Exception as e:
+                self._cache = {"provider_error": str(e)}
+        
+        return deepcopy(self._cache)
 
 
 # Context variables for async-safe storage
 _log_context: ContextVar[Dict[str, Any]] = ContextVar('log_context', default={})
 _correlation_id: ContextVar[Optional[str]] = ContextVar('correlation_id', default=None)
 _trace_id: ContextVar[Optional[str]] = ContextVar('trace_id', default=None)
+_context_providers: Dict[str, ContextProvider] = {}
 
 # Thread-local fallback for non-async environments
 _thread_local = threading.local()
 
+
+def _merge_contexts(base: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
+    """Deep merge two context dictionaries."""
+    result = deepcopy(base)
+    
+    def merge_dict(d1: Dict[str, Any], d2: Dict[str, Any]) -> None:
+        for k, v in d2.items():
+            if k in d1 and isinstance(d1[k], dict) and isinstance(v, dict):
+                merge_dict(d1[k], v)
+            else:
+                d1[k] = deepcopy(v)
+                
+    merge_dict(result, new)
+    return result
 
 def get_context() -> Dict[str, Any]:
     """Get the current logging context with comprehensive error handling."""
@@ -28,8 +74,17 @@ def get_context() -> Dict[str, Any]:
         if context is None:
             context = {}
 
-        # Make a safe copy
-        result = context.copy() if isinstance(context, dict) else {}
+        # Make a safe copy and merge provider contexts
+        result = deepcopy(context) if isinstance(context, dict) else {}
+        
+        # Add provider contexts
+        for name, provider in _context_providers.items():
+            try:
+                provider_context = provider.get_context()
+                if provider_context:
+                    result[name] = provider_context
+            except Exception as e:
+                result[f"{name}_error"] = str(e)
 
         # Add special context variables if set
         try:

@@ -14,11 +14,14 @@ class ConsoleHandler:
 
     def emit(self, record: LogRecord) -> None:
         try:
+            print(f"\nDEBUG ConsoleHandler: record level={record.level} message={record.message}")
+            print(f"DEBUG ConsoleHandler: my level={getattr(self, 'level', 'NOTSET')}")
+            
             message = str(record.timestamp) + " " + record.level + " " + record.message
             self.stream.write(message + "\n")
             self.stream.flush()
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Failed to emit to console: {e}")
 
 
 class NullHandler:
