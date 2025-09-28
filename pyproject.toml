@@ -48,11 +48,6 @@ classifiers = [
     "Framework :: AsyncIO"
 ]
 dependencies = [
-    "aioboto3>=11.3.0",
-    "botocore>=1.31.62",
-    "azure-monitor-ingestion>=1.0.0b5",
-    "azure-core>=1.29.5",
-    "google-cloud-logging>=3.8.0",
     "typing-extensions>=4.0.0;python_version<'3.11'"
 ]
 
@@ -66,6 +61,13 @@ dev = [
     "ruff>=0.1.0",
     "isort>=5.0"
 ]
+cloud = [
+    "aioboto3>=11.3.0",
+    "botocore>=1.31.62",
+    "azure-monitor-ingestion>=1.0.0b5",
+    "azure-core>=1.29.5",
+    "google-cloud-logging>=3.8.0"
+]
 performance = [
     "orjson>=3.8.0",
     "msgpack>=1.0.0"
@@ -73,14 +75,14 @@ performance = [
 rich = [
     "rich>=13.0.0"
 ]
-all = ["micktrace[dev,performance,rich]"]
+all = ["micktrace[dev,cloud,performance,rich]"]
 
 [project.urls]
-Homepage = "https://github.com/ajaycodes/micktrace"
-Repository = "https://github.com/ajaycodes/micktrace"
-Documentation = "https://github.com/ajaycodes/micktrace#readme"
-Issues = "https://github.com/ajaycodes/micktrace/issues"
-Changelog = "https://github.com/ajaycodes/micktrace/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/ajayagrawalgit/micktrace"
+Repository = "https://github.com/ajayagrawalgit/micktrace"
+Documentation = "https://github.com/ajayagrawalgit/micktrace#readme"
+Issues = "https://github.com/ajayagrawalgit/micktrace/issues"
+Changelog = "https://github.com/ajayagrawalgit/micktrace/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 zip-safe = false

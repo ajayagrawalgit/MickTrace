@@ -36,55 +36,13 @@ micktrace.configure(level="INFO", format="structured")
 - **Sub-microsecond overhead** when logging is disabled
 - **Async-native** with automatic context propagation
 - **Memory efficient** with intelligent batching
-- **Multiprocessing safe** with zero file locking issues
-
-### 🎯 Developer Experience  
-- **Zero config** for libraries, simple config for applications
-- **Full type safety** with comprehensive type hints
-- **Modern Python idioms** - f-strings, context managers, dataclasses
-- **Automatic caller tracking** and source location
-
-### 🏗️ Production Ready
-- **Built-in context management** for request tracing
-- **Structured logging** by default with JSON/logfmt output
-- **Hot-reload configuration** support
-- **Comprehensive error handling** that never crashes your app
-
-## 📦 Installation
-
-```bash
-pip install micktrace
-```
-
-## 🔧 Basic Usage
-
-### Simple Logging
-```python
-import micktrace
-
-# Configure for your application
-micktrace.configure(level="INFO", format="json")
-
-# Get a logger
-logger = micktrace.get_logger(__name__)
-
-# Log with structure by default
-logger.info("User action", user_id=123, action="login", success=True)
-```
-
 ### Context Management
 ```python
-import micktrace
-
-logger = micktrace.get_logger(__name__)
-
-# Automatic context propagation across async boundaries
+# Add context to all logs in a scope
 with micktrace.context(request_id="req_123", user_id=456):
     logger.info("Processing request")  # Includes request_id and user_id
     await process_data()  # All nested logs include context
 ```
-
-### Bound Loggers
 ```python
 import micktrace
 

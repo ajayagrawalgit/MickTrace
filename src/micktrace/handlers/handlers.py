@@ -1,9 +1,8 @@
 """Base handlers for MickTrace."""
 
-import logging
 import os
 import time
-from typing import Any, Dict, List, Optional, TextIO, Union
+from typing import Any, List, Optional, TextIO, Union
 from ..types import LogLevel, LogRecord
 
 

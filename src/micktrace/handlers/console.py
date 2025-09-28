@@ -33,8 +33,8 @@ class ConsoleHandler:
             message = str(record.timestamp) + " " + record.level + " " + record.message
             self.stream.write(message + "\n")
             self.stream.flush()
-        except Exception as e:
-            print(f"Failed to emit to console: {e}")
+        except Exception:
+            pass
 
 
 class NullHandler:
