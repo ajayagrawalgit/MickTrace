@@ -52,8 +52,8 @@ dependencies = [
     "botocore>=1.31.62",
     "azure-monitor-ingestion>=1.0.0b5",
     "azure-core>=1.29.5",
-    "google-cloud-logging>=3.8.0"
-    "typing-extensions>=4.0.0;python_version<'3.11'",
+    "google-cloud-logging>=3.8.0",
+    "typing-extensions>=4.0.0;python_version<'3.11'"
 ]
 
 [project.optional-dependencies]

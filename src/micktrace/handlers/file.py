@@ -8,34 +8,47 @@ from ..types import LogRecord
 import json
 
 
+import traceback
+
 class FileHandler:
     def __init__(
         self,
-        name: str = "file",
-        filename: str = "app.log",
+        filename: str,
         max_bytes: int = 10485760,  # 10MB default
         backup_count: int = 5,
+        async_mode: bool = False,
         **kwargs: Any
     ) -> None:
         """Initialize FileHandler.
         
         Args:
-            name: Name of the handler
-            filename: Path to the log file
+            filename: Path to the log file (required)
             max_bytes: Maximum size in bytes before rotation
             backup_count: Number of backup files to keep
+            async_mode: Whether to use asynchronous logging
         """
-        self.name = name
-        self.filename = filename
+        if not filename:
+            raise ValueError("filename must be provided")
+        
+        self.filename = os.path.abspath(filename)
         self.max_bytes = max_bytes
         self.backup_count = backup_count
         self.config = kwargs
         
-        # Ensure directory exists
-        os.makedirs(os.path.dirname(self.filename), exist_ok=True)
+        try:
+            # Ensure directory exists
+            log_dir = os.path.dirname(self.filename)
+            if log_dir:  # Only create if path has a directory component
+                os.makedirs(log_dir, exist_ok=True)
+                
+            # Verify we can write to the file
+            with open(self.filename, 'a') as f:
+                f.write("")
+        except Exception as e:
+            raise IOError(f"Cannot initialize log file {self.filename}: {str(e)}") from e
         
         # Setup async queue and worker if async mode is enabled
-        self.async_mode = kwargs.get("async_mode", False)
+        self.async_mode = async_mode
         if self.async_mode:
             self.queue = queue.Queue()
             self.stop_event = Event()
@@ -80,10 +93,6 @@ class FileHandler:
             if self.should_rotate():
                 self.rotate()
 
-            # Get absolute path
-            abs_filename = os.path.abspath(self.filename)
-            print(f"DEBUG FileHandler: Writing record to {abs_filename}")
-            
             # Convert record to JSON for consistent storage
             log_data = {
                 "timestamp": str(record.timestamp),
@@ -94,31 +103,19 @@ class FileHandler:
             }
             
             log_line = json.dumps(log_data)
-            print(f"DEBUG FileHandler: Preparing to write: {log_line}")
             
+            # Write with atomic operation when possible
+            temp_file = f"{self.filename}.tmp"
             try:
-                # Ensure directory exists one more time
-                dir_name = os.path.dirname(abs_filename)
-                os.makedirs(dir_name, exist_ok=True)
-                
-                print(f"DEBUG FileHandler: Directory created: {dir_name}")
-                
-                # Write with proper newline and flush
-                with open(abs_filename, "a", encoding="utf-8") as f:
+                # Append directly to the file
+                with open(self.filename, "a", encoding="utf-8") as f:
                     f.write(log_line + "\n")
                     f.flush()
                     os.fsync(f.fileno())  # Force write to disk
-                    
-                print(f"DEBUG FileHandler: Successfully wrote to {abs_filename}")
             except Exception as e:
-                print(f"DEBUG FileHandler: Failed to write to {abs_filename}: {e}")
-                traceback.print_exc()
-                raise
-
+                raise IOError(f"Failed to write to {self.filename}: {str(e)}") from e
         except Exception as e:
-            import traceback
-            print(f"Failed to write log: {e}")
-            traceback.print_exc()
+            raise IOError(f"Failed to process log record: {str(e)}") from e
 
     def emit(self, record: LogRecord) -> None:
         """Emit a log record.
@@ -137,28 +134,19 @@ class FileHandler:
     def handle(self, record: LogRecord) -> None:
         """Handle a log record."""
         try:
-            print(f"\nDEBUG FileHandler: Got record: level={record.level} message={record.message}")
-            print(f"DEBUG FileHandler: My filename={self.filename} level={getattr(self, 'level', 'NOTSET')}")
-            
             # Check level if specified
             if hasattr(self, 'level'):
                 from ..types import LogLevel
                 record_level = LogLevel.from_string(record.level)
                 handler_level = LogLevel.from_string(self.level)
-                print(f"DEBUG FileHandler: Record level={record_level} handler level={handler_level}")
                 if record_level < handler_level:
-                    print(f"DEBUG FileHandler: Skipping record due to level")
                     return
                     
-            print(f"DEBUG FileHandler: Creating directory if needed")
-            os.makedirs(os.path.dirname(os.path.abspath(self.filename)), exist_ok=True)
-            
-            print(f"DEBUG FileHandler: Emitting record")
             self.emit(record)
         except Exception as e:
-            import traceback
-            print(f"Failed to handle log: {e}")
-            traceback.print_exc()
+            # Log handler failures should not crash the application
+            # but we should report them somehow - possibly through a callback
+            pass
 
     def _worker(self) -> None:
         """Background worker for async mode."""

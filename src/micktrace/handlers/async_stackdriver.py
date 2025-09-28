@@ -5,7 +5,6 @@ import time
 from typing import List, Dict, Any, Optional
 
 from google.cloud import logging_v2
-from google.cloud.logging_v2 import AsyncLoggingServiceV2Client
 from google.cloud.logging_v2.types import LogEntry
 
 from ..types import LogRecord
@@ -95,26 +94,28 @@ class AsyncGoogleCloudHandler(AsyncBatchHandler):
             }
             entries.append(entry)
             
-        # Create async client
-        async with AsyncLoggingServiceV2Client.from_service_account_json(
-            self.credentials_path
-        ) if self.credentials_path else AsyncLoggingServiceV2Client() as client:
-            # Send logs with retry
-            max_retries = 5
-            retry_count = 0
-            
-            while retry_count < max_retries:
-                try:
-                    await client.write_log_entries(
-                        entries=entries,
-                        partial_success=True
-                    )
-                    break
-                    
-                except Exception as e:
-                    retry_count += 1
-                    if retry_count >= max_retries:
-                        print(f"Error sending logs to Google Cloud: {e}")
-                        raise
-                        
-                    await asyncio.sleep(2 ** retry_count)
+        # Create sync client but run in thread
+        client = (
+            logging_v2.Client.from_service_account_json(self.credentials_path)
+            if self.credentials_path
+            else logging_v2.Client()
+        ).logging_api
+        
+        # Send logs with retry
+        max_retries = 5
+        retry_count = 0
+        
+        while retry_count < max_retries:
+            try:
+                client.write_entries(entries)
+                break
+                
+            except Exception as e:
+                retry_count += 1
+                if retry_count >= max_retries:
+                    print(f"Error sending logs to Google Cloud: {e}")
+                    raise
+                
+                # Sleep in thread
+                time.sleep(2 ** retry_count)
+                time.sleep(2 ** retry_count)

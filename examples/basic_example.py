@@ -6,115 +6,84 @@ Basic Micktrace Example - Demonstrates core features with error handling
 import sys
 import os
 from pathlib import Path
+import asyncio
 
 # Add src to path for running from source
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 try:
     import micktrace
+    from micktrace.types import LogLevel
 except ImportError as e:
     print(f"Failed to import micktrace: {e}")
     sys.exit(1)
 
 
-def demonstrate_basic_logging():
+async def demonstrate_basic_logging():
     """Demonstrate basic logging features."""
     print("=== Basic Logging Demo ===")
 
-    # Configure micktrace for applications
-    micktrace.configure(level="INFO", format="structured")
+    # Get a logger with DEBUG level
+    logger = micktrace.get_logger(__name__, level=LogLevel.DEBUG)
 
-    # Get a logger
-    logger = micktrace.get_logger(__name__)
+    # Add console handler
+    logger.add_handler("console")
 
-    # Basic logging calls
-    logger.info("Application starting", component="main", version="1.0.0")
+    # Set correlation and trace IDs for distributed tracing
+    logger.set_correlation_id("demo_correlation_id")
+    logger.set_trace_id("demo_trace_id")
 
-    # Structured logging with additional data
-    logger.info("User logged in", 
-                user_id=123, 
-                username="alice", 
-                ip_address="192.168.1.100",
-                success=True)
+    # Basic logging with structured data
+    logger.info("Application starting", data={"component": "main", "version": "1.0.0"})
 
-    # Different log levels
-    logger.debug("Debug information", details="hidden unless debug enabled")
-    logger.warning("Something suspicious", threat_level="low", action_required=True)
-    logger.error("An error occurred", error_code=500, retryable=True, component="database")
+    # Log with structured data
+    logger.info("User logged in", data={
+        "user_id": 123,
+        "username": "alice",
+        "ip_address": "192.168.1.100",
+        "success": True
+    })
+
+    # Different log levels with rich data
+    logger.debug("Debug information", data={"details": "only visible in debug"})
+    logger.warning("Something suspicious", data={"threat_level": "low", "action_required": True})
+    
+    # Error logging with exception
+    try:
+        raise ValueError("Database connection failed")
+    except Exception as e:
+        logger.error("An error occurred", 
+                    data={"error_code": 500, "retryable": True},
+                    exc_info=e)
+
+    # Async logging
+    await logger.async_info("Async operation completed", 
+                          data={"duration": 1.23, "status": "success"})
 
     print("✅ Basic logging completed successfully!")
 
 
-def demonstrate_context():
-    """Demonstrate context propagation."""
+async def demonstrate_context():
+    """Demonstrate context and trace propagation."""
     logger = micktrace.get_logger("demo.context")
 
-    print("=== Context Demo ===")
+    print("=== Context and Tracing Demo ===")
 
-    # Set context for a request
-    with micktrace.context(request_id="req_12345", user_id=456, session="sess_789"):
-        logger.info("Processing request", operation="get_user_profile")
-        logger.info("Database query executed", table="users", duration_ms=45)
-        logger.info("Request processed successfully", status_code=200)
+    # Set trace context for distributed tracing
+    logger.set_correlation_id("service_call_123")
+    logger.set_trace_id("distributed_trace_abc")
 
-    print("✅ Context demo completed successfully!")
+    # Log service operations with tracing
+    await logger.async_info("Processing request", 
+                          data={"operation": "get_user_profile", "request_id": "req_12345"})
+    
+    await logger.async_info("Database query executed", 
+                          data={"table": "users", "duration_ms": 45, "query_id": "q_789"})
 
+    logger.info("Request processed successfully", 
+               data={"status_code": 200, "response_time_ms": 123})
 
-def demonstrate_bound_logger():
-    """Demonstrate bound logger."""
-    logger = micktrace.get_logger("demo.bound")
-
-    print("=== Bound Logger Demo ===")
-
-    # Create a logger bound with common context
-    service_logger = logger.bind(service="payment-service", version="2.1.0", environment="production")
-
-    # All logs from this bound logger include the service context
-    service_logger.info("Payment processing started", amount=99.99, currency="USD")
-    service_logger.info("Payment validated", payment_id="pay_123", provider="stripe")
-    service_logger.info("Payment completed", transaction_id="txn_456", fee=2.99)
-
-    # Can create further bound loggers
-    request_logger = service_logger.bind(request_id="req_789", customer_id="cust_123")
-    request_logger.info("Customer payment history retrieved", count=5)
-
-    print("✅ Bound logger demo completed successfully!")
-
-
-def demonstrate_exception_handling():
-    """Demonstrate exception logging."""
-    logger = micktrace.get_logger("demo.exceptions")
-
-    print("=== Exception Handling Demo ===")
-
-    try:
-        # Simulate an error
-        raise ValueError("This is a demonstration exception")
-    except ValueError as e:
-        logger.exception("Caught demonstration exception", 
-                        error_type="ValueError",
-                        user_action="create_account",
-                        severity="low")
-
-    print("✅ Exception handling demo completed successfully!")
-
-
-def demonstrate_different_levels():
-    """Demonstrate different log levels."""
-    logger = micktrace.get_logger("demo.levels")
-
-    print("=== Log Levels Demo ===")
-
-    # Configure to show all levels
-    micktrace.configure(level="DEBUG")
-
-    logger.debug("Debug: Detailed diagnostic information", function="process_data", line=42)
-    logger.info("Info: General application flow", checkpoint="user_authenticated")
-    logger.warning("Warning: Something unexpected happened", issue="rate_limit_approaching")
-    logger.error("Error: Something went wrong", error="database_connection_failed")
-    logger.critical("Critical: System is in critical state", alert="service_down")
-
-    print("✅ Log levels demo completed successfully!")
+    print("✅ Context and tracing demo completed successfully!")
 
 
 def main():
@@ -123,21 +92,10 @@ def main():
     print("=" * 60)
 
     try:
-        demonstrate_basic_logging()
+        asyncio.run(demonstrate_basic_logging())
         print()
-
-        demonstrate_context()
+        asyncio.run(demonstrate_context())
         print()
-
-        demonstrate_bound_logger()
-        print()
-
-        demonstrate_exception_handling()
-        print()
-
-        demonstrate_different_levels()
-        print()
-
         print("🎉 All demonstrations completed successfully!")
         print("✅ Micktrace is working perfectly!")
 

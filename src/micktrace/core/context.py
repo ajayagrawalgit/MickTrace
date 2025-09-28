@@ -3,13 +3,149 @@ Context management system for micktrace.
 Provides async-safe context propagation with comprehensive error handling.
 """
 
+__all__ = ['ContextProvider', 'DynamicContext', 'Context']
+
 import asyncio
 import threading
+import time
 from contextlib import contextmanager, asynccontextmanager
 from contextvars import ContextVar, Token
 from copy import deepcopy
-from typing import Any, Callable, Dict, List, Optional, Union, Iterator, AsyncIterator
+from typing import Any, Dict, List, Optional, Union, Iterator, AsyncIterator, TypeVar, Callable
+from dataclasses import dataclass, field
 from uuid import uuid4
+
+T = TypeVar('T')
+
+@dataclass
+class DynamicContext:
+    """Dynamic context that can have values populated at runtime."""
+    
+    def __init__(self, **providers: Callable[[], Any]) -> None:
+        """Initialize with value providers.
+        
+        Args:
+            **providers: Dict mapping field names to functions that return their values
+        """
+        self._providers = providers
+        self._cache: Dict[str, Any] = {}
+        self._last_refresh: Dict[str, float] = {}
+        self._refresh_intervals: Dict[str, float] = {}
+        
+    def set_refresh_interval(self, field: str, interval: float) -> None:
+        """Set refresh interval for a field.
+        
+        Args:
+            field: Field name
+            interval: Refresh interval in seconds
+        """
+        self._refresh_intervals[field] = interval
+        
+    def _should_refresh(self, field: str) -> bool:
+        """Check if a field should be refreshed."""
+        if field not in self._last_refresh:
+            return True
+            
+        interval = self._refresh_intervals.get(field)
+        if interval is None:
+            return True
+            
+        return time.time() - self._last_refresh[field] >= interval
+        
+    def get(self, field: str) -> Any:
+        """Get a field value, refreshing if needed.
+        
+        Args:
+            field: Field name
+            
+        Returns:
+            Current field value
+        """
+        if field not in self._providers:
+            raise KeyError(f"No provider for field: {field}")
+            
+        if self._should_refresh(field):
+            try:
+                self._cache[field] = self._providers[field]()
+                self._last_refresh[field] = time.time()
+            except Exception as e:
+                if field not in self._cache:
+                    self._cache[field] = None
+                print(f"Error getting dynamic context for {field}: {e}")
+                
+        return self._cache.get(field)
+        
+    def asdict(self) -> Dict[str, Any]:
+        """Get all field values as a dict."""
+        return {
+            field: self.get(field)
+            for field in self._providers
+        }
+        
+    def __getattr__(self, name: str) -> Any:
+        """Get field value by attribute access."""
+        if name in self._providers:
+            return self.get(name)
+        raise AttributeError(f"No such attribute: {name}")
+
+
+@dataclass
+class Context:
+    """Structured logging context with strong typing."""
+
+    service: Optional[str] = None
+    environment: Optional[str] = None
+    version: Optional[str] = None
+    request_id: Optional[str] = None
+    correlation_id: Optional[str] = None
+    trace_id: Optional[str] = None
+    span_id: Optional[str] = None
+    user_id: Optional[str] = None
+    session_id: Optional[str] = None
+    ip_address: Optional[str] = None
+    endpoint: Optional[str] = None
+    method: Optional[str] = None
+    path: Optional[str] = None
+    query: Optional[Dict[str, str]] = None
+    headers: Optional[Dict[str, str]] = None
+    tags: Dict[str, str] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+    
+    _stack: List['Context'] = field(default_factory=list)
+
+    def __enter__(self) -> 'Context':
+        """Enter context."""
+        # Save current context
+        current = get_context()
+        self._stack.append(Context(**current))
+
+        # Set new context
+        set_context(**self.asdict())
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit context."""
+        if self._stack:
+            old_context = self._stack.pop()
+            set_context(**old_context.asdict())
+        else:
+            clear_context()
+
+    async def __aenter__(self) -> 'Context':
+        """Enter async context."""
+        return self.__enter__()
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit async context."""
+        self.__exit__(exc_type, exc_val, exc_tb)
+
+    def asdict(self) -> Dict[str, Any]:
+        """Convert context to dictionary."""
+        result: Dict[str, Any] = {}
+        for key, value in self.__dict__.items():
+            if not key.startswith('_') and value is not None:
+                result[key] = value
+        return result
 
 class ContextProvider:
     """Dynamic context provider that can inject context based on runtime conditions."""

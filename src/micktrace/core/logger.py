@@ -1,10 +1,12 @@
 """Core Logger implementation with comprehensive error handling and zero circular dependencies."""
 
+import asyncio
+import datetime
 import inspect
 import sys
+import threading
 import time
 import traceback
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Union, Awaitable
 
 from ..types import LogLevel, LogRecord
@@ -13,7 +15,6 @@ from .context import get_context
 from ..handlers.handlers import FileHandler
 from ..handlers.rotating import RotatingFileHandler
 from ..handlers import ConsoleHandler, NullHandler, MemoryHandler
-
 
 class Logger:
     """High-performance, async-native logger with structured logging support."""
@@ -27,6 +28,318 @@ class Logger:
         'memory': MemoryHandler,
         'rotating_file': RotatingFileHandler
     }
+    
+    def __init__(self, name: str, handlers: Optional[List[Any]] = None, level: Union[str, LogLevel] = LogLevel.INFO):
+        """Initialize a logger.
+        
+        Args:
+            name: Logger name
+            handlers: Optional list of handlers
+            level: Minimum log level to process (default: INFO)
+        """
+        self.name = name
+        self._handlers = handlers or []
+        self.level = level if isinstance(level, LogLevel) else LogLevel.from_string(level)
+        self._lock = threading.Lock()
+        self._async_lock = asyncio.Lock()
+        self._correlation_id: Optional[str] = None
+        self._trace_id: Optional[str] = None
+        """Initialize a logger.
+        
+        Args:
+            name: Logger name
+            handlers: Optional list of handlers
+        """
+        self.name = name
+        self._handlers = handlers or []
+        
+    def add_handler(self, handler: Any) -> None:
+        """Add a handler to the logger.
+        
+        Args:
+            handler: Handler instance to add
+        """
+        self._handlers.append(handler)
+        
+    def remove_handler(self, handler: Any) -> None:
+        """Remove a handler from the logger.
+        
+        Args:
+            handler: Handler instance to remove
+        """
+        if handler in self._handlers:
+            self._handlers.remove(handler)
+    
+    def get_handlers(self) -> List[Any]:
+        """Get all handlers attached to this logger.
+        
+        Returns:
+            List of handlers
+        """
+        return self._handlers.copy()
+        
+    def clear_handlers(self) -> None:
+        """Remove all handlers from this logger."""
+        self._handlers.clear()
+        
+    @classmethod
+    def get_logger(cls, name: str) -> "Logger":
+        """Get a logger by name.
+        
+        Args:
+            name: Logger name
+            
+        Returns:
+            Logger instance
+        """
+        if name not in cls._loggers:
+            cls._loggers[name] = cls(name)
+        return cls._loggers[name]
+        
+    @classmethod
+    def get_library_logger(cls, name: str) -> "Logger":
+        """Get a library logger by name.
+        
+        Args:
+            name: Logger name
+            
+        Returns:
+            Logger instance
+        """
+        if name not in cls._library_loggers:
+            cls._library_loggers[name] = cls(name)
+        return cls._library_loggers[name]
+            
+    def _log(self, level: LogLevel, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Internal method to handle log record creation and processing.
+        
+        Args:
+            level: Log level
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        if level < self.level:
+            return
+            
+        # Build exception info if provided
+        exception = None
+        if exc_info:
+            exception = {
+                'type': exc_info.__class__.__name__,
+                'message': str(exc_info),
+                'traceback': getattr(exc_info, '__traceback__', None)
+            }
+
+        # Get caller info
+        frame = inspect.currentframe()
+        caller = {}
+        try:
+            if frame:
+                # Skip this frame and the public logging method frame
+                frame = frame.f_back.f_back
+                if frame:
+                    caller = {
+                        'file': frame.f_code.co_filename,
+                        'function': frame.f_code.co_name,
+                        'line': frame.f_lineno
+                    }
+        finally:
+            del frame  # Avoid reference cycles
+            
+        record = LogRecord(
+            timestamp=time.time(),
+            level=level.name,
+            logger_name=self.name,
+            message=message,
+            data=data or {},
+            caller=caller,
+            exception=exception,
+            correlation_id=self._correlation_id,
+            trace_id=self._trace_id
+        )
+        
+        with self._lock:
+            for handler in self._handlers:
+                try:
+                    handler.handle(record)
+                except Exception as e:
+                    print(f"Error in handler {handler}: {e}")
+                    
+    async def _async_log(self, level: LogLevel, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Internal method to handle async log record creation and processing.
+        
+        Args:
+            level: Log level
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        if level < self.level:
+            return
+            
+        # Build exception info if provided
+        exception = None
+        if exc_info:
+            exception = {
+                'type': exc_info.__class__.__name__,
+                'message': str(exc_info),
+                'traceback': getattr(exc_info, '__traceback__', None)
+            }
+
+        # Get caller info
+        frame = inspect.currentframe()
+        caller = {}
+        try:
+            if frame:
+                # Skip this frame and the public logging method frame
+                frame = frame.f_back.f_back
+                if frame:
+                    caller = {
+                        'file': frame.f_code.co_filename,
+                        'function': frame.f_code.co_name,
+                        'line': frame.f_lineno
+                    }
+        finally:
+            del frame  # Avoid reference cycles
+            
+        record = LogRecord(
+            timestamp=time.time(),
+            level=level.name,
+            logger_name=self.name,
+            message=message,
+            data=data or {},
+            caller=caller,
+            exception=exception,
+            correlation_id=self._correlation_id,
+            trace_id=self._trace_id
+        )
+        
+        async with self._async_lock:
+            for handler in self._handlers:
+                try:
+                    if hasattr(handler, 'async_handle'):
+                        await handler.async_handle(record)
+                    else:
+                        handler.handle(record)
+                except Exception as e:
+                    print(f"Error in handler {handler}: {e}")
+                    
+    def debug(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Log a debug message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        self._log(LogLevel.DEBUG, message, data, exc_info)
+        
+    def info(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Log an info message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        self._log(LogLevel.INFO, message, data, exc_info)
+        
+    def warning(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Log a warning message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        self._log(LogLevel.WARNING, message, data, exc_info)
+        
+    def error(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Log an error message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        self._log(LogLevel.ERROR, message, data, exc_info)
+        
+    def critical(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Log a critical message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        self._log(LogLevel.CRITICAL, message, data, exc_info)
+        
+    async def async_debug(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Asynchronously log a debug message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        await self._async_log(LogLevel.DEBUG, message, data, exc_info)
+        
+    async def async_info(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Asynchronously log an info message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        await self._async_log(LogLevel.INFO, message, data, exc_info)
+        
+    async def async_warning(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Asynchronously log a warning message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        await self._async_log(LogLevel.WARNING, message, data, exc_info)
+        
+    async def async_error(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Asynchronously log an error message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        await self._async_log(LogLevel.ERROR, message, data, exc_info)
+        
+    async def async_critical(self, message: str, data: Optional[Dict[str, Any]] = None, exc_info: Optional[Exception] = None) -> None:
+        """Asynchronously log a critical message.
+        
+        Args:
+            message: Log message
+            data: Optional structured data
+            exc_info: Optional exception info
+        """
+        await self._async_log(LogLevel.CRITICAL, message, data, exc_info)
+        
+    def set_correlation_id(self, correlation_id: Optional[str]) -> None:
+        """Set the correlation ID for this logger.
+        
+        Args:
+            correlation_id: Correlation ID for distributed tracing
+        """
+        self._correlation_id = correlation_id
+        
+    def set_trace_id(self, trace_id: Optional[str]) -> None:
+        """Set the trace ID for this logger.
+        
+        Args:
+            trace_id: Trace ID for distributed tracing
+        """
+        self._trace_id = trace_id
 
     @classmethod
     def create_handler(cls, handler_type: str, handler_config: Dict[str, Any]) -> Any:

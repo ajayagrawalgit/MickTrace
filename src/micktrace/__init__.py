@@ -27,8 +27,9 @@ from typing import Any, Dict, Optional
 from .core.logger import Logger, BoundLogger, get_logger, bind
 from .config.configuration import configure, get_configuration
 from .core.context import (
-    context,
-    acontext,
+    Context, 
+    ContextProvider, 
+    DynamicContext,
     get_context,
     set_context,
     clear_context

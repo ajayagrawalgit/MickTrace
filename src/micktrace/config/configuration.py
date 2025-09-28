@@ -28,8 +28,7 @@ class HandlerConfig:
         try:
             # Validate handler type
             valid_types = [
-                "console", "file", "rotating_file", "http", "syslog",
-                "null", "memory", "stream"
+                "console", "file", "http", "syslog", "null", "memory", "stream"
             ]
             if not isinstance(self.type, str) or self.type not in valid_types:
                 raise ValueError(f"Invalid handler type: {self.type}. Must be one of {valid_types}")
@@ -163,16 +162,8 @@ class Configuration:
                         "level": handler.level,
                         "format": handler.format,
                         "enabled": handler.enabled,
-                        "config": handler.config,
                     }
-
-                    # Convert any paths to absolute paths
-                    if handler.type == "file" and "filename" in handler_dict:
-                        filename = handler_dict["filename"]
-                        if not os.path.isabs(filename):
-                            # Use the current working directory as base if not absolute
-                            handler_dict["filename"] = os.path.abspath(filename)
-
+                    handler_dict.update(handler.config)
                     handlers_list.append(handler_dict)
                 except Exception:
                     # Skip invalid handlers
@@ -364,12 +355,10 @@ def set_configuration(config: Configuration) -> None:
 def configure(**kwargs: Any) -> None:
     """Configure micktrace programmatically with error handling."""
     try:
-        print("\nDEBUG configure: Starting configuration")
         current_config = get_configuration()
 
         # Create new configuration from current + overrides
         config_dict = current_config.to_dict()
-        print(f"DEBUG configure: Current config: {config_dict}")
 
         # Handle simple overrides
         for key in ["level", "format", "enabled", "service", "version", "environment"]:
@@ -378,34 +367,26 @@ def configure(**kwargs: Any) -> None:
 
         # Handle handler configuration
         if "handlers" in kwargs:
-            print(f"DEBUG configure: Processing handlers: {kwargs['handlers']}")
             handlers = kwargs["handlers"]
-            if isinstance(handlers, dict):
-                print("DEBUG configure: Converting handler dict to list")
-                handler_list = []
-                for name, config in handlers.items():
-                    config['name'] = name
-                    handler_list.append(config)
-                config_dict["handlers"] = handler_list
-            elif isinstance(handlers, str):
-                print("DEBUG configure: String handler types")
+            if isinstance(handlers, str):
                 handler_types = [h.strip() for h in handlers.split(",") if h.strip()]
                 config_dict["handlers"] = [{"type": h} for h in handler_types]
             elif isinstance(handlers, list):
-                print("DEBUG configure: List of handlers")
-                config_dict["handlers"] = handlers
-        else:
-            print("DEBUG configure: No handlers provided")
+                if all(isinstance(h, str) for h in handlers):
+                    config_dict["handlers"] = [{"type": h} for h in handlers]
+                elif all(isinstance(h, dict) for h in handlers):
+                    config_dict["handlers"] = handlers
+                else:
+                    # Mixed or invalid types, keep current handlers
+                    pass
 
-        print(f"DEBUG configure: Final config: {config_dict}")
         # Create and set new configuration
         new_config = Configuration.from_dict(config_dict)
         set_configuration(new_config)
 
-    except Exception as e:
-        print(f"DEBUG configure: Failed to configure: {e}")
-        import traceback
-        traceback.print_exc()
+    except Exception:
+        # If configuration fails, silently continue with current config
+        pass
 
 
 def reset_configuration() -> None:
