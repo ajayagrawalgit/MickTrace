@@ -1,0 +1,194 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "micktrace"
+version = "1.0.0"
+description = "Modern Python logging library for production applications - async-native, structured logging, zero-config, cloud-ready with AWS/Azure/GCP integration, context propagation, and performance optimization"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Ajay Agrawal", email = "ajayagrawalofficial@gmail.com"}
+]
+maintainers = [
+    {name = "Ajay Agrawal", email = "ajayagrawalofficial@gmail.com"}
+]
+keywords = [
+    "python logging",
+    "async logging", 
+    "structured logging",
+    "json logging",
+    "cloud logging",
+    "aws cloudwatch",
+    "azure monitor", 
+    "google cloud logging",
+    "datadog logging",
+    "observability", 
+    "tracing", 
+    "monitoring",
+    "performance logging",
+    "production logging",
+    "library logging",
+    "context propagation",
+    "correlation id",
+    "microservices logging",
+    "kubernetes logging",
+    "docker logging",
+    "elasticsearch logging",
+    "logfmt",
+    "python logger",
+    "async python",
+    "logging library",
+    "log management",
+    "application logging",
+    "system logging",
+    "enterprise logging"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9", 
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Logging",
+    "Topic :: Software Development :: Debuggers",
+    "Typing :: Typed",
+    "Environment :: Console",
+    "Framework :: AsyncIO"
+]
+dependencies = [
+    "typing-extensions>=4.0.0;python_version<'3.11'"
+]
+
+[project.optional-dependencies]
+# Development dependencies
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0",
+    "black>=22.0",
+    "mypy>=1.0",
+    "ruff>=0.1.0",
+    "isort>=5.0"
+]
+
+# Cloud platform integrations
+aws = [
+    "aioboto3>=11.3.0",
+    "botocore>=1.31.62"
+]
+azure = [
+    "azure-monitor-ingestion>=1.0.0b5",
+    "azure-core>=1.29.5"
+]
+gcp = [
+    "google-cloud-logging>=3.8.0"
+]
+cloud = ["micktrace[aws,azure,gcp]"]
+
+# Analytics and monitoring platforms
+datadog = [
+    "datadog>=0.44.0"
+]
+newrelic = [
+    "newrelic>=8.0.0"
+]
+elastic = [
+    "elasticsearch>=8.0.0"
+]
+prometheus = [
+    "prometheus-client>=0.16.0"
+]
+sentry = [
+    "sentry-sdk>=1.0.0"
+]
+analytics = ["micktrace[datadog,newrelic,elastic,prometheus,sentry]"]
+
+# Performance enhancements
+performance = [
+    "orjson>=3.8.0",
+    "msgpack>=1.0.0",
+    "lz4>=4.0.0"
+]
+
+# Rich console output
+rich = [
+    "rich>=13.0.0"
+]
+
+# OpenTelemetry integration
+opentelemetry = [
+    "opentelemetry-api>=1.15.0",
+    "opentelemetry-sdk>=1.15.0"
+]
+
+# All integrations
+all = ["micktrace[dev,cloud,analytics,performance,rich,opentelemetry]"]
+
+[project.urls]
+Homepage = "https://github.com/ajayagrawalgit/MickTrace"
+Repository = "https://github.com/ajayagrawalgit/MickTrace"
+Documentation = "https://github.com/ajayagrawalgit/MickTrace#readme"
+"Bug Tracker" = "https://github.com/ajayagrawalgit/MickTrace/issues"
+"Source Code" = "https://github.com/ajayagrawalgit/MickTrace"
+"Author Profile" = "https://github.com/ajayagrawalgit"
+"LinkedIn" = "https://www.linkedin.com/in/theajayagrawal/"
+Changelog = "https://github.com/ajayagrawalgit/MickTrace/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+micktrace = ["py.typed"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers", 
+    "--strict-config",
+    "-v",
+    "--tb=short",
+    "--durations=10"
+]
+asyncio_mode = "auto"
+markers = [
+    "asyncio: marks tests as async",
+    "performance: marks tests as performance tests",
+    "integration: marks tests as integration tests"
+]
+
+[tool.ruff]
+target-version = "py38"
+line-length = 88
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
