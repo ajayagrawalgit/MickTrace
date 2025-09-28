@@ -1,0 +1,264 @@
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0001 response_time_ms=439.55 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0002 response_time_ms=430.85 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0003 response_time_ms=444.45 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0004 response_time_ms=61.49 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0005 response_time_ms=96.03 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0006 response_time_ms=361.15 status_code=201 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0007 response_time_ms=99.98 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0008 response_time_ms=142.8 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=PUT request_id=REQ-0009 response_time_ms=37.92 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0010 response_time_ms=159.2 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0011 response_time_ms=130.32 status_code=500 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0012 response_time_ms=302.5 status_code=201 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0013 response_time_ms=256.82 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0014 response_time_ms=382.53 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0015 response_time_ms=404.55 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0016 response_time_ms=280.76 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0017 response_time_ms=260.92 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0018 response_time_ms=176.27 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0019 response_time_ms=446.0 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0020 response_time_ms=211.12 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0021 response_time_ms=128.59 status_code=201 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0022 response_time_ms=126.65 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0023 response_time_ms=270.7 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0024 response_time_ms=61.1 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0025 response_time_ms=364.56 status_code=404 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0026 response_time_ms=204.77 status_code=404 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0027 response_time_ms=498.99 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0028 response_time_ms=187.81 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0029 response_time_ms=171.37 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0030 response_time_ms=366.71 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0031 response_time_ms=100.13 status_code=201 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0032 response_time_ms=130.23 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=PUT request_id=REQ-0033 response_time_ms=408.17 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0034 response_time_ms=476.64 status_code=404 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0035 response_time_ms=94.7 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0036 response_time_ms=106.01 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0037 response_time_ms=270.56 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0038 response_time_ms=100.17 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0039 response_time_ms=125.45 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0040 response_time_ms=353.72 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0041 response_time_ms=380.9 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0042 response_time_ms=271.32 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0043 response_time_ms=358.46 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=PUT request_id=REQ-0044 response_time_ms=42.72 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0045 response_time_ms=225.89 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0046 response_time_ms=186.16 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0047 response_time_ms=281.73 status_code=500 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0048 response_time_ms=231.16 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0049 response_time_ms=200.49 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0050 response_time_ms=208.48 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0051 response_time_ms=499.33 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0052 response_time_ms=382.55 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0053 response_time_ms=431.97 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=POST request_id=REQ-0054 response_time_ms=479.06 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0055 response_time_ms=474.47 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0056 response_time_ms=76.53 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0057 response_time_ms=283.08 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0058 response_time_ms=362.03 status_code=201 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0059 response_time_ms=41.85 status_code=404 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0060 response_time_ms=453.28 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0061 response_time_ms=301.64 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0062 response_time_ms=198.65 status_code=404 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=POST request_id=REQ-0063 response_time_ms=393.86 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0064 response_time_ms=121.4 status_code=500 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0065 response_time_ms=118.1 status_code=500 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0066 response_time_ms=34.83 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0067 response_time_ms=18.38 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0068 response_time_ms=330.96 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0069 response_time_ms=357.62 status_code=201 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0070 response_time_ms=98.44 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0071 response_time_ms=499.58 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0072 response_time_ms=217.78 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0073 response_time_ms=469.05 status_code=500 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=POST request_id=REQ-0074 response_time_ms=370.11 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0075 response_time_ms=393.61 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0076 response_time_ms=349.29 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0077 response_time_ms=99.03 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0078 response_time_ms=334.67 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0079 response_time_ms=490.68 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0080 response_time_ms=437.68 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0081 response_time_ms=465.65 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0082 response_time_ms=166.96 status_code=201 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0083 response_time_ms=346.9 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0084 response_time_ms=183.9 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=POST request_id=REQ-0085 response_time_ms=303.67 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0086 response_time_ms=296.08 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0087 response_time_ms=197.78 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0088 response_time_ms=386.76 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0089 response_time_ms=163.36 status_code=500 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0090 response_time_ms=226.13 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0091 response_time_ms=481.07 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0092 response_time_ms=64.6 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0093 response_time_ms=473.53 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=POST request_id=REQ-0094 response_time_ms=142.2 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0095 response_time_ms=71.34 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0096 response_time_ms=119.02 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0097 response_time_ms=287.06 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0098 response_time_ms=482.69 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0099 response_time_ms=430.68 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0100 response_time_ms=294.29 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0101 response_time_ms=305.05 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0102 response_time_ms=27.13 status_code=404 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0103 response_time_ms=100.14 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0104 response_time_ms=233.42 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=PUT request_id=REQ-0105 response_time_ms=482.42 status_code=500 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0106 response_time_ms=432.08 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0107 response_time_ms=207.9 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0108 response_time_ms=67.05 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0109 response_time_ms=38.25 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0110 response_time_ms=423.75 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0111 response_time_ms=440.19 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0112 response_time_ms=72.51 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=PUT request_id=REQ-0113 response_time_ms=389.74 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0114 response_time_ms=95.06 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0115 response_time_ms=64.0 status_code=404 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0116 response_time_ms=329.93 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0117 response_time_ms=229.06 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0118 response_time_ms=27.14 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0119 response_time_ms=102.75 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0120 response_time_ms=253.9 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0121 response_time_ms=179.12 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0122 response_time_ms=44.24 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0123 response_time_ms=81.96 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0124 response_time_ms=374.96 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0125 response_time_ms=403.26 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0126 response_time_ms=328.85 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0127 response_time_ms=433.18 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0128 response_time_ms=347.34 status_code=201 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0129 response_time_ms=444.54 status_code=404 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0130 response_time_ms=427.64 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0131 response_time_ms=333.54 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0132 response_time_ms=279.32 status_code=400 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0133 response_time_ms=488.86 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0134 response_time_ms=145.15 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0135 response_time_ms=466.57 status_code=500 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0136 response_time_ms=145.44 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=PUT request_id=REQ-0137 response_time_ms=386.18 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0138 response_time_ms=470.07 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0139 response_time_ms=159.09 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0140 response_time_ms=441.36 status_code=200 version=1.0.0
+2025-09-28 18:23:19 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0141 response_time_ms=358.4 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0142 response_time_ms=315.68 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0143 response_time_ms=470.2 status_code=404 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=POST request_id=REQ-0144 response_time_ms=265.75 status_code=404 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0145 response_time_ms=126.69 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0146 response_time_ms=480.19 status_code=400 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0147 response_time_ms=309.52 status_code=404 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0148 response_time_ms=413.45 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0149 response_time_ms=494.24 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0150 response_time_ms=356.97 status_code=201 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0151 response_time_ms=171.36 status_code=201 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0152 response_time_ms=454.06 status_code=201 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0153 response_time_ms=308.61 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0154 response_time_ms=125.82 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0155 response_time_ms=135.69 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=PUT request_id=REQ-0156 response_time_ms=34.98 status_code=400 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0157 response_time_ms=291.42 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0158 response_time_ms=163.77 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0159 response_time_ms=385.39 status_code=400 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0160 response_time_ms=411.78 status_code=400 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0161 response_time_ms=115.37 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0162 response_time_ms=410.66 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=GET request_id=REQ-0163 response_time_ms=265.45 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0164 response_time_ms=256.47 status_code=201 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0165 response_time_ms=264.91 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=PUT request_id=REQ-0166 response_time_ms=460.57 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0167 response_time_ms=176.06 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=GET request_id=REQ-0168 response_time_ms=260.4 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0169 response_time_ms=452.29 status_code=201 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0170 response_time_ms=239.8 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0171 response_time_ms=301.03 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0172 response_time_ms=415.38 status_code=404 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0173 response_time_ms=328.39 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0174 response_time_ms=38.39 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0175 response_time_ms=187.76 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=POST request_id=REQ-0176 response_time_ms=342.21 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=DELETE request_id=REQ-0177 response_time_ms=71.96 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0178 response_time_ms=287.22 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0179 response_time_ms=291.65 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0180 response_time_ms=235.02 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0181 response_time_ms=479.27 status_code=400 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=DELETE request_id=REQ-0182 response_time_ms=46.73 status_code=201 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0183 response_time_ms=342.28 status_code=201 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=POST request_id=REQ-0184 response_time_ms=87.16 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0185 response_time_ms=138.81 status_code=500 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/analytics method=PUT request_id=REQ-0186 response_time_ms=227.56 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=POST request_id=REQ-0187 response_time_ms=400.05 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0188 response_time_ms=479.61 status_code=404 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=GET request_id=REQ-0189 response_time_ms=301.56 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=POST request_id=REQ-0190 response_time_ms=43.11 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0191 response_time_ms=457.0 status_code=400 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0192 response_time_ms=95.58 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0193 response_time_ms=329.42 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=POST request_id=REQ-0194 response_time_ms=244.22 status_code=404 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0195 response_time_ms=234.18 status_code=201 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=PUT request_id=REQ-0196 response_time_ms=423.5 status_code=500 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/orders method=GET request_id=REQ-0197 response_time_ms=118.56 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=PUT request_id=REQ-0198 response_time_ms=403.78 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/users method=DELETE request_id=REQ-0199 response_time_ms=444.72 status_code=200 version=1.0.0
+2025-09-28 18:23:20 [    INFO] high_volume API request processed component=api_server endpoint=/api/products method=DELETE request_id=REQ-0200 response_time_ms=469.0 status_code=400 version=1.0.0
+2025-09-28 18:23:20 [    INFO] batch_processor Starting batch processing batch_size=50 batch_type=user_analytics component=data_processor estimated_batches=20 total_records=1000
+2025-09-28 18:23:20 [    INFO] batch_processor Batch completed batch_duration_ms=119.44 batch_number=1 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=418.61 total_processed=50
+2025-09-28 18:23:20 [    INFO] batch_processor Batch completed batch_duration_ms=203.4 batch_number=2 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=245.82 total_processed=100
+2025-09-28 18:23:20 [    INFO] batch_processor Batch completed batch_duration_ms=151.38 batch_number=3 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=330.3 total_processed=150
+2025-09-28 18:23:21 [    INFO] batch_processor Batch completed batch_duration_ms=185.76 batch_number=4 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=269.17 total_processed=200
+2025-09-28 18:23:21 [    INFO] batch_processor Batch completed batch_duration_ms=177.26 batch_number=5 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=282.07 total_processed=250
+2025-09-28 18:23:21 [    INFO] batch_processor Processing progress batch_type=user_analytics component=data_processor progress_percentage=25.0 records_processed=250 records_remaining=750
+2025-09-28 18:23:21 [    INFO] batch_processor Batch completed batch_duration_ms=250.63 batch_number=6 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=199.5 total_processed=300
+2025-09-28 18:23:21 [    INFO] batch_processor Batch completed batch_duration_ms=264.12 batch_number=7 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=189.31 total_processed=350
+2025-09-28 18:23:21 [    INFO] batch_processor Batch completed batch_duration_ms=187.5 batch_number=8 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=266.66 total_processed=400
+2025-09-28 18:23:22 [    INFO] batch_processor Batch completed batch_duration_ms=104.82 batch_number=9 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=476.99 total_processed=450
+2025-09-28 18:23:22 [    INFO] batch_processor Batch completed batch_duration_ms=271.68 batch_number=10 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=184.04 total_processed=500
+2025-09-28 18:23:22 [    INFO] batch_processor Processing progress batch_type=user_analytics component=data_processor progress_percentage=50.0 records_processed=500 records_remaining=500
+2025-09-28 18:23:22 [    INFO] batch_processor Batch completed batch_duration_ms=175.3 batch_number=11 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=285.23 total_processed=550
+2025-09-28 18:23:22 [    INFO] batch_processor Batch completed batch_duration_ms=231.57 batch_number=12 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=215.92 total_processed=600
+2025-09-28 18:23:22 [    INFO] batch_processor Batch completed batch_duration_ms=187.06 batch_number=13 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=267.3 total_processed=650
+2025-09-28 18:23:23 [    INFO] batch_processor Batch completed batch_duration_ms=166.51 batch_number=14 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=300.28 total_processed=700
+2025-09-28 18:23:23 [    INFO] batch_processor Batch completed batch_duration_ms=282.64 batch_number=15 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=176.9 total_processed=750
+2025-09-28 18:23:23 [    INFO] batch_processor Processing progress batch_type=user_analytics component=data_processor progress_percentage=75.0 records_processed=750 records_remaining=250
+2025-09-28 18:23:23 [    INFO] batch_processor Batch completed batch_duration_ms=207.84 batch_number=16 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=240.57 total_processed=800
+2025-09-28 18:23:23 [    INFO] batch_processor Batch completed batch_duration_ms=108.11 batch_number=17 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=462.48 total_processed=850
+2025-09-28 18:23:23 [    INFO] batch_processor Batch completed batch_duration_ms=230.51 batch_number=18 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=216.91 total_processed=900
+2025-09-28 18:23:24 [    INFO] batch_processor Batch completed batch_duration_ms=225.39 batch_number=19 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=221.84 total_processed=950
+2025-09-28 18:23:24 [    INFO] batch_processor Batch completed batch_duration_ms=206.54 batch_number=20 batch_type=user_analytics component=data_processor records_in_batch=50 throughput_records_per_sec=242.08 total_processed=1000
+2025-09-28 18:23:24 [    INFO] batch_processor Processing progress batch_type=user_analytics component=data_processor progress_percentage=100.0 records_processed=1000 records_remaining=0
+2025-09-28 18:23:24 [    INFO] batch_processor Batch processing completed batch_type=user_analytics component=data_processor status=success total_batches=20 total_records_processed=1000
+2025-09-28 18:23:24 [    INFO] async_buffer Starting async message processing component=async_processor priority_distribution={'high': 9, 'medium': 11, 'low': 10} total_messages=30 worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Processing message batch batch_number=1 batch_size=10 component=async_processor worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0009 priority=high processing_time_ms=27.45 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0010 priority=high processing_time_ms=37.81 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0006 priority=high processing_time_ms=40.16 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0001 priority=medium processing_time_ms=51.19 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0003 priority=medium processing_time_ms=61.25 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0002 priority=medium processing_time_ms=95.93 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0004 priority=medium processing_time_ms=135.75 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0008 priority=low processing_time_ms=168.65 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0005 priority=low processing_time_ms=195.08 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0007 priority=low processing_time_ms=238.69 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message batch completed batch_number=1 component=async_processor messages_processed=10 worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Processing message batch batch_number=2 batch_size=10 component=async_processor worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0011 priority=high processing_time_ms=10.47 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0015 priority=high processing_time_ms=12.44 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0018 priority=medium processing_time_ms=55.1 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0017 priority=medium processing_time_ms=101.0 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0014 priority=medium processing_time_ms=107.28 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0020 priority=medium processing_time_ms=128.13 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0019 priority=low processing_time_ms=169.22 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0012 priority=low processing_time_ms=253.32 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0013 priority=low processing_time_ms=273.28 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0016 priority=low processing_time_ms=285.91 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message batch completed batch_number=2 component=async_processor messages_processed=10 worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Processing message batch batch_number=3 batch_size=10 component=async_processor worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0030 priority=high processing_time_ms=16.02 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0021 priority=high processing_time_ms=31.57 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0023 priority=high processing_time_ms=38.54 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0025 priority=high processing_time_ms=48.75 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0028 priority=medium processing_time_ms=66.49 status=completed worker_pool=default
+2025-09-28 18:23:24 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0026 priority=medium processing_time_ms=78.22 status=completed worker_pool=default
+2025-09-28 18:23:25 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0024 priority=medium processing_time_ms=148.87 status=completed worker_pool=default
+2025-09-28 18:23:25 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0027 priority=low processing_time_ms=184.48 status=completed worker_pool=default
+2025-09-28 18:23:25 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0029 priority=low processing_time_ms=282.79 status=completed worker_pool=default
+2025-09-28 18:23:25 [    INFO] async_buffer Message processed component=async_processor message_id=MSG-0022 priority=low processing_time_ms=292.91 status=completed worker_pool=default
+2025-09-28 18:23:25 [    INFO] async_buffer Message batch completed batch_number=3 component=async_processor messages_processed=10 worker_pool=default
+2025-09-28 18:23:25 [    INFO] async_buffer All async message processing completed component=async_processor total_messages=30 worker_pool=default

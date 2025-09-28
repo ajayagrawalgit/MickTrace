@@ -370,3 +370,22 @@
 2025-09-28 18:14:09 [    INFO] ComprehensiveDemo Transaction processing summary average_transaction_amount=568.94 completed_transactions=10 failed_transactions=5 log_sequence=122 success_rate_percent=66.67 total_amount_processed=5689.39 total_transactions=15
 2025-09-28 18:14:09 [    INFO] ComprehensiveDemo User activity summary active_users=5 admin_users=1 log_sequence=123 total_users=5 user_roles_distribution={'admin': 1, 'moderator': 1, 'user': 3}
 2025-09-28 18:14:09 [    INFO] ComprehensiveDemo Comprehensive demo completed successfully all_simulations=['user_authentication', 'transaction_processing', 'system_monitoring', 'error_scenarios'] demo_duration_seconds=0.18137168884277344 demo_status=completed log_file_location=logs\comprehensive_demo.log log_sequence=124 total_log_entries_generated=123
+2025-09-28 18:27:39 [    INFO] file_demo File processing started component=file_processor file_count=10 session_id=724c0089-bc60-4a06-8546-ba5091f67249
+2025-09-28 18:27:39 [    INFO] file_demo Processing file component=file_processor file_id=file_001 file_size_bytes=1024 progress_percent=20.0 session_id=724c0089-bc60-4a06-8546-ba5091f67249
+2025-09-28 18:27:39 [    INFO] file_demo Processing file component=file_processor file_id=file_002 file_size_bytes=2048 progress_percent=40.0 session_id=724c0089-bc60-4a06-8546-ba5091f67249
+2025-09-28 18:27:39 [    INFO] file_demo Processing file component=file_processor file_id=file_003 file_size_bytes=3072 progress_percent=60.0 session_id=724c0089-bc60-4a06-8546-ba5091f67249
+2025-09-28 18:27:39 [    INFO] file_demo Processing file component=file_processor file_id=file_004 file_size_bytes=4096 progress_percent=80.0 session_id=724c0089-bc60-4a06-8546-ba5091f67249
+2025-09-28 18:27:39 [    INFO] file_demo Processing file component=file_processor file_id=file_005 file_size_bytes=5120 progress_percent=100.0 session_id=724c0089-bc60-4a06-8546-ba5091f67249
+2025-09-28 18:27:39 [    INFO] file_demo File processing completed component=file_processor files_processed=5 session_id=724c0089-bc60-4a06-8546-ba5091f67249 success_rate=100.0 total_size_bytes=15360
+2025-09-28 18:27:39 [    INFO] async_demo Starting async batch processing batch_size=5 service=async-processor worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing started item_id=item_001 service=async-processor worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing started item_id=item_002 service=async-processor worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing started item_id=item_003 service=async-processor worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing started item_id=item_004 service=async-processor worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing started item_id=item_005 service=async-processor worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing completed duration_ms=120.0 item_id=item_001 service=async-processor status=success worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing completed duration_ms=140.0 item_id=item_002 service=async-processor status=success worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing completed duration_ms=160.0 item_id=item_003 service=async-processor status=success worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing completed duration_ms=180.0 item_id=item_004 service=async-processor status=success worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Processing completed duration_ms=200.0 item_id=item_005 service=async-processor status=success worker_id=worker_001
+2025-09-28 18:27:39 [    INFO] async_demo Async batch completed results=['processed_1', 'processed_2', 'processed_3', 'processed_4', 'processed_5'] results_count=5 service=async-processor worker_id=worker_001
