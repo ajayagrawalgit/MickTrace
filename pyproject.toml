@@ -52,6 +52,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Development dependencies
 dev = [
     "pytest>=7.0",
     "pytest-asyncio>=0.21.0",
@@ -61,21 +62,59 @@ dev = [
     "ruff>=0.1.0",
     "isort>=5.0"
 ]
-cloud = [
+
+# Cloud platform integrations
+aws = [
     "aioboto3>=11.3.0",
-    "botocore>=1.31.62",
+    "botocore>=1.31.62"
+]
+azure = [
     "azure-monitor-ingestion>=1.0.0b5",
-    "azure-core>=1.29.5",
+    "azure-core>=1.29.5"
+]
+gcp = [
     "google-cloud-logging>=3.8.0"
 ]
+cloud = ["micktrace[aws,azure,gcp]"]
+
+# Analytics and monitoring platforms
+datadog = [
+    "datadog>=0.44.0"
+]
+newrelic = [
+    "newrelic>=8.0.0"
+]
+elastic = [
+    "elasticsearch>=8.0.0"
+]
+prometheus = [
+    "prometheus-client>=0.16.0"
+]
+sentry = [
+    "sentry-sdk>=1.0.0"
+]
+analytics = ["micktrace[datadog,newrelic,elastic,prometheus,sentry]"]
+
+# Performance enhancements
 performance = [
     "orjson>=3.8.0",
-    "msgpack>=1.0.0"
+    "msgpack>=1.0.0",
+    "lz4>=4.0.0"
 ]
+
+# Rich console output
 rich = [
     "rich>=13.0.0"
 ]
-all = ["micktrace[dev,cloud,performance,rich]"]
+
+# OpenTelemetry integration
+opentelemetry = [
+    "opentelemetry-api>=1.15.0",
+    "opentelemetry-sdk>=1.15.0"
+]
+
+# All integrations
+all = ["micktrace[dev,cloud,analytics,performance,rich,opentelemetry]"]
 
 [project.urls]
 Homepage = "https://github.com/ajayagrawalgit/micktrace"
@@ -110,8 +149,19 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = ["--strict-markers", "--strict-config"]
+addopts = [
+    "--strict-markers", 
+    "--strict-config",
+    "-v",
+    "--tb=short",
+    "--durations=10"
+]
 asyncio_mode = "auto"
+markers = [
+    "asyncio: marks tests as async",
+    "performance: marks tests as performance tests",
+    "integration: marks tests as integration tests"
+]
 
 [tool.ruff]
 target-version = "py38"

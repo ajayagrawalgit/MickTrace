@@ -30,6 +30,72 @@ logger.info("Library initialized", component="auth", version="1.2.3")
 micktrace.configure(level="INFO", format="structured")
 ```
 
+## 📦 Installation
+
+### Basic Installation
+```bash
+pip install micktrace
+```
+**Minimal dependencies** - Only `typing-extensions` for Python < 3.11
+
+### Cloud Platform Integration
+```bash
+# AWS CloudWatch, S3, Kinesis
+pip install micktrace[aws]
+
+# Azure Monitor, Application Insights  
+pip install micktrace[azure]
+
+# Google Cloud Logging, BigQuery
+pip install micktrace[gcp]
+
+# All cloud platforms
+pip install micktrace[cloud]
+```
+
+### Analytics & Monitoring Platforms
+```bash
+# Datadog integration
+pip install micktrace[datadog]
+
+# New Relic integration  
+pip install micktrace[newrelic]
+
+# Elasticsearch integration
+pip install micktrace[elastic]
+
+# Prometheus metrics
+pip install micktrace[prometheus]
+
+# Sentry error tracking
+pip install micktrace[sentry]
+
+# All analytics platforms
+pip install micktrace[analytics]
+```
+
+### Performance & Features
+```bash
+# High-performance JSON/compression
+pip install micktrace[performance]
+
+# Rich console output with colors
+pip install micktrace[rich]
+
+# OpenTelemetry integration
+pip install micktrace[opentelemetry]
+
+# Everything (all integrations)
+pip install micktrace[all]
+```
+
+### Mix & Match
+```bash
+# Custom combinations
+pip install micktrace[aws,datadog,performance]
+pip install micktrace[gcp,elastic,rich]
+```
+
 ## ✨ Key Features
 
 ### 🔥 Performance First
@@ -157,6 +223,103 @@ micktrace.configure(
 ### Logfmt
 ```
 timestamp=1695720930.123 level=INFO logger=my_app message="User logged in" user_id=123 action=login success=true trace_id=550e8400-e29b-41d4-a716-446655440000
+```
+
+## ☁️ Cloud Platform Integration
+
+### AWS CloudWatch
+```python
+# pip install micktrace[aws]
+import micktrace
+
+micktrace.configure(
+    level="INFO",
+    handlers=[{
+        "type": "cloudwatch",
+        "log_group": "/aws/lambda/my-function",
+        "log_stream": "my-stream",
+        "region": "us-east-1"
+    }]
+)
+
+logger = micktrace.get_logger(__name__)
+logger.info("Lambda function executed", duration_ms=150, memory_used_mb=128)
+```
+
+### Azure Monitor
+```python
+# pip install micktrace[azure]
+import micktrace
+
+micktrace.configure(
+    level="INFO", 
+    handlers=[{
+        "type": "azure",
+        "workspace_id": "your-workspace-id",
+        "shared_key": "your-shared-key",
+        "log_type": "MyAppLogs"
+    }]
+)
+
+logger = micktrace.get_logger(__name__)
+logger.info("Application event", event_type="user_action", user_id=123)
+```
+
+### Google Cloud Logging
+```python
+# pip install micktrace[gcp]
+import micktrace
+
+micktrace.configure(
+    level="INFO",
+    handlers=[{
+        "type": "stackdriver", 
+        "project_id": "my-project",
+        "log_name": "my-app-log"
+    }]
+)
+
+logger = micktrace.get_logger(__name__)
+logger.info("GCP service call", service="storage", operation="upload")
+```
+
+### Datadog Integration
+```python
+# pip install micktrace[datadog]
+import micktrace
+
+micktrace.configure(
+    level="INFO",
+    handlers=[{
+        "type": "datadog",
+        "api_key": "your-api-key", 
+        "service": "my-service",
+        "env": "production"
+    }]
+)
+
+logger = micktrace.get_logger(__name__)
+logger.info("Request processed", endpoint="/api/users", response_time_ms=45)
+```
+
+### Multi-Platform Setup
+```python
+# pip install micktrace[aws,datadog,elastic]
+import micktrace
+
+micktrace.configure(
+    level="INFO",
+    handlers=[
+        {"type": "console"},  # Local development
+        {"type": "cloudwatch", "log_group": "/aws/my-app"},  # AWS
+        {"type": "datadog", "service": "my-app"},  # Monitoring
+        {"type": "elasticsearch", "index": "logs-2024"}  # Search
+    ]
+)
+
+# All handlers receive the same structured logs
+logger = micktrace.get_logger(__name__)
+logger.info("Multi-platform logging", user_id=123, action="login")
 ```
 
 ## 🏆 Why Better Than Alternatives

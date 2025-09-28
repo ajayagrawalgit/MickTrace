@@ -22,7 +22,6 @@ class AzureMonitorHandler:
     ):
         """Initialize the Azure Monitor handler.
         
-        Args:
             connection_string: Azure Monitor connection string or instrumentation key
             custom_dimensions: Default custom dimensions to add to all logs
             batch_size: Max number of logs to batch before sending
@@ -30,14 +29,13 @@ class AzureMonitorHandler:
         """
         if AzureLogHandler is None:
             raise ImportError(
-                "The opencensus-ext-azure library is required to use the Azure Monitor handler. "
-                "Install it with: pip install opencensus-ext-azure"
+                "Azure Monitor integration requires additional dependencies. "
+                "Install with: pip install micktrace[azure]"
             )
             
         # If connection string is just an instrumentation key, convert to proper format
         if not connection_string.startswith("InstrumentationKey="):
             connection_string = f"InstrumentationKey={connection_string}"
-            
         self.custom_dimensions = custom_dimensions or {}
         self.batch_size = batch_size
         self.flush_interval = flush_interval

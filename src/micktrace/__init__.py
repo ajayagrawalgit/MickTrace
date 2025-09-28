@@ -32,7 +32,11 @@ from .core.context import (
     DynamicContext,
     get_context,
     set_context,
-    clear_context
+    clear_context,
+    context,
+    acontext,
+    correlation,
+    acorrelation
 )
 
 # Types

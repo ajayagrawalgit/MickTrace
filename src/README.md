@@ -80,6 +80,14 @@ Output destinations for log records:
 - Size-based and time-based rotation
 - Automatic cleanup of old log files
 
+#### Cloud Platform Handlers (Optional Dependencies)
+- `cloudwatch.py`: AWS CloudWatch Logs integration (`pip install micktrace[aws]`)
+- `azure.py`: Azure Monitor integration (`pip install micktrace[azure]`)
+- `stackdriver.py`: Google Cloud Logging (`pip install micktrace[gcp]`)
+- `async_cloudwatch.py`: Async AWS CloudWatch handler
+- `async_azure.py`: Async Azure Monitor handler
+- `async_stackdriver.py`: Async Google Cloud handler
+
 ### `formatters/`
 Log record formatting:
 
@@ -125,6 +133,12 @@ Log filtering and sampling:
 - Plugin architecture for handlers
 - Custom formatter support
 - Filter chain composition
+
+### 6. **Optional Dependencies Architecture**
+- Minimal core with zero external dependencies
+- Cloud integrations as optional extras
+- Graceful degradation when dependencies missing
+- Clear error messages for missing integrations
 
 ## 🔄 Data Flow
 
@@ -239,5 +253,57 @@ class CustomFilter(Filter):
     "filters": [...]          # Filter configurations
 }
 ```
+
+## 📦 Optional Dependencies Pattern
+
+### Graceful Degradation Example
+```python
+# In cloudwatch.py
+try:
+    import boto3
+    from botocore.exceptions import ClientError
+except ImportError:
+    boto3 = None
+
+class CloudWatchHandler:
+    def __init__(self, ...):
+        if boto3 is None:
+            raise ImportError(
+                "AWS CloudWatch integration requires additional dependencies. "
+                "Install with: pip install micktrace[aws]"
+            )
+        # ... rest of initialization
+```
+
+### Installation Patterns
+```bash
+# Minimal installation
+pip install micktrace
+
+# Cloud platforms
+pip install micktrace[aws]      # AWS CloudWatch, S3
+pip install micktrace[azure]    # Azure Monitor
+pip install micktrace[gcp]      # Google Cloud Logging
+
+# Analytics platforms  
+pip install micktrace[datadog]  # Datadog integration
+pip install micktrace[elastic]  # Elasticsearch
+
+# Performance enhancements
+pip install micktrace[performance]  # orjson, lz4, msgpack
+
+# Everything
+pip install micktrace[all]
+```
+
+### Dependency Groups
+- **Core**: `typing-extensions` (Python < 3.11 only)
+- **AWS**: `aioboto3`, `botocore` 
+- **Azure**: `azure-monitor-ingestion`, `azure-core`
+- **GCP**: `google-cloud-logging`
+- **Analytics**: `datadog`, `newrelic`, `elasticsearch`, `prometheus-client`, `sentry-sdk`
+- **Performance**: `orjson`, `msgpack`, `lz4`
+- **Rich**: `rich` (colored console output)
+- **OpenTelemetry**: `opentelemetry-api`, `opentelemetry-sdk`
 
 This architecture provides a solid foundation for production-grade logging while maintaining simplicity and performance.

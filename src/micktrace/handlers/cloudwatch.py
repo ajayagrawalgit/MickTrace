@@ -29,7 +29,6 @@ class CloudWatchHandler:
         Args:
             log_group_name: The name of the CloudWatch Logs group
             log_stream_name: The name of the CloudWatch Logs stream
-            region: AWS region (default: us-west-2)
             batch_size: Max number of logs to batch before sending
             flush_interval: Max seconds to wait before sending logs
             aws_access_key_id: Optional AWS access key
@@ -37,14 +36,16 @@ class CloudWatchHandler:
         """
         if boto3 is None:
             raise ImportError(
-                "The boto3 library is required to use the CloudWatch handler. "
-                "Install it with: pip install boto3"
+                "AWS CloudWatch integration requires additional dependencies. "
+                "Install with: pip install micktrace[aws]"
             )
             
         self.log_group_name = log_group_name
         self.log_stream_name = log_stream_name
         self.batch_size = batch_size
         self.flush_interval = flush_interval
+        self.aws_access_key_id = aws_access_key_id
+        self.aws_secret_access_key = aws_secret_access_key
         
         # Initialize AWS client
         session = boto3.Session(

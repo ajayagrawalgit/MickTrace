@@ -118,6 +118,39 @@ class Logger:
             elif handler_type == 'memory':
                 from ..handlers.console import MemoryHandler
                 return MemoryHandler(level=level)
+            elif handler_type == 'rotating':
+                from ..handlers.rotating import RotatingFileHandler
+                path = config.get('path', 'micktrace.log')
+                max_bytes = config.get('max_bytes', 10485760)  # 10MB
+                backup_count = config.get('backup_count', 5)
+                return RotatingFileHandler(filename=path, maxBytes=max_bytes, backupCount=backup_count, level=level)
+            elif handler_type == 'cloudwatch':
+                try:
+                    from ..handlers.cloudwatch import CloudWatchHandler
+                    return CloudWatchHandler(
+                        log_group_name=config.get('log_group', 'micktrace'),
+                        log_stream_name=config.get('log_stream', 'default'),
+                        region=config.get('region', 'us-east-1')
+                    )
+                except ImportError:
+                    return None
+            elif handler_type == 'azure':
+                try:
+                    from ..handlers.azure import AzureMonitorHandler
+                    return AzureMonitorHandler(
+                        connection_string=config.get('connection_string', '')
+                    )
+                except ImportError:
+                    return None
+            elif handler_type == 'stackdriver':
+                try:
+                    from ..handlers.stackdriver import StackdriverHandler
+                    return StackdriverHandler(
+                        project_id=config.get('project_id', ''),
+                        log_name=config.get('log_name', 'micktrace')
+                    )
+                except ImportError:
+                    return None
             else:
                 return None
         except Exception:
@@ -144,6 +177,39 @@ class Logger:
             elif handler_type == 'memory':
                 from ..handlers.console import MemoryHandler
                 return MemoryHandler(level=level)
+            elif handler_type == 'rotating':
+                from ..handlers.rotating import RotatingFileHandler
+                path = config.get('path', handler_config.get('path', 'micktrace.log'))
+                max_bytes = config.get('max_bytes', 10485760)  # 10MB
+                backup_count = config.get('backup_count', 5)
+                return RotatingFileHandler(filename=path, maxBytes=max_bytes, backupCount=backup_count, level=level)
+            elif handler_type == 'cloudwatch':
+                try:
+                    from ..handlers.cloudwatch import CloudWatchHandler
+                    return CloudWatchHandler(
+                        log_group_name=config.get('log_group', handler_config.get('log_group', 'micktrace')),
+                        log_stream_name=config.get('log_stream', handler_config.get('log_stream', 'default')),
+                        region=config.get('region', handler_config.get('region', 'us-east-1'))
+                    )
+                except ImportError:
+                    return None
+            elif handler_type == 'azure':
+                try:
+                    from ..handlers.azure import AzureMonitorHandler
+                    return AzureMonitorHandler(
+                        connection_string=config.get('connection_string', handler_config.get('connection_string', ''))
+                    )
+                except ImportError:
+                    return None
+            elif handler_type == 'stackdriver':
+                try:
+                    from ..handlers.stackdriver import StackdriverHandler
+                    return StackdriverHandler(
+                        project_id=config.get('project_id', handler_config.get('project_id', '')),
+                        log_name=config.get('log_name', handler_config.get('log_name', 'micktrace'))
+                    )
+                except ImportError:
+                    return None
             else:
                 return None
         except Exception:
