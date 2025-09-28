@@ -1,11 +1,15 @@
-# MickTrace Source Code Architecture
+# MickTrace Source Code - Python Logging Library
 
-This document explains the internal architecture and modules of MickTrace.
+This directory contains the source code for MickTrace, a modern Python logging library designed for production applications.
+
+**Created by [Ajay Agrawal](https://github.com/ajayagrawalgit) | [LinkedIn](https://www.linkedin.com/in/theajayagrawal/)**
+**Repository**: [https://github.com/ajayagrawalgit/MickTrace](https://github.com/ajayagrawalgit/MickTrace)
 
 ## 📁 Directory Structure
 
 ```
 src/micktrace/
+{{ ... }}
 ├── __init__.py          # Public API exports
 ├── types.py             # Core type definitions
 ├── core/                # Core logging engine

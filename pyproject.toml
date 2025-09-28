@@ -5,28 +5,46 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "micktrace"
 version = "1.0.0"
-description = "The world's most advanced Python logging library - async-native, structured, zero-config, library-first design"
+description = "Modern Python logging library for production applications - async-native, structured logging, zero-config, cloud-ready with AWS/Azure/GCP integration, context propagation, and performance optimization"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "Ajay Agrawal", email = "ajay@micktrace.dev"}
+    {name = "Ajay Agrawal", email = "ajayagrawalofficial@gmail.com"}
 ]
 maintainers = [
-    {name = "Ajay Agrawal", email = "ajay@micktrace.dev"}
+    {name = "Ajay Agrawal", email = "ajayagrawalofficial@gmail.com"}
 ]
 keywords = [
-    "logging", 
-    "async", 
-    "structured", 
+    "python logging",
+    "async logging", 
+    "structured logging",
+    "json logging",
+    "cloud logging",
+    "aws cloudwatch",
+    "azure monitor", 
+    "google cloud logging",
+    "datadog logging",
     "observability", 
     "tracing", 
-    "performance",
-    "library-first",
-    "zero-config",
-    "context",
-    "json",
-    "logfmt"
+    "monitoring",
+    "performance logging",
+    "production logging",
+    "library logging",
+    "context propagation",
+    "correlation id",
+    "microservices logging",
+    "kubernetes logging",
+    "docker logging",
+    "elasticsearch logging",
+    "logfmt",
+    "python logger",
+    "async python",
+    "logging library",
+    "log management",
+    "application logging",
+    "system logging",
+    "enterprise logging"
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -117,11 +135,14 @@ opentelemetry = [
 all = ["micktrace[dev,cloud,analytics,performance,rich,opentelemetry]"]
 
 [project.urls]
-Homepage = "https://github.com/ajayagrawalgit/micktrace"
-Repository = "https://github.com/ajayagrawalgit/micktrace"
-Documentation = "https://github.com/ajayagrawalgit/micktrace#readme"
-Issues = "https://github.com/ajayagrawalgit/micktrace/issues"
-Changelog = "https://github.com/ajayagrawalgit/micktrace/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/ajayagrawalgit/MickTrace"
+Repository = "https://github.com/ajayagrawalgit/MickTrace"
+Documentation = "https://github.com/ajayagrawalgit/MickTrace#readme"
+"Bug Tracker" = "https://github.com/ajayagrawalgit/MickTrace/issues"
+"Source Code" = "https://github.com/ajayagrawalgit/MickTrace"
+"Author Profile" = "https://github.com/ajayagrawalgit"
+"LinkedIn" = "https://www.linkedin.com/in/theajayagrawal/"
+Changelog = "https://github.com/ajayagrawalgit/MickTrace/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 zip-safe = false

@@ -1,6 +1,11 @@
 """
 Micktrace - The world's most advanced Python logging library
 
+Created by Ajay Agrawal (https://github.com/ajayagrawalgit)
+Repository: https://github.com/ajayagrawalgit/MickTrace
+LinkedIn: https://www.linkedin.com/in/theajayagrawal/
+Copyright (c) 2025 Ajay Agrawal. All rights reserved.
+
 Zero-shortcomings, async-native, structured logging library designed to be 
 the de facto standard for Python logging.
 
@@ -66,11 +71,16 @@ except ImportError:
     Filter = None
     LevelFilter = None
 
-# Version information
+# Version and metadata
 __version__ = "1.0.0"
 __author__ = "Ajay Agrawal"
-__email__ = "ajay@micktrace.dev"
+__email__ = "ajayagrawalofficial@gmail.com"
 __license__ = "MIT"
+__copyright__ = "Copyright (c) 2025 Ajay Agrawal"
+__url__ = "https://github.com/ajayagrawalgit/MickTrace"
+__repository__ = "https://github.com/ajayagrawalgit/MickTrace"
+__linkedin__ = "https://www.linkedin.com/in/theajayagrawal/"
+__credits__ = ["Ajay Agrawal"]
 
 # Public API
 __all__ = [
