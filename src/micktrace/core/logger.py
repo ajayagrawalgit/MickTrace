@@ -388,19 +388,27 @@ class Logger:
         self._cached_config = None
         self._cache_ttl = 1.0
         self._bound_data = bound_data or {}
-        
         # Add context manager
         from .context import get_context
         self.context = get_context
 
         try:
             config = self._get_config()
-            if hasattr(config, 'handlers'):
+            if hasattr(config, 'handlers') and config.handlers:
                 for handler_config in config.handlers:
-                    if isinstance(handler_config, dict):
-                        handler = self.create_handler(handler_config.get('type', ''), handler_config)
-                        if handler:
-                            self._handlers.append(handler)
+                    try:
+                        if hasattr(handler_config, 'type'):
+                            # HandlerConfig object
+                            handler = self._create_handler_from_config(handler_config)
+                            if handler:
+                                self._handlers.append(handler)
+                        elif isinstance(handler_config, dict):
+                            # Dictionary config
+                            handler = self._create_handler_from_dict(handler_config)
+                            if handler:
+                                self._handlers.append(handler)
+                    except Exception:
+                        continue
         except Exception:
             pass
 
@@ -418,6 +426,65 @@ class Logger:
                 is_configured = False
                 enabled = True
             return FallbackConfig()
+
+    def _create_handler_from_config(self, handler_config) -> Any:
+        """Create a handler from HandlerConfig object."""
+        try:
+            handler_type = handler_config.type
+            level = handler_config.level
+            config = handler_config.config.copy() if handler_config.config else {}
+            
+            if handler_type == 'file':
+                from ..handlers.handlers import FileHandler
+                # The config might be nested, so check both levels
+                if 'path' in config:
+                    path = config['path']
+                elif 'config' in config and isinstance(config['config'], dict):
+                    path = config['config'].get('path', 'micktrace.log')
+                else:
+                    path = 'micktrace.log'
+                return FileHandler(filename=path, level=level)
+            elif handler_type == 'console':
+                from ..handlers.console import ConsoleHandler
+                return ConsoleHandler(level=level)
+            elif handler_type == 'null':
+                from ..handlers.console import NullHandler
+                return NullHandler(level=level)
+            elif handler_type == 'memory':
+                from ..handlers.console import MemoryHandler
+                return MemoryHandler(level=level)
+            else:
+                return None
+        except Exception:
+            return None
+
+    def _create_handler_from_dict(self, handler_config: Dict[str, Any]) -> Any:
+        """Create a handler from dictionary config."""
+        try:
+            handler_type = handler_config.get('type', 'console')
+            level = handler_config.get('level', 'INFO')
+            config = handler_config.get('config', {})
+            
+            if handler_type == 'file':
+                from ..handlers.handlers import FileHandler
+                # Support both nested and flat config structures
+                path = config.get('path', handler_config.get('path', 'micktrace.log'))
+                if path == 'micktrace.log' and 'config' in config and isinstance(config['config'], dict):
+                    path = config['config'].get('path', 'micktrace.log')
+                return FileHandler(filename=path, level=level)
+            elif handler_type == 'console':
+                from ..handlers.console import ConsoleHandler
+                return ConsoleHandler(level=level)
+            elif handler_type == 'null':
+                from ..handlers.console import NullHandler
+                return NullHandler(level=level)
+            elif handler_type == 'memory':
+                from ..handlers.console import MemoryHandler
+                return MemoryHandler(level=level)
+            else:
+                return None
+        except Exception:
+            return None
 
     def _normalize_level(self, level: Union[str, LogLevel, int]) -> LogLevel:
         """Normalize level input to LogLevel enum."""
@@ -625,13 +692,18 @@ class Logger:
                 except Exception:
                     pass
             
-            self._emit_simple(record)
-
-            for handler in self._handlers:
-                try:
-                    handler.handle(record)
-                except Exception:
-                    pass
+            # Only emit to handlers - no default console output
+            # This ensures logs only go where they're configured to go
+            if self._handlers:
+                for handler in self._handlers:
+                    try:
+                        handler.handle(record)
+                    except Exception:
+                        pass
+            else:
+                # Only fallback to simple emit if no handlers are configured
+                # This maintains backward compatibility for unconfigured loggers
+                self._emit_simple(record)
 
         except Exception:
             pass

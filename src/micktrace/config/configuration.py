@@ -55,7 +55,7 @@ class HandlerConfig:
 
         except Exception:
             # If validation fails completely, set safe defaults
-            self.type = "console"
+            self.type = "null"  # Use NullHandler as safe default
             self.level = "INFO"
             self.format = "structured"
             self.enabled = True
@@ -74,7 +74,7 @@ class Configuration:
 
     # Handlers
     handlers: List[HandlerConfig] = field(default_factory=lambda: [
-        HandlerConfig(type="console")
+        HandlerConfig(type="null")  # Use NullHandler by default
     ])
 
     # Context and metadata
@@ -97,7 +97,7 @@ class Configuration:
             self.format = "structured"
             self.enabled = True
             self.environment = "development"
-            self.handlers = [HandlerConfig(type="console")]
+            self.handlers = [HandlerConfig(type="null")]  # Use NullHandler as safe default
         except Exception:
             pass
 
@@ -124,7 +124,7 @@ class Configuration:
 
         # Validate handlers
         if not isinstance(self.handlers, list) or not self.handlers:
-            self.handlers = [HandlerConfig(type="console")]
+            self.handlers = [HandlerConfig(type="null")]  # Use NullHandler as fallback
         else:
             # Validate each handler
             valid_handlers = []
@@ -186,7 +186,7 @@ class Configuration:
                 "format": "structured",
                 "enabled": True,
                 "is_configured": False,
-                "handlers": [{"type": "console"}]
+                "handlers": [{"type": "null"}]  # Use NullHandler as fallback
             }
 
     @classmethod

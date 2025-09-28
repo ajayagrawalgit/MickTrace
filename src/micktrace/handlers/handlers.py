@@ -24,17 +24,13 @@ class Handler:
 
     def handle(self, record: LogRecord) -> None:
         """Process a log record."""
-        print(f"Handler {self.__class__.__name__} checking record: {record}")
         try:
             if not self.should_log(record):
-                print(f"Handler {self.__class__.__name__} skipping record due to level/filters")
                 return
-            print(f"Handler {self.__class__.__name__} emitting record")
             self.emit(record)
-        except Exception as e:
-            print(f"Handler {self.__class__.__name__} failed to handle record: {e}")
-            import traceback
-            traceback.print_exc()
+        except Exception:
+            # Silently continue if a handler fails
+            pass
 
     def emit(self, record: LogRecord) -> None:
         """Emit a log record."""
