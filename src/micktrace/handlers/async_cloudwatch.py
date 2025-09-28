@@ -155,5 +155,4 @@ class AsyncCloudWatchHandler(AsyncBatchHandler):
                     await asyncio.sleep(2 ** retry_count)
                     
                 except Exception as e:
-                    print(f"Error sending logs to CloudWatch: {e}")
                     raise

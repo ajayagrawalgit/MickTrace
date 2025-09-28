@@ -124,9 +124,6 @@ class AsyncHandler(ABC):
         # Calculate backoff time (exponential with max of 5 minutes)
         backoff = min(300, 2 ** self._error_count)
         
-        print(f"Error in async handler worker: {error}. "
-              f"Backing off for {backoff} seconds.")
-        
         time.sleep(backoff)
         
     @abstractmethod

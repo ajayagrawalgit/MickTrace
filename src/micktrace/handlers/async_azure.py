@@ -92,7 +92,6 @@ class AsyncAzureMonitorHandler(AsyncBatchHandler):
             except Exception as e:
                 retry_count += 1
                 if retry_count >= max_retries:
-                    print(f"Error sending logs to Azure Monitor: {e}")
                     raise
                     
                 await asyncio.sleep(2 ** retry_count)

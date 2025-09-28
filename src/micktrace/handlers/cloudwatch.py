@@ -104,7 +104,6 @@ class CloudWatchHandler:
             return None
             
         except Exception as e:
-            print(f"Error getting sequence token: {e}")
             return None
             
     def emit(self, record: LogRecord) -> None:
@@ -151,8 +150,8 @@ class CloudWatchHandler:
                 self.sequence_token = response.get('nextSequenceToken')
                 
             except Exception as e:
-                print(f"Error sending logs to CloudWatch: {e}")
                 # Could implement retry logic here
+                pass
                 
             self._buffer.clear()
             self._last_flush = time.time()

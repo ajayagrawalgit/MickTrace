@@ -322,12 +322,10 @@ class MusicStreamingService:
                 
                 stats["events_processed"] += 1
                 
-                # Show progress every 10,000 events
+                # Optional progress update every 10,000 events
                 if (i + 1) % 10_000 == 0:
                     duration = time.time() - start_time
                     rate = (i + 1) / duration
-                    # Only show progress on terminal
-                    print(f"\rProcessing events: {i + 1:,}/{events_count:,} ({rate:.0f} events/sec)", end="")
             
             # Calculate final statistics
             duration = time.time() - start_time
@@ -345,9 +343,7 @@ class MusicStreamingService:
                 data=stats
             )
             
-            # Clear the progress line
-            print("\r" + " " * 80)
-            print(f"\rCompleted processing {events_count:,} events.")
+            pass  # Let the logs show completion
             
         except Exception as e:
             # Log critical error
@@ -357,7 +353,7 @@ class MusicStreamingService:
                 exc_info=e
             )
             
-            print("\rSimulation failed. Check logs for details.")
+            pass  # Error will be in the logs
             raise
             
         finally:

@@ -27,8 +27,8 @@ class RotatingFileHandler(FileHandler):
         try:
             log_dir = Path(self.filename).parent
             log_dir.mkdir(parents=True, exist_ok=True)
-        except Exception as e:
-            print(f"Failed to create log directory: {e}")
+        except Exception:
+            pass
 
     def _should_rotate(self) -> bool:
         """Determine if we should rotate the file."""
@@ -69,8 +69,8 @@ class RotatingFileHandler(FileHandler):
                 # No backups, just truncate
                 open(self.filename, 'w').close()
 
-        except Exception as e:
-            print(f"Failed to rotate log file: {e}")
+        except Exception:
+            pass
 
     def handle(self, record: LogRecord) -> None:
         """Handle a log record with rotation support."""
@@ -82,12 +82,12 @@ class RotatingFileHandler(FileHandler):
                     self._file = None
 
             super().handle(record)
-        except Exception as e:
-            print(f"Failed to handle log record: {e}")
+        except Exception:
+            pass
 
     def close(self) -> None:
         """Close the handler and associated file."""
         try:
             super().close()
-        except Exception as e:
-            print(f"Failed to close handler: {e}")
+        except Exception:
+            pass

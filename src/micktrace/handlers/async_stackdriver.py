@@ -113,7 +113,6 @@ class AsyncGoogleCloudHandler(AsyncBatchHandler):
             except Exception as e:
                 retry_count += 1
                 if retry_count >= max_retries:
-                    print(f"Error sending logs to Google Cloud: {e}")
                     raise
                 
                 # Sleep in thread

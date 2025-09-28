@@ -140,8 +140,8 @@ class AzureMonitorHandler:
                 self.handler.flush()
                 
             except Exception as e:
-                print(f"Error sending logs to Azure Monitor: {e}")
                 # Could implement retry logic here
+                pass
                 
             self._buffer.clear()
             self._last_flush = time.time()
