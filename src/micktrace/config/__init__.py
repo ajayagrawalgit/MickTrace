@@ -6,14 +6,14 @@ from .configuration import (
     configure,
     get_configuration,
     set_configuration,
-    reset_configuration
+    reset_configuration,
 )
 
 __all__ = [
     "Configuration",
     "HandlerConfig",
     "configure",
-    "get_configuration", 
+    "get_configuration",
     "set_configuration",
-    "reset_configuration"
+    "reset_configuration",
 ]

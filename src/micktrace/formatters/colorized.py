@@ -13,7 +13,7 @@ class ColorizedFormatter:
 
     RESET = "\033[0m"
     BOLD = "\033[1m"
-    
+
     # Colors
     BLACK = "\033[30m"
     RED = "\033[31m"
@@ -23,7 +23,7 @@ class ColorizedFormatter:
     MAGENTA = "\033[35m"
     CYAN = "\033[36m"
     WHITE = "\033[37m"
-    
+
     # Background colors
     BG_BLACK = "\033[40m"
     BG_RED = "\033[41m"
@@ -42,9 +42,13 @@ class ColorizedFormatter:
         "CRITICAL": RED + BOLD,
     }
 
-    def __init__(self, timestamp_format: str = "%Y-%m-%d %H:%M:%S",
-                 include_context: bool = True, colored_level: bool = True,
-                 colored_service: bool = False) -> None:
+    def __init__(
+        self,
+        timestamp_format: str = "%Y-%m-%d %H:%M:%S",
+        include_context: bool = True,
+        colored_level: bool = True,
+        colored_service: bool = False,
+    ) -> None:
         """Initialize the formatter."""
         self.timestamp_format = timestamp_format
         self.include_context = include_context
@@ -55,7 +59,7 @@ class ColorizedFormatter:
     def _check_color_support(self) -> None:
         """Check if the terminal supports colors."""
         self.supports_color = False
-        if hasattr(sys.stdout, 'isatty') and sys.stdout.isatty():
+        if hasattr(sys.stdout, "isatty") and sys.stdout.isatty():
             self.supports_color = True
 
     def _colorize(self, text: str, color: str) -> str:
@@ -90,7 +94,7 @@ class ColorizedFormatter:
         try:
             parts = []
             for key, value in data.items():
-                if key not in ['timestamp_iso', 'level', 'logger_name', 'message']:
+                if key not in ["timestamp_iso", "level", "logger_name", "message"]:
                     try:
                         if isinstance(value, (dict, list)):
                             value_str = json.dumps(value)
@@ -111,7 +115,7 @@ class ColorizedFormatter:
                 self._format_timestamp(record.timestamp),
                 self._format_level(record.level),
                 self._format_service(record.logger_name),
-                record.message
+                record.message,
             ]
 
             # Add context data if enabled

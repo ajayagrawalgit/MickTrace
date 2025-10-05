@@ -8,9 +8,13 @@ from ..types import LogLevel, LogRecord
 
 class Handler:
     """Base handler class for MickTrace."""
-    
+
     def __init__(self, level: Optional[Union[str, LogLevel]] = None):
-        self.level = LogLevel.from_string(level) if isinstance(level, str) else level or LogLevel.NOTSET
+        self.level = (
+            LogLevel.from_string(level)
+            if isinstance(level, str)
+            else level or LogLevel.NOTSET
+        )
         self._filters: List[Any] = []
 
     def add_filter(self, filter_obj: Any) -> None:
@@ -49,7 +53,7 @@ class Handler:
 
         if record_level < handler_level:
             return False
-            
+
         return all(f.filter(record) for f in self._filters)
 
     def flush(self) -> None:
@@ -65,17 +69,17 @@ class FileHandler(Handler):
     """Handler for writing log records to a file."""
 
     def __init__(
-        self, 
+        self,
         filename: str,
-        mode: str = 'a',
+        mode: str = "a",
         encoding: Optional[str] = None,
         level: Optional[Union[str, LogLevel]] = None,
-        formatter: Optional[Any] = None
+        formatter: Optional[Any] = None,
     ):
         super().__init__(level)
         self.filename = filename
         self.mode = mode
-        self.encoding = encoding or 'utf-8'
+        self.encoding = encoding or "utf-8"
         self.formatter = formatter
         self._file: Optional[TextIO] = None
 
@@ -104,16 +108,19 @@ class FileHandler(Handler):
                 msg = self.formatter.format(record)
             else:
                 # Default formatting with better data handling
-                ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(record.timestamp))
+                ts = time.strftime(
+                    "%Y-%m-%d %H:%M:%S", time.localtime(record.timestamp)
+                )
                 msg = f"{ts} [{record.level:>8}] {record.logger_name} {record.message}"
-                
+
                 # Handle structured data
                 if record.data:
                     try:
-                        sorted_data = sorted(record.data.items())  # Sort for consistency
+                        # Sort for consistency
+                        sorted_data = sorted(record.data.items())
                         for k, v in sorted_data:
                             # Skip special fields
-                            if k not in ('timestamp_iso', 'message'):
+                            if k not in ("timestamp_iso", "message"):
                                 msg += f" {k}={v}"
                     except Exception:
                         pass  # Skip data on error
@@ -139,6 +146,7 @@ class FileHandler(Handler):
             # Use print for handler errors since we can't log them
             print(f"Failed to emit log record to {self.filename}: {e}")
             import traceback
+
             traceback.print_exc()
 
     def format(self, record: LogRecord) -> str:
@@ -167,10 +175,10 @@ class RotatingFileHandler(FileHandler):
         filename: str,
         max_bytes: int = 0,
         backup_count: int = 0,
-        mode: str = 'a',
+        mode: str = "a",
         encoding: Optional[str] = None,
         level: Optional[Union[str, LogLevel]] = None,
-        formatter: Optional[Any] = None
+        formatter: Optional[Any] = None,
     ):
         super().__init__(filename, mode, encoding, level, formatter)
         self.max_bytes = max_bytes

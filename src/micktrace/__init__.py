@@ -6,12 +6,12 @@ Repository: https://github.com/ajayagrawalgit/MickTrace
 LinkedIn: https://www.linkedin.com/in/theajayagrawal/
 Copyright (c) 2025 Ajay Agrawal. All rights reserved.
 
-Zero-shortcomings, async-native, structured logging library designed to be 
+Zero-shortcomings, async-native, structured logging library designed to be
 the de facto standard for Python logging.
 
 Features:
 - Library-first design with zero global state pollution
-- Async-native with sub-microsecond overhead when disabled  
+- Async-native with sub-microsecond overhead when disabled
 - Structured logging by default with type safety
 - Hot-reload configuration and environment variable support
 - Multiprocessing safe with built-in queue management
@@ -32,8 +32,8 @@ from typing import Any, Dict, Optional
 from .core.logger import Logger, BoundLogger, get_logger, bind
 from .config.configuration import configure, get_configuration
 from .core.context import (
-    Context, 
-    ContextProvider, 
+    Context,
+    ContextProvider,
     DynamicContext,
     get_context,
     set_context,
@@ -41,7 +41,7 @@ from .core.context import (
     context,
     acontext,
     correlation,
-    acorrelation
+    acorrelation,
 )
 
 # Types
@@ -86,38 +86,34 @@ __credits__ = ["Ajay Agrawal"]
 __all__ = [
     # Core functionality
     "get_logger",
-    "configure", 
+    "configure",
     "get_configuration",
     "bind",
-
     # Context management
     "context",
     "acontext",
-    "get_context", 
+    "get_context",
     "set_context",
     "clear_context",
-
     # Types
     "Logger",
     "BoundLogger",
     "LogLevel",
     "LogRecord",
-
     # Base classes for extensions (may be None if imports fail)
     "ConsoleHandler",
-    "NullHandler", 
+    "NullHandler",
     "MemoryHandler",
     "Formatter",
     "JSONFormatter",
     "SimpleFormatter",
     "Filter",
     "LevelFilter",
-
     # Version info
     "__version__",
-    "__author__", 
+    "__author__",
     "__email__",
-    "__license__"
+    "__license__",
 ]
 
 
@@ -149,7 +145,7 @@ def disable() -> None:
         pass
 
 
-def enable() -> None: 
+def enable() -> None:
     """Re-enable logging after disable().
 
     Restores default configuration.

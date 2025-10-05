@@ -14,7 +14,7 @@ from .buffered import BufferedHandler
 
 __all__ = [
     "ConsoleHandler",
-    "NullHandler", 
+    "NullHandler",
     "MemoryHandler",
     "FileHandler",
     "CloudWatchHandler",
@@ -23,7 +23,7 @@ __all__ = [
     "AsyncHandler",
     "AsyncBatchHandler",
     "AsyncCloudWatchHandler",
-    "AsyncGoogleCloudHandler", 
+    "AsyncGoogleCloudHandler",
     "AsyncAzureMonitorHandler",
-    "BufferedHandler"
+    "BufferedHandler",
 ]

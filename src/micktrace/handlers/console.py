@@ -7,7 +7,9 @@ from ..types import LogRecord
 
 
 class ConsoleHandler:
-    def __init__(self, name: str = "console", level: str = "INFO", **kwargs: Any) -> None:
+    def __init__(
+        self, name: str = "console", level: str = "INFO", **kwargs: Any
+    ) -> None:
         self.name = name
         self.level = level
         self.stream = sys.stderr
@@ -17,13 +19,14 @@ class ConsoleHandler:
         """Handle a log record."""
         try:
             # Check level if specified
-            if hasattr(self, 'level'):
+            if hasattr(self, "level"):
                 from ..types import LogLevel
+
                 record_level = LogLevel.from_string(record.level)
                 handler_level = LogLevel.from_string(self.level)
                 if record_level < handler_level:
                     return
-                    
+
             self.emit(record)
         except Exception:
             pass
@@ -52,7 +55,9 @@ class NullHandler:
 
 
 class MemoryHandler:
-    def __init__(self, name: str = "memory", level: str = "INFO", **kwargs: Any) -> None:
+    def __init__(
+        self, name: str = "memory", level: str = "INFO", **kwargs: Any
+    ) -> None:
         self.name = name
         self.level = level
         self.records = []
@@ -62,13 +67,14 @@ class MemoryHandler:
         """Handle a log record."""
         try:
             # Check level if specified
-            if hasattr(self, 'level'):
+            if hasattr(self, "level"):
                 from ..types import LogLevel
+
                 record_level = LogLevel.from_string(record.level)
                 handler_level = LogLevel.from_string(self.level)
                 if record_level < handler_level:
                     return
-                    
+
             self.emit(record)
         except Exception:
             pass

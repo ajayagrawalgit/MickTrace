@@ -3,26 +3,26 @@
 from .logger import Logger, BoundLogger, get_logger
 from .context import Context, ContextProvider, DynamicContext
 from .context import (
-    get_context, 
-    set_context, 
-    clear_context, 
-    context, 
+    get_context,
+    set_context,
+    clear_context,
+    context,
     acontext,
     new_correlation_id,
     correlation,
-    acorrelation
+    acorrelation,
 )
 
 __all__ = [
     "Logger",
-    "BoundLogger", 
+    "BoundLogger",
     "get_logger",
     "get_context",
-    "set_context", 
+    "set_context",
     "clear_context",
     "context",
     "acontext",
     "new_correlation_id",
     "correlation",
-    "acorrelation"
+    "acorrelation",
 ]

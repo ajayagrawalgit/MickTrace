@@ -7,10 +7,10 @@ from .ecs import ECSFormatter
 
 __all__ = [
     "Formatter",
-    "JSONFormatter", 
+    "JSONFormatter",
     "SimpleFormatter",
     "LogfmtFormatter",
     "ColorizedFormatter",
     "OpenTelemetryFormatter",
-    "ECSFormatter"
+    "ECSFormatter",
 ]

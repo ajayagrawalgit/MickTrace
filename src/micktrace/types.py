@@ -16,6 +16,7 @@ from uuid import uuid4
 
 try:
     import orjson
+
     HAS_ORJSON = True
 except ImportError:
     HAS_ORJSON = False
@@ -23,6 +24,7 @@ except ImportError:
 
 class LogLevel(Enum):
     """Log levels with numeric values for comparison."""
+
     NOTSET = 0
     DEBUG = 10
     INFO = 20
@@ -105,53 +107,55 @@ class LogRecord:
             self.message = str(self.message)
 
             # Add ISO timestamp for readability
-            if 'timestamp_iso' not in self.data:
+            if "timestamp_iso" not in self.data:
                 try:
                     dt = datetime.fromtimestamp(self.timestamp)
-                    self.data['timestamp_iso'] = dt.isoformat()
+                    self.data["timestamp_iso"] = dt.isoformat()
                 except (ValueError, OSError):
                     # Handle invalid timestamps gracefully
-                    self.data['timestamp_iso'] = datetime.now().isoformat()
+                    self.data["timestamp_iso"] = datetime.now().isoformat()
 
         except Exception:
             # Ensure the object is always in a valid state
-            if not hasattr(self, 'message') or not self.message:
+            if not hasattr(self, "message") or not self.message:
                 self.message = "Log message"
-            if not hasattr(self, 'timestamp') or not self.timestamp:
+            if not hasattr(self, "timestamp") or not self.timestamp:
                 self.timestamp = time.time()
 
     def to_dict(self, include_metadata: bool = True) -> Dict[str, Any]:
         """Convert record to dictionary with error handling."""
         try:
             result = {
-                'timestamp': self.timestamp,
-                'level': self.level,
-                'logger_name': self.logger_name,
-                'message': self.message,
-                'data': self.data.copy() if self.data else {},
+                "timestamp": self.timestamp,
+                "level": self.level,
+                "logger_name": self.logger_name,
+                "message": self.message,
+                "data": self.data.copy() if self.data else {},
             }
 
             if include_metadata:
-                result.update({
-                    'caller': self.caller.copy() if self.caller else {},
-                    'exception': self.exception,
-                    'trace_id': self.trace_id,
-                    'correlation_id': self.correlation_id,
-                    'span_id': self.span_id,
-                    'process_id': self.process_id,
-                    'thread_id': self.thread_id,
-                })
+                result.update(
+                    {
+                        "caller": self.caller.copy() if self.caller else {},
+                        "exception": self.exception,
+                        "trace_id": self.trace_id,
+                        "correlation_id": self.correlation_id,
+                        "span_id": self.span_id,
+                        "process_id": self.process_id,
+                        "thread_id": self.thread_id,
+                    }
+                )
 
             return result
 
         except Exception:
             # Fallback to minimal record
             return {
-                'timestamp': getattr(self, 'timestamp', time.time()),
-                'level': getattr(self, 'level', 'INFO'),
-                'logger_name': getattr(self, 'logger_name', 'unknown'),
-                'message': getattr(self, 'message', 'Log record error'),
-                'data': {},
+                "timestamp": getattr(self, "timestamp", time.time()),
+                "level": getattr(self, "level", "INFO"),
+                "logger_name": getattr(self, "logger_name", "unknown"),
+                "message": getattr(self, "message", "Log record error"),
+                "data": {},
             }
 
     def to_json(self, **kwargs: Any) -> str:
@@ -162,21 +166,30 @@ class LogRecord:
             if HAS_ORJSON:
                 # Use orjson for better performance
                 try:
-                    return orjson.dumps(data, **kwargs).decode('utf-8')
+                    return orjson.dumps(data, **kwargs).decode("utf-8")
                 except Exception:
                     # Fallback if orjson fails
                     pass
 
             # Standard library json fallback
             import json
+
             return json.dumps(data, default=str, **kwargs)
 
         except Exception:
             # Ultimate fallback - FIXED: removed malformed f-string
-            level = getattr(self, 'level', 'INFO')
-            message = getattr(self, 'message', 'error')
-            timestamp = getattr(self, 'timestamp', time.time())
-            return '{"level": "' + level + '", "message": "' + message + '", "timestamp": ' + str(timestamp) + '}'
+            level = getattr(self, "level", "INFO")
+            message = getattr(self, "message", "error")
+            timestamp = getattr(self, "timestamp", time.time())
+            return (
+                '{"level": "'
+                + level
+                + '", "message": "'
+                + message
+                + '", "timestamp": '
+                + str(timestamp)
+                + "}"
+            )
 
     def to_logfmt(self) -> str:
         """Convert record to logfmt format with error handling."""
@@ -185,13 +198,13 @@ class LogRecord:
                 f"timestamp={self.timestamp}",
                 f"level={self.level}",
                 f"logger={self._quote_value(self.logger_name)}",
-                f"message={self._quote_value(self.message)}"
+                f"message={self._quote_value(self.message)}",
             ]
 
             # Add structured data
             if self.data:
                 for key, value in self.data.items():
-                    if key != 'timestamp_iso':
+                    if key != "timestamp_iso":
                         try:
                             parts.append(f"{key}={self._quote_value(value)}")
                         except Exception:
@@ -203,7 +216,7 @@ class LogRecord:
             if self.correlation_id:
                 parts.append(f"correlation_id={self.correlation_id}")
 
-            return ' '.join(parts)
+            return " ".join(parts)
 
         except Exception:
             # Minimal fallback
@@ -213,9 +226,9 @@ class LogRecord:
         """Quote a value for logfmt output with error handling."""
         try:
             str_value = str(value)
-            if ' ' in str_value or '"' in str_value or '=' in str_value:
+            if " " in str_value or '"' in str_value or "=" in str_value:
                 # Escape quotes and wrap in quotes
-                escaped = str_value.replace('"', '\"')
+                escaped = str_value.replace('"', '"')
                 return f'"{escaped}"'
             return str_value
         except Exception:

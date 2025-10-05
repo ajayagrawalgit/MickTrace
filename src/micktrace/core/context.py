@@ -3,7 +3,18 @@ Context management system for micktrace.
 Provides async-safe context propagation with comprehensive error handling.
 """
 
-__all__ = ['ContextProvider', 'DynamicContext', 'Context', 'get_context', 'set_context', 'clear_context', 'context', 'acontext', 'correlation', 'acorrelation']
+__all__ = [
+    "ContextProvider",
+    "DynamicContext",
+    "Context",
+    "get_context",
+    "set_context",
+    "clear_context",
+    "context",
+    "acontext",
+    "correlation",
+    "acorrelation",
+]
 
 import asyncio
 import threading
@@ -11,14 +22,24 @@ import time
 from contextlib import contextmanager, asynccontextmanager
 from contextvars import ContextVar, Token
 from copy import deepcopy
-from typing import Any, Dict, List, Optional, Union, Iterator, AsyncIterator, TypeVar, Callable
+from typing import (
+    Any,
+    Dict,
+    List,
+    Optional,
+    Union,
+    Iterator,
+    AsyncIterator,
+    TypeVar,
+    Callable,
+)
 from dataclasses import dataclass, field
 from uuid import uuid4
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 # Global context variable for async-safe context propagation
-_context_var: ContextVar[Dict[str, Any]] = ContextVar('micktrace_context', default={})
+_context_var: ContextVar[Dict[str, Any]] = ContextVar("micktrace_context", default={})
 
 
 def get_context() -> Dict[str, Any]:
@@ -55,10 +76,10 @@ def new_correlation_id() -> str:
 @dataclass
 class DynamicContext:
     """Dynamic context that can have values populated at runtime."""
-    
+
     def __init__(self, **providers: Callable[[], Any]) -> None:
         """Initialize with value providers.
-        
+
         Args:
             **providers: Dict mapping field names to functions that return their values
         """
@@ -76,10 +97,10 @@ class DynamicContext:
         return values
 
 
-@dataclass 
+@dataclass
 class ContextProvider:
     """Provides context data from various sources with error handling."""
-    
+
     name: str
     provider: Callable[[], Dict[str, Any]]
     refresh_interval: float = 0.0
@@ -91,37 +112,39 @@ class ContextProvider:
         """Get context data, using cache if refresh interval not exceeded."""
         if not self.enabled:
             return {}
-            
+
         try:
             current_time = time.time()
-            
+
             # Check if we need to refresh
-            if (self.refresh_interval <= 0 or 
-                current_time - self._last_refresh >= self.refresh_interval):
-                
+            if (
+                self.refresh_interval <= 0
+                or current_time - self._last_refresh >= self.refresh_interval
+            ):
+
                 try:
                     self._cached_data = self.provider()
                     self._last_refresh = current_time
                 except Exception:
                     # If provider fails, return cached data or empty dict
                     pass
-                    
+
             return self._cached_data.copy()
-            
+
         except Exception:
             return {}
 
 
 class Context:
     """Context manager for temporary context data with error handling."""
-    
+
     def __init__(self, **kwargs: Any) -> None:
         """Initialize context with data."""
         self.data = kwargs
         self.token: Optional[Token] = None
         self.previous_context: Dict[str, Any] = {}
 
-    def __enter__(self) -> 'Context':
+    def __enter__(self) -> "Context":
         """Enter context and set data."""
         try:
             self.previous_context = get_context()
@@ -140,7 +163,7 @@ class Context:
         except Exception:
             pass
 
-    async def __aenter__(self) -> 'Context':
+    async def __aenter__(self) -> "Context":
         """Enter async context."""
         return self.__enter__()
 
@@ -151,22 +174,24 @@ class Context:
 
 class ContextManager:
     """Advanced context manager with provider support."""
-    
+
     def __init__(self) -> None:
         """Initialize context manager."""
         self._providers: Dict[str, ContextProvider] = {}
         self._permanent_context: Dict[str, Any] = {}
         self._lock = threading.RLock()
 
-    def add_provider(self, name: str, provider: Callable[[], Dict[str, Any]], 
-                    refresh_interval: float = 0.0) -> None:
+    def add_provider(
+        self,
+        name: str,
+        provider: Callable[[], Dict[str, Any]],
+        refresh_interval: float = 0.0,
+    ) -> None:
         """Add a context provider."""
         try:
             with self._lock:
                 self._providers[name] = ContextProvider(
-                    name=name,
-                    provider=provider,
-                    refresh_interval=refresh_interval
+                    name=name, provider=provider, refresh_interval=refresh_interval
                 )
         except Exception:
             pass
@@ -191,10 +216,10 @@ class ContextManager:
         """Get full context including providers and permanent data."""
         try:
             context = {}
-            
+
             # Add permanent context
             context.update(self._permanent_context)
-            
+
             # Add provider data
             with self._lock:
                 for provider in self._providers.values():
@@ -203,16 +228,16 @@ class ContextManager:
                         context.update(provider_data)
                     except Exception:
                         continue
-            
+
             # Add current context
             context.update(get_context())
-            
+
             return context
-            
+
         except Exception:
             return get_context()
 
-    def __enter__(self) -> 'ContextManager':
+    def __enter__(self) -> "ContextManager":
         """Enter context manager."""
         return self
 
@@ -232,13 +257,13 @@ def context(**kwargs: Any) -> Iterator[None]:
         pass
 
 
-@contextmanager  
+@contextmanager
 def correlation(**kwargs: Any) -> Iterator[str]:
     """Context manager that generates a correlation ID with error handling."""
     correlation_id = new_correlation_id()
-    ctx_data = {'correlation_id': correlation_id}
+    ctx_data = {"correlation_id": correlation_id}
     ctx_data.update(kwargs)
-    
+
     try:
         with context(**ctx_data):
             yield correlation_id
@@ -261,9 +286,9 @@ async def acontext(**kwargs: Any) -> AsyncIterator[None]:
 async def acorrelation(**kwargs: Any) -> AsyncIterator[str]:
     """Async context manager that generates a correlation ID with error handling."""
     correlation_id = new_correlation_id()
-    ctx_data = {'correlation_id': correlation_id}
+    ctx_data = {"correlation_id": correlation_id}
     ctx_data.update(kwargs)
-    
+
     try:
         async with acontext(**ctx_data):
             yield correlation_id
