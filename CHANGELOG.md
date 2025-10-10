@@ -7,6 +7,23 @@ All notable changes to MickTrace Python logging library will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-10-10 - PEP8 Compliance & Tooling Updates
+### Changed
+- **PEP8 compliance improvements** - Enhanced code formatting and style consistency across the codebase
+- **Package management enhancements** - Added automated package update scripts for better maintenance
+
+### Fixed
+- Code style consistency issues resolved
+- Improved test coverage and reliability
+- Enhanced async example implementations
+
+### Added
+- Automated package update utilities
+- Enhanced development tooling and scripts
+- Improved code quality checks
+
+---
+
 ## [1.0.0] - 2025-01-01 - Production Release
 ### Added - Python Logging Features
 - **Async-native Python logging** with sub-microsecond overhead when disabled

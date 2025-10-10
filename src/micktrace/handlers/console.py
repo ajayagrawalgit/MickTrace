@@ -34,6 +34,15 @@ class ConsoleHandler:
     def emit(self, record: LogRecord) -> None:
         try:
             message = str(record.timestamp) + " " + record.level + " " + record.message
+            # Add additional data if present
+            if record.data:
+                data_parts = []
+                for key, value in record.data.items():
+                    # Skip internal timestamp_iso field
+                    if key != "timestamp_iso":
+                        data_parts.append(f"{key}={value}")
+                if data_parts:
+                    message += " " + " ".join(data_parts)
             self.stream.write(message + "\n")
             self.stream.flush()
         except Exception:
@@ -69,12 +78,10 @@ class MemoryHandler:
             # Check level if specified
             if hasattr(self, "level"):
                 from ..types import LogLevel
-
                 record_level = LogLevel.from_string(record.level)
                 handler_level = LogLevel.from_string(self.level)
                 if record_level < handler_level:
                     return
-
             self.emit(record)
         except Exception:
             pass
