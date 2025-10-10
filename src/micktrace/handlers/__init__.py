@@ -8,6 +8,7 @@ from .stackdriver import StackdriverHandler
 from .azure import AzureMonitorHandler
 from .async_base import AsyncHandler, AsyncBatchHandler
 from .buffered import BufferedHandler
+from .datadog import DatadogHandler
 
 # Optional async handlers - import only if dependencies are available
 try:
@@ -33,6 +34,7 @@ __all__ = [
     "CloudWatchHandler",
     "StackdriverHandler",
     "AzureMonitorHandler",
+    "DatadogHandler",
     "AsyncHandler",
     "AsyncBatchHandler",
     "BufferedHandler",

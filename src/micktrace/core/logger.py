@@ -174,6 +174,13 @@ class Logger:
                     )
                 except ImportError:
                     return None
+            elif handler_type == "datadog":
+                try:
+                    from ..handlers.datadog import DatadogHandler
+
+                    return DatadogHandler(api_key=config.get("api_key"), dd_site=config.get("dd_site", "datadoghq.com"), level=level)
+                except ImportError:
+                    return None
             else:
                 return None
         except Exception:
@@ -261,6 +268,13 @@ class Logger:
                             "log_name", handler_config.get("log_name", "micktrace")
                         ),
                     )
+                except ImportError:
+                    return None
+            elif handler_type == "datadog":
+                try:
+                    from ..handlers.datadog import DatadogHandler
+
+                    return DatadogHandler(api_key=config.get("api_key"), dd_site=config.get("dd_site", "datadoghq.com"), level=level)
                 except ImportError:
                     return None
             else:
