@@ -25,9 +25,7 @@ async def demonstrate_basic_logging():
 
     # Configure micktrace first
     micktrace.configure(
-        level="DEBUG",
-        format="structured",
-        handlers=[{"type": "console"}]
+        level="DEBUG", format="structured", handlers=[{"type": "console"}]
     )
 
     # Get a logger
@@ -37,24 +35,23 @@ async def demonstrate_basic_logging():
     logger.info("Application starting", component="main", version="1.0.0")
 
     # Log with structured data
-    logger.info("User logged in", 
-                user_id=123,
-                username="alice",
-                ip_address="192.168.1.100",
-                success=True)
+    logger.info(
+        "User logged in",
+        user_id=123,
+        username="alice",
+        ip_address="192.168.1.100",
+        success=True,
+    )
 
     # Different log levels with rich data
     logger.debug("Debug information", details="only visible in debug")
     logger.warning("Something suspicious", threat_level="low", action_required=True)
-    
+
     # Error logging with exception
     try:
         raise ValueError("Database connection failed")
     except Exception as e:
-        logger.error("An error occurred", 
-                    error_code=500, 
-                    retryable=True,
-                    exc_info=e)
+        logger.error("An error occurred", error_code=500, retryable=True, exc_info=e)
 
     # Regular logging (async logging not available in current API)
     logger.info("Operation completed", duration=1.23, status="success")
@@ -69,22 +66,18 @@ async def demonstrate_context():
     print("=== Context and Bound Logger Demo ===")
 
     # Create bound logger with context
-    request_logger = logger.bind(
-        request_id="req_12345",
-        operation="get_user_profile"
-    )
+    request_logger = logger.bind(request_id="req_12345", operation="get_user_profile")
 
     # Log service operations with automatic context
     request_logger.info("Processing request")
-    
-    request_logger.info("Database query executed", 
-                       table="users", 
-                       duration_ms=45, 
-                       query_id="q_789")
 
-    request_logger.info("Request processed successfully", 
-                       status_code=200, 
-                       response_time_ms=123)
+    request_logger.info(
+        "Database query executed", table="users", duration_ms=45, query_id="q_789"
+    )
+
+    request_logger.info(
+        "Request processed successfully", status_code=200, response_time_ms=123
+    )
 
     print("✅ Context and bound logger demo completed successfully!")
 
@@ -105,6 +98,7 @@ def main():
     except Exception as e:
         print(f"❌ Error occurred during demonstration: {e}")
         import traceback
+
         traceback.print_exc()
         return 1
 

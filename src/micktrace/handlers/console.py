@@ -7,7 +7,9 @@ from ..types import LogRecord
 
 
 class ConsoleHandler:
-    def __init__(self, name: str = "console", level: str = "INFO", **kwargs: Any) -> None:
+    def __init__(
+        self, name: str = "console", level: str = "INFO", **kwargs: Any
+    ) -> None:
         self.name = name
         self.level = level
         self.stream = sys.stderr
@@ -17,13 +19,14 @@ class ConsoleHandler:
         """Handle a log record."""
         try:
             # Check level if specified
-            if hasattr(self, 'level'):
+            if hasattr(self, "level"):
                 from ..types import LogLevel
+
                 record_level = LogLevel.from_string(record.level)
                 handler_level = LogLevel.from_string(self.level)
                 if record_level < handler_level:
                     return
-                    
+
             self.emit(record)
         except Exception:
             pass
@@ -31,6 +34,15 @@ class ConsoleHandler:
     def emit(self, record: LogRecord) -> None:
         try:
             message = str(record.timestamp) + " " + record.level + " " + record.message
+            # Add additional data if present
+            if record.data:
+                data_parts = []
+                for key, value in record.data.items():
+                    # Skip internal timestamp_iso field
+                    if key != "timestamp_iso":
+                        data_parts.append(f"{key}={value}")
+                if data_parts:
+                    message += " " + " ".join(data_parts)
             self.stream.write(message + "\n")
             self.stream.flush()
         except Exception:
@@ -52,7 +64,9 @@ class NullHandler:
 
 
 class MemoryHandler:
-    def __init__(self, name: str = "memory", level: str = "INFO", **kwargs: Any) -> None:
+    def __init__(
+        self, name: str = "memory", level: str = "INFO", **kwargs: Any
+    ) -> None:
         self.name = name
         self.level = level
         self.records = []
@@ -62,13 +76,12 @@ class MemoryHandler:
         """Handle a log record."""
         try:
             # Check level if specified
-            if hasattr(self, 'level'):
+            if hasattr(self, "level"):
                 from ..types import LogLevel
                 record_level = LogLevel.from_string(record.level)
                 handler_level = LogLevel.from_string(self.level)
                 if record_level < handler_level:
                     return
-                    
             self.emit(record)
         except Exception:
             pass

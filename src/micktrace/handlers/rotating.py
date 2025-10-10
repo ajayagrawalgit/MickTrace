@@ -11,13 +11,28 @@ from ..types import LogRecord
 class RotatingFileHandler(FileHandler):
     """A handler that writes log records to a file, rotating the file when it reaches a certain size."""
 
-    def __init__(self, name: str, level: str = "INFO", formatter: Optional[object] = None,
-                 filename: str = "log.txt", maxBytes: int = 0, backupCount: int = 0,
-                 encoding: str = "utf-8", errors: str = "strict", **kwargs):
+    def __init__(
+        self,
+        name: str,
+        level: str = "INFO",
+        formatter: Optional[object] = None,
+        filename: str = "log.txt",
+        maxBytes: int = 0,
+        backupCount: int = 0,
+        encoding: str = "utf-8",
+        errors: str = "strict",
+        **kwargs,
+    ):
         """Initialize the handler."""
-        super().__init__(name=name, level=level, formatter=formatter, 
-                        filename=filename, encoding=encoding, errors=errors)
-        
+        super().__init__(
+            name=name,
+            level=level,
+            formatter=formatter,
+            filename=filename,
+            encoding=encoding,
+            errors=errors,
+        )
+
         self.maxBytes = maxBytes
         self.backupCount = backupCount
         self._ensure_log_dir()
@@ -34,7 +49,7 @@ class RotatingFileHandler(FileHandler):
         """Determine if we should rotate the file."""
         if self.maxBytes <= 0:
             return False
-            
+
         try:
             if not os.path.exists(self.filename):
                 return False
@@ -67,7 +82,7 @@ class RotatingFileHandler(FileHandler):
 
             else:
                 # No backups, just truncate
-                open(self.filename, 'w').close()
+                open(self.filename, "w").close()
 
         except Exception:
             pass
@@ -77,7 +92,7 @@ class RotatingFileHandler(FileHandler):
         try:
             if self._should_rotate():
                 self._do_rotation()
-                if hasattr(self, '_file') and self._file:
+                if hasattr(self, "_file") and self._file:
                     self._file.close()
                     self._file = None
 

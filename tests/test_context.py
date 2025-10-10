@@ -14,10 +14,7 @@ class TestContextManagement:
     def setup_method(self):
         """Setup for each test."""
         micktrace.clear_context()
-        micktrace.configure(
-            level="DEBUG",
-            handlers=[{"type": "memory"}]
-        )
+        micktrace.configure(level="DEBUG", handlers=[{"type": "memory"}])
 
     def test_get_context_empty(self):
         """Test getting empty context."""
@@ -29,7 +26,7 @@ class TestContextManagement:
         """Test setting and getting context."""
         test_data = {"user_id": 123, "action": "test"}
         micktrace.set_context(test_data)
-        
+
         ctx = micktrace.get_context()
         assert ctx["user_id"] == 123
         assert ctx["action"] == "test"
@@ -38,10 +35,10 @@ class TestContextManagement:
         """Test that context changes don't affect original data."""
         original_data = {"user_id": 123}
         micktrace.set_context(original_data)
-        
+
         # Modify the original data
         original_data["user_id"] = 456
-        
+
         # Context should still have original value
         ctx = micktrace.get_context()
         assert ctx["user_id"] == 123
@@ -50,7 +47,7 @@ class TestContextManagement:
         """Test clearing context."""
         micktrace.set_context({"test": "value"})
         assert len(micktrace.get_context()) > 0
-        
+
         micktrace.clear_context()
         ctx = micktrace.get_context()
         assert len(ctx) == 0
@@ -59,12 +56,12 @@ class TestContextManagement:
         """Test context manager functionality."""
         # Start with empty context
         assert len(micktrace.get_context()) == 0
-        
+
         with micktrace.context(user_id=123, action="test"):
             ctx = micktrace.get_context()
             assert ctx["user_id"] == 123
             assert ctx["action"] == "test"
-        
+
         # Context should be cleared after with block
         ctx = micktrace.get_context()
         assert "user_id" not in ctx
@@ -74,12 +71,12 @@ class TestContextManagement:
         """Test nested context managers."""
         with micktrace.context(level1="outer"):
             assert micktrace.get_context()["level1"] == "outer"
-            
+
             with micktrace.context(level2="inner"):
                 ctx = micktrace.get_context()
                 assert ctx["level1"] == "outer"
                 assert ctx["level2"] == "inner"
-            
+
             # Inner context should be cleared
             ctx = micktrace.get_context()
             assert ctx["level1"] == "outer"
@@ -90,7 +87,7 @@ class TestContextManagement:
         with micktrace.correlation(service="test") as correlation_id:
             assert correlation_id is not None
             assert len(correlation_id) > 0
-            
+
             ctx = micktrace.get_context()
             assert ctx["correlation_id"] == correlation_id
             assert ctx["service"] == "test"
@@ -101,7 +98,7 @@ class TestContextManagement:
         async with micktrace.acontext(request_id="async_123"):
             ctx = micktrace.get_context()
             assert ctx["request_id"] == "async_123"
-            
+
             # Test that context propagates to nested async function
             await self._nested_async_function()
 
@@ -120,9 +117,9 @@ class TestContextManagement:
         results = await asyncio.gather(
             self._async_operation("task1", 1),
             self._async_operation("task2", 2),
-            self._async_operation("task3", 3)
+            self._async_operation("task3", 3),
         )
-        
+
         # Each task should have maintained its own context
         assert results[0] == 1
         assert results[1] == 2
@@ -147,16 +144,13 @@ class TestBoundLoggers:
     def setup_method(self):
         """Setup for each test."""
         micktrace.clear_context()
-        micktrace.configure(
-            level="DEBUG",
-            handlers=[{"type": "memory"}]
-        )
+        micktrace.configure(level="DEBUG", handlers=[{"type": "memory"}])
 
     def test_bound_logger_creation(self):
         """Test creating bound loggers."""
         logger = micktrace.get_logger("test")
         bound = logger.bind(service="test", version="1.0")
-        
+
         assert bound is not None
         assert bound != logger
 
@@ -166,7 +160,7 @@ class TestBoundLoggers:
         bound1 = logger.bind(service="test")
         bound2 = bound1.bind(version="1.0")
         bound3 = bound2.bind(request_id="req_123")
-        
+
         assert bound3 is not None
         # Each binding should create a new logger instance
         assert bound1 != bound2 != bound3
@@ -175,7 +169,7 @@ class TestBoundLoggers:
         """Test bound logger with context manager."""
         logger = micktrace.get_logger("test")
         bound = logger.bind(service="test")
-        
+
         with micktrace.context(user_id=123):
             # Both bound context and context manager should be available
             bound.info("Test message")

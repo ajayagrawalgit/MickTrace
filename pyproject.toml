@@ -177,7 +177,6 @@ addopts = [
     "--tb=short",
     "--durations=10"
 ]
-asyncio_mode = "auto"
 markers = [
     "asyncio: marks tests as async",
     "performance: marks tests as performance tests",

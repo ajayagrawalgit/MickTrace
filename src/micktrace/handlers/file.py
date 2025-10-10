@@ -10,6 +10,7 @@ import json
 
 import traceback
 
+
 class FileHandler:
     def __init__(
         self,
@@ -17,10 +18,10 @@ class FileHandler:
         max_bytes: int = 10485760,  # 10MB default
         backup_count: int = 5,
         async_mode: bool = False,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """Initialize FileHandler.
-        
+
         Args:
             filename: Path to the log file (required)
             max_bytes: Maximum size in bytes before rotation
@@ -29,24 +30,26 @@ class FileHandler:
         """
         if not filename:
             raise ValueError("filename must be provided")
-        
+
         self.filename = os.path.abspath(filename)
         self.max_bytes = max_bytes
         self.backup_count = backup_count
         self.config = kwargs
-        
+
         try:
             # Ensure directory exists
             log_dir = os.path.dirname(self.filename)
             if log_dir:  # Only create if path has a directory component
                 os.makedirs(log_dir, exist_ok=True)
-                
+
             # Verify we can write to the file
-            with open(self.filename, 'a') as f:
+            with open(self.filename, "a") as f:
                 f.write("")
         except Exception as e:
-            raise IOError(f"Cannot initialize log file {self.filename}: {str(e)}") from e
-        
+            raise IOError(
+                f"Cannot initialize log file {self.filename}: {str(e)}"
+            ) from e
+
         # Setup async queue and worker if async mode is enabled
         self.async_mode = async_mode
         if self.async_mode:
@@ -99,11 +102,11 @@ class FileHandler:
                 "level": record.level,
                 "message": record.message,
                 "logger_name": record.logger_name,
-                "data": record.data
+                "data": record.data,
             }
-            
+
             log_line = json.dumps(log_data)
-            
+
             # Write with atomic operation when possible
             temp_file = f"{self.filename}.tmp"
             try:
@@ -119,7 +122,7 @@ class FileHandler:
 
     def emit(self, record: LogRecord) -> None:
         """Emit a log record.
-        
+
         In async mode, puts the record in a queue.
         In sync mode, writes directly to file.
         """
@@ -135,13 +138,14 @@ class FileHandler:
         """Handle a log record."""
         try:
             # Check level if specified
-            if hasattr(self, 'level'):
+            if hasattr(self, "level"):
                 from ..types import LogLevel
+
                 record_level = LogLevel.from_string(record.level)
                 handler_level = LogLevel.from_string(self.level)
                 if record_level < handler_level:
                     return
-                    
+
             self.emit(record)
         except Exception as e:
             # Log handler failures should not crash the application

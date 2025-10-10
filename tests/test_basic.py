@@ -48,7 +48,7 @@ def test_log_record():
             timestamp=1234567890.123,
             level="INFO",
             logger_name="test",
-            message="Test message"
+            message="Test message",
         )
 
         assert record.timestamp == 1234567890.123
@@ -69,7 +69,7 @@ def test_log_record_serialization():
             level="INFO",
             logger_name="test",
             message="Test message",
-            data={"key": "value"}
+            data={"key": "value"},
         )
 
         json_str = record.to_json()
@@ -143,9 +143,7 @@ def test_configuration():
     try:
         # Basic configuration should work
         micktrace.configure(
-            level="DEBUG", 
-            format="structured",
-            handlers=[{"type": "console"}]
+            level="DEBUG", format="structured", handlers=[{"type": "console"}]
         )
         return True
     except Exception as e:
@@ -181,7 +179,7 @@ def run_all_tests():
         test_structured_logging,
         test_bound_logger,
         test_configuration,
-        test_exception_logging
+        test_exception_logging,
     ]
 
     print("🧪 Running Micktrace comprehensive tests...")

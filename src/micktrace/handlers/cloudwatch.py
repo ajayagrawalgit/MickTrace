@@ -11,9 +11,10 @@ try:
 except ImportError:
     boto3 = None
 
+
 class CloudWatchHandler:
     """Handler for sending logs to AWS CloudWatch Logs."""
-    
+
     def __init__(
         self,
         log_group_name: str,
@@ -25,7 +26,7 @@ class CloudWatchHandler:
         aws_secret_access_key: Optional[str] = None,
     ):
         """Initialize the CloudWatch handler.
-        
+
         Args:
             log_group_name: The name of the CloudWatch Logs group
             log_stream_name: The name of the CloudWatch Logs stream
@@ -39,37 +40,36 @@ class CloudWatchHandler:
                 "AWS CloudWatch integration requires additional dependencies. "
                 "Install with: pip install micktrace[aws]"
             )
-            
+
         self.log_group_name = log_group_name
         self.log_stream_name = log_stream_name
         self.batch_size = batch_size
         self.flush_interval = flush_interval
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_access_key = aws_secret_access_key
-        
+
         # Initialize AWS client
         session = boto3.Session(
             aws_access_key_id=aws_access_key_id,
             aws_secret_access_key=aws_secret_access_key,
-            region_name=region
+            region_name=region,
         )
-        self.client = session.client('logs')
-        
+        self.client = session.client("logs")
+
         # Initialize sequence token
         self.sequence_token = self._get_sequence_token()
-        
+
         # Setup batching
         self._buffer: List[Dict[str, Any]] = []
         self._buffer_lock = threading.Lock()
         self._last_flush = time.time()
-        
+
         # Start background flush thread
         self._flush_thread = threading.Thread(
-            target=self._background_flush,
-            daemon=True
+            target=self._background_flush, daemon=True
         )
         self._flush_thread.start()
-        
+
     def _get_sequence_token(self) -> Optional[str]:
         """Get the sequence token for the log stream."""
         try:
@@ -77,86 +77,90 @@ class CloudWatchHandler:
             try:
                 self.client.create_log_group(logGroupName=self.log_group_name)
             except ClientError as e:
-                if e.response['Error']['Code'] != 'ResourceAlreadyExistsException':
+                if e.response["Error"]["Code"] != "ResourceAlreadyExistsException":
                     raise
-                    
+
             # Try to create log stream if it doesn't exist
             try:
                 self.client.create_log_stream(
-                    logGroupName=self.log_group_name,
-                    logStreamName=self.log_stream_name
+                    logGroupName=self.log_group_name, logStreamName=self.log_stream_name
                 )
                 return None  # New stream starts with no sequence token
             except ClientError as e:
-                if e.response['Error']['Code'] != 'ResourceAlreadyExistsException':
+                if e.response["Error"]["Code"] != "ResourceAlreadyExistsException":
                     raise
-                    
+
             # Get existing stream's sequence token
             response = self.client.describe_log_streams(
                 logGroupName=self.log_group_name,
                 logStreamNamePrefix=self.log_stream_name,
-                limit=1
+                limit=1,
             )
-            
-            streams = response.get('logStreams', [])
-            if streams and streams[0]['logStreamName'] == self.log_stream_name:
-                return streams[0].get('uploadSequenceToken')
-                
+
+            streams = response.get("logStreams", [])
+            if streams and streams[0]["logStreamName"] == self.log_stream_name:
+                return streams[0].get("uploadSequenceToken")
+
             return None
-            
+
         except Exception as e:
             return None
-            
+
     def emit(self, record: LogRecord) -> None:
         """Add a log record to the buffer."""
         log_entry = {
-            'timestamp': int(record.timestamp * 1000),
-            'message': record.message
+            "timestamp": int(record.timestamp * 1000),
+            "message": record.message,
         }
-        
+
         # Add context data as structured fields
         if record.data:
             log_entry.update(record.data)
-            
+
         with self._buffer_lock:
             self._buffer.append(log_entry)
-            
+
             # Check if we should flush
-            if (len(self._buffer) >= self.batch_size or
-                time.time() - self._last_flush >= self.flush_interval):
+            if (
+                len(self._buffer) >= self.batch_size
+                or time.time() - self._last_flush >= self.flush_interval
+            ):
                 self.flush()
-                
+
     def flush(self) -> None:
         """Flush buffered logs to CloudWatch."""
         with self._buffer_lock:
             if not self._buffer:
                 return
-                
-            log_events = [{
-                'timestamp': entry['timestamp'],
-                'message': str(entry)  # Convert dict to string for CloudWatch
-            } for entry in self._buffer]
-            
+
+            log_events = [
+                {
+                    "timestamp": entry["timestamp"],
+                    "message": str(entry),  # Convert dict to string for CloudWatch
+                }
+                for entry in self._buffer
+            ]
+
             try:
                 kwargs = {
-                    'logGroupName': self.log_group_name,
-                    'logStreamName': self.log_stream_name,
-                    'logEvents': log_events
+                    "logGroupName": self.log_group_name,
+                    "logStreamName": self.log_stream_name,
+                    "logEvents": log_events,
                 }
-                
+
                 if self.sequence_token:
-                    kwargs['sequenceToken'] = self.sequence_token
-                    
+                    kwargs["sequenceToken"] = self.sequence_token
+
                 response = self.client.put_log_events(**kwargs)
-                self.sequence_token = response.get('nextSequenceToken')
-                
+                self.sequence_token = response.get("nextSequenceToken")
+
             except Exception as e:
                 # Could implement retry logic here
                 pass
-                
+
             self._buffer.clear()
             self._last_flush = time.time()
-            
+
     def _background_flush(self) -> None:
         """Background thread that periodically flushes logs."""
         while True:

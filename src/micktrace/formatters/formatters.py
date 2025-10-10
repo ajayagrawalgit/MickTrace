@@ -39,9 +39,18 @@ class SimpleFormatter(Formatter):
         """Format record simply."""
         try:
             from datetime import datetime
+
             dt = datetime.fromtimestamp(record.timestamp)
             timestamp_str = dt.strftime("%H:%M:%S")
-            return timestamp_str + " " + record.level + " " + record.logger_name + " " + record.message
+            return (
+                timestamp_str
+                + " "
+                + record.level
+                + " "
+                + record.logger_name
+                + " "
+                + record.message
+            )
         except Exception:
             try:
                 return record.level + " " + record.message
@@ -57,4 +66,6 @@ class LogfmtFormatter(Formatter):
         try:
             return record.to_logfmt()
         except Exception:
-            return "level=" + getattr(record, 'level', 'ERROR') + " message=format_error"
+            return (
+                "level=" + getattr(record, "level", "ERROR") + " message=format_error"
+            )

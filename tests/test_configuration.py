@@ -18,11 +18,9 @@ class TestConfiguration:
     def test_basic_configuration(self):
         """Test basic configuration."""
         micktrace.configure(
-            level="INFO",
-            format="structured",
-            handlers=[{"type": "console"}]
+            level="INFO", format="structured", handlers=[{"type": "console"}]
         )
-        
+
         logger = micktrace.get_logger("config_test")
         logger.info("Basic configuration test")
         # Test passes if no exceptions are raised
@@ -35,40 +33,31 @@ class TestConfiguration:
             service="test-service",
             version="1.0.0",
             environment="test",
-            handlers=[{"type": "memory"}]
+            handlers=[{"type": "memory"}],
         )
-        
+
         logger = micktrace.get_logger("service_test")
         logger.info("Service configuration test")
 
     def test_multiple_reconfigurations(self):
         """Test that multiple reconfigurations work."""
         # First configuration
-        micktrace.configure(
-            level="DEBUG",
-            handlers=[{"type": "console"}]
-        )
-        
+        micktrace.configure(level="DEBUG", handlers=[{"type": "console"}])
+
         logger = micktrace.get_logger("reconfig_test")
         logger.debug("First configuration")
-        
+
         # Second configuration
-        micktrace.configure(
-            level="INFO",
-            handlers=[{"type": "memory"}]
-        )
-        
+        micktrace.configure(level="INFO", handlers=[{"type": "memory"}])
+
         logger.info("Second configuration")
         logger.debug("This should not appear due to level change")
 
     def test_configuration_validation(self):
         """Test configuration validation and error handling."""
         # Test with invalid level (should handle gracefully)
-        micktrace.configure(
-            level="INVALID_LEVEL",
-            handlers=[{"type": "console"}]
-        )
-        
+        micktrace.configure(level="INVALID_LEVEL", handlers=[{"type": "console"}])
+
         logger = micktrace.get_logger("validation_test")
         logger.info("Validation test with invalid level")
 
@@ -79,17 +68,17 @@ class TestConfiguration:
             level="INFO",
             handlers=[
                 {"type": "console", "level": "INFO"},
-                {"type": "memory", "level": "DEBUG"}
-            ]
+                {"type": "memory", "level": "DEBUG"},
+            ],
         )
-        
+
         logger = micktrace.get_logger("handler_format_test")
         logger.info("Handler format test")
 
     def test_empty_configuration(self):
         """Test configuration with minimal parameters."""
         micktrace.configure()
-        
+
         logger = micktrace.get_logger("empty_config_test")
         logger.info("Empty configuration test")
 
@@ -101,17 +90,17 @@ class TestConfiguration:
                 {"type": "console"},  # Valid
                 {"type": "invalid_handler"},  # Invalid
                 {"type": "memory"},  # Valid
-                {}  # Invalid (no type)
-            ]
+                {},  # Invalid (no type)
+            ],
         )
-        
+
         logger = micktrace.get_logger("invalid_handlers_test")
         logger.info("Test with mixed valid/invalid handlers")
 
     def test_basic_config_function(self):
         """Test basic_config convenience function."""
         micktrace.basic_config(level="INFO", format="json")
-        
+
         logger = micktrace.get_logger("basic_config_test")
         logger.info("Basic config test")
 
@@ -119,12 +108,12 @@ class TestConfiguration:
         """Test disable and enable functions."""
         micktrace.configure(level="INFO", handlers=[{"type": "console"}])
         logger = micktrace.get_logger("disable_test")
-        
+
         logger.info("Before disable")
-        
+
         micktrace.disable()
         logger.info("During disable (should not appear)")
-        
+
         micktrace.enable()
         logger.info("After enable")
 
@@ -132,19 +121,13 @@ class TestConfiguration:
         """Test that configuration errors don't break the system."""
         # Try invalid configuration
         try:
-            micktrace.configure(
-                level=None,  # Invalid
-                handlers=None  # Invalid
-            )
+            micktrace.configure(level=None, handlers=None)  # Invalid  # Invalid
         except Exception:
             pass  # Expected to handle gracefully
-        
+
         # Should be able to configure properly afterwards
-        micktrace.configure(
-            level="INFO",
-            handlers=[{"type": "console"}]
-        )
-        
+        micktrace.configure(level="INFO", handlers=[{"type": "console"}])
+
         logger = micktrace.get_logger("error_recovery_test")
         logger.info("Error recovery test")
 
@@ -154,22 +137,15 @@ class TestConfigurationEdgeCases:
 
     def test_configuration_with_none_values(self):
         """Test configuration with None values."""
-        micktrace.configure(
-            level=None,
-            format=None,
-            handlers=None
-        )
-        
+        micktrace.configure(level=None, format=None, handlers=None)
+
         logger = micktrace.get_logger("none_values_test")
         logger.info("None values test")
 
     def test_configuration_with_empty_handlers(self):
         """Test configuration with empty handlers list."""
-        micktrace.configure(
-            level="INFO",
-            handlers=[]
-        )
-        
+        micktrace.configure(level="INFO", handlers=[])
+
         logger = micktrace.get_logger("empty_handlers_test")
         logger.info("Empty handlers test")
 
@@ -179,9 +155,9 @@ class TestConfigurationEdgeCases:
         micktrace.configure(
             level=123,  # Should be string
             format=["json"],  # Should be string
-            handlers="console"  # Should be list
+            handlers="console",  # Should be list
         )
-        
+
         logger = micktrace.get_logger("type_errors_test")
         logger.info("Type errors test")
 
@@ -189,14 +165,12 @@ class TestConfigurationEdgeCases:
         """Test partial configuration updates."""
         # Initial configuration
         micktrace.configure(
-            level="DEBUG",
-            format="structured",
-            handlers=[{"type": "console"}]
+            level="DEBUG", format="structured", handlers=[{"type": "console"}]
         )
-        
+
         # Partial update (only level)
         micktrace.configure(level="INFO")
-        
+
         logger = micktrace.get_logger("partial_update_test")
         logger.info("Partial update test")
         logger.debug("This should not appear due to level change")
@@ -207,9 +181,9 @@ class TestConfigurationEdgeCases:
             level="INFO",
             handlers=[{"type": "console"}],
             unknown_parameter="value",
-            extra_config={"key": "value"}
+            extra_config={"key": "value"},
         )
-        
+
         logger = micktrace.get_logger("extra_params_test")
         logger.info("Extra parameters test")
 
@@ -222,14 +196,14 @@ class TestEnvironmentConfiguration:
         # Set environment variables
         os.environ["MICKTRACE_LEVEL"] = "DEBUG"
         os.environ["MICKTRACE_FORMAT"] = "json"
-        
+
         try:
             # Configuration should pick up environment variables
             micktrace.configure()
-            
+
             logger = micktrace.get_logger("env_config_test")
             logger.debug("Environment configuration test")
-            
+
         finally:
             # Clean up environment variables
             os.environ.pop("MICKTRACE_LEVEL", None)
@@ -238,14 +212,14 @@ class TestEnvironmentConfiguration:
     def test_environment_override(self):
         """Test that explicit config overrides environment variables."""
         os.environ["MICKTRACE_LEVEL"] = "ERROR"
-        
+
         try:
             # Explicit configuration should override environment
             micktrace.configure(level="DEBUG")
-            
+
             logger = micktrace.get_logger("env_override_test")
             logger.debug("This should appear despite env var setting ERROR")
-            
+
         finally:
             os.environ.pop("MICKTRACE_LEVEL", None)
 
@@ -253,13 +227,13 @@ class TestEnvironmentConfiguration:
         """Test handling of invalid environment variable values."""
         os.environ["MICKTRACE_LEVEL"] = "INVALID_LEVEL"
         os.environ["MICKTRACE_FORMAT"] = "INVALID_FORMAT"
-        
+
         try:
             micktrace.configure()
-            
+
             logger = micktrace.get_logger("invalid_env_test")
             logger.info("Invalid environment values test")
-            
+
         finally:
             os.environ.pop("MICKTRACE_LEVEL", None)
             os.environ.pop("MICKTRACE_FORMAT", None)

@@ -24,7 +24,9 @@ class Filter:
 class LevelFilter(Filter):
     """Filter by log level."""
 
-    def __init__(self, min_level: str = "DEBUG", max_level: str = "CRITICAL", **kwargs: Any) -> None:
+    def __init__(
+        self, min_level: str = "DEBUG", max_level: str = "CRITICAL", **kwargs: Any
+    ) -> None:
         super().__init__(**kwargs)
         try:
             self.min_level = LogLevel.from_string(min_level)
