@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "micktrace"
-version = "1.0.0"
+version = "1.0.3"
 description = "Modern Python logging library for production applications - async-native, structured logging, zero-config, cloud-ready with AWS/Azure/GCP integration, context propagation, and performance optimization"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -97,7 +97,8 @@ cloud = ["micktrace[aws,azure,gcp]"]
 
 # Analytics and monitoring platforms
 datadog = [
-    "datadog>=0.44.0"
+    "datadog>=0.44.0",
+    "requests>=2.28.0"
 ]
 newrelic = [
     "newrelic>=8.0.0"

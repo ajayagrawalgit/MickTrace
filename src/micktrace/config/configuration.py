@@ -17,7 +17,6 @@ from ..types import LogLevel
 @dataclass
 class HandlerConfig:
     """Configuration for a single handler with validation."""
-
     type: str
     level: str = "INFO"
     format: str = "structured"
@@ -29,18 +28,10 @@ class HandlerConfig:
         try:
             # Validate handler type
             valid_types = [
-                "console",
-                "file",
-                "http",
-                "syslog",
-                "null",
-                "memory",
-                "stream",
+                "console", "file", "http", "syslog", "null", "memory", "stream"
             ]
             if not isinstance(self.type, str) or self.type not in valid_types:
-                raise ValueError(
-                    f"Invalid handler type: {self.type}. Must be one of {valid_types}"
-                )
+                raise ValueError(f"Invalid handler type: {self.type}. Must be one of {valid_types}")
 
             # Validate and normalize level
             try:
@@ -82,11 +73,9 @@ class Configuration:
     is_configured: bool = False
 
     # Handlers
-    handlers: List[HandlerConfig] = field(
-        default_factory=lambda: [
-            HandlerConfig(type="null")  # Use NullHandler by default
-        ]
-    )
+    handlers: List[HandlerConfig] = field(default_factory=lambda: [
+        HandlerConfig(type="null")  # Use NullHandler by default
+    ])
 
     # Context and metadata
     service: Optional[str] = None
@@ -108,8 +97,7 @@ class Configuration:
             self.format = "structured"
             self.enabled = True
             self.environment = "development"
-            # Use NullHandler as safe default
-            self.handlers = [HandlerConfig(type="null")]
+            self.handlers = [HandlerConfig(type="null")]  # Use NullHandler as safe default
         except Exception:
             pass
 
@@ -136,8 +124,7 @@ class Configuration:
 
         # Validate handlers
         if not isinstance(self.handlers, list) or not self.handlers:
-            # Use NullHandler as fallback
-            self.handlers = [HandlerConfig(type="null")]
+            self.handlers = [HandlerConfig(type="null")]  # Use NullHandler as fallback
         else:
             # Validate each handler
             valid_handlers = []
@@ -150,11 +137,8 @@ class Configuration:
                             level=handler.get("level", "INFO"),
                             format=handler.get("format", "structured"),
                             enabled=handler.get("enabled", True),
-                            config={
-                                k: v
-                                for k, v in handler.items()
-                                if k not in ["type", "level", "format", "enabled"]
-                            },
+                            config={k: v for k, v in handler.items() 
+                                   if k not in ["type", "level", "format", "enabled"]}
                         )
                         valid_handlers.append(handler_config)
                     elif isinstance(handler, HandlerConfig):
@@ -165,9 +149,7 @@ class Configuration:
                 except Exception:
                     continue
 
-            self.handlers = (
-                valid_handlers if valid_handlers else [HandlerConfig(type="console")]
-            )
+            self.handlers = valid_handlers if valid_handlers else [HandlerConfig(type="console")]
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert configuration to dictionary with error handling."""
@@ -195,7 +177,7 @@ class Configuration:
                 "service": self.service,
                 "version": self.version,
                 "environment": self.environment,
-                "handlers": handlers_list,
+                "handlers": handlers_list
             }
         except Exception:
             # Fallback dict
@@ -204,7 +186,7 @@ class Configuration:
                 "format": "structured",
                 "enabled": True,
                 "is_configured": False,
-                "handlers": [{"type": "null"}],  # Use NullHandler as fallback
+                "handlers": [{"type": "null"}]  # Use NullHandler as fallback
             }
 
     @classmethod
@@ -229,11 +211,8 @@ class Configuration:
                             level=handler_data.get("level", "INFO"),
                             format=handler_data.get("format", "structured"),
                             enabled=handler_data.get("enabled", True),
-                            config={
-                                k: v
-                                for k, v in handler_data.items()
-                                if k not in ["type", "level", "format", "enabled"]
-                            },
+                            config={k: v for k, v in handler_data.items() 
+                                   if k not in ["type", "level", "format", "enabled"]}
                         )
                         handlers.append(handler_config)
                 except Exception:
@@ -251,7 +230,7 @@ class Configuration:
                 version=data.get("version"),
                 environment=data.get("environment", "development"),
                 handlers=handlers,
-                is_configured=data.get("is_configured", True),
+                is_configured=data.get("is_configured", True)
             )
 
             return config
@@ -266,9 +245,7 @@ class Configuration:
         try:
             # Parse handlers
             handler_types_str = os.getenv("MICKTRACE_HANDLERS", "console")
-            handler_types = [
-                h.strip() for h in handler_types_str.split(",") if h.strip()
-            ]
+            handler_types = [h.strip() for h in handler_types_str.split(",") if h.strip()]
 
             if not handler_types:
                 handler_types = ["console"]
@@ -279,16 +256,12 @@ class Configuration:
                 try:
                     handler_config = HandlerConfig(
                         type=handler_type,
-                        level=os.getenv(
-                            f"MICKTRACE_{handler_type.upper()}_LEVEL", "INFO"
-                        ),
+                        level=os.getenv(f"MICKTRACE_{handler_type.upper()}_LEVEL", "INFO")
                     )
 
                     # Handler-specific config
                     if handler_type == "file":
-                        file_path = os.getenv(
-                            "MICKTRACE_FILE_PATH", "/tmp/micktrace.log"
-                        )
+                        file_path = os.getenv("MICKTRACE_FILE_PATH", "/tmp/micktrace.log")
                         handler_config.config["path"] = file_path
 
                         rotation = os.getenv("MICKTRACE_FILE_ROTATION")
@@ -313,13 +286,12 @@ class Configuration:
             config = cls(
                 level=os.getenv("MICKTRACE_LEVEL", "INFO"),
                 format=os.getenv("MICKTRACE_FORMAT", "structured"),
-                enabled=os.getenv("MICKTRACE_ENABLED", "true").lower()
-                in ("true", "1", "yes"),
+                enabled=os.getenv("MICKTRACE_ENABLED", "true").lower() in ("true", "1", "yes"),
                 service=os.getenv("MICKTRACE_SERVICE"),
                 version=os.getenv("MICKTRACE_VERSION"),
                 environment=os.getenv("MICKTRACE_ENVIRONMENT", "development"),
                 handlers=handlers,
-                is_configured=True,
+                is_configured=True
             )
 
             return config

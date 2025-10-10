@@ -24,6 +24,20 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.3] - 2025-10-10 - Datadog Integration & Packaging
+### Added
+- Built-in Datadog integration: `DatadogHandler` added to `micktrace.handlers` for easy logs forwarding to Datadog Logs Intake (HTTP).
+- Optional extra `datadog` in `pyproject.toml` now installs `datadog` and `requests` when users run `pip install micktrace[datadog]`.
+- Example: `examples/datadog_example.py` demonstrating how to configure `micktrace` to send structured logs to Datadog using `DATADOG_API_KEY` environment variable.
+
+### Changed
+- Logger factory now recognizes handler type `datadog` when provided in configuration dictionaries.
+
+### Fixed
+- Cleanup of temporary test artifacts and improved import-safety for optional integrations.
+
+---
+
 ## [1.0.0] - 2025-01-01 - Production Release
 ### Added - Python Logging Features
 - **Async-native Python logging** with sub-microsecond overhead when disabled
