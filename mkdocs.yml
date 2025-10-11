@@ -1,5 +1,13 @@
+site_name: MickTrace Documentation
+site_url: https://ajayagrawalgit.github.io/MickTrace/
+repo_url: https://github.com/ajayagrawalgit/MickTrace
+repo_name: ajayagrawalgit/MickTrace
+edit_uri: edit/main/docs/
+
 theme:
   name: material
+  logo: assets/logo.png           # Place logo at docs/assets/logo.png
+  favicon: assets/favicon.ico     # Place favicon at docs/assets/favicon.ico
   palette:
     - scheme: default
       primary: blue
@@ -13,6 +21,17 @@ theme:
   font:
     text: Roboto
     code: Fira Mono
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.sections
+    - search.suggest
+    - search.highlight
+    - toc.integrate
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
@@ -20,10 +39,29 @@ nav:
   - API Reference: api.md
   - FAQ: faq.md
   - Changelog: changelog.md
+  - Contributing: contributing.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ajayagrawalgit/MickTrace
+      name: GitHub
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/micktrace/
+      name: PyPI
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/theajayagrawal/
+      name: LinkedIn
+
 markdown_extensions:
   - admonition
   - codehilite
   - pymdownx.superfences
   - pymdownx.tabbed
+  - pymdownx.emoji
+  - pymdownx.details
   - toc:
       permalink: true
+
+plugins:
+  - search

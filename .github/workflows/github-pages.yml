@@ -1,14 +1,17 @@
-name: Deploy Testing Docs to GitHub Pages
+name: Deploy Docs to GitHub Pages
 
 on:
   push:
     branches:
-      - dev  # Runs on push to dev branch
-  workflow_dispatch:  # Manual trigger option
+      - dev     # Deploys preview/docs from dev branch
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy-testing:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,16 +21,17 @@ jobs:
         with:
           python-version: '3.14'
 
-      - name: Install MkDocs and Material theme
-        run: pip install mkdocs mkdocs-material
+      - name: Install dependencies
+        run: |
+          pip install mkdocs mkdocs-material pymdown-extensions
 
       - name: Build docs
         run: mkdocs build
 
-      - name: Deploy to GitHub Pages (testing branch)
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
-          publish_branch: gh-pages-test
-          force_orphan: true # Keeps gh-pages-test branch history clean
+          publish_branch: ${{ github.ref_name == 'main' && 'gh-pages' || 'gh-pages-test' }}
+          force_orphan: true
