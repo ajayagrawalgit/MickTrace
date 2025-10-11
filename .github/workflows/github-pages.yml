@@ -1,43 +1,33 @@
-name: Deploy GitHub Pages from dev branch
+name: Deploy Testing Docs to GitHub Pages
 
 on:
   push:
-    branches: [dev]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+    branches:
+      - dev  # Runs on push to dev branch
+  workflow_dispatch:  # Manual trigger option
 
 jobs:
-  build:
+  build-and-deploy-testing:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          ruby-version: 3.2
+          python-version: '3.x'
 
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install
+      - name: Install MkDocs and Material theme
+        run: pip install mkdocs mkdocs-material
 
-      - name: Build site with Jekyll
-        run: bundle exec jekyll build
+      - name: Build docs
+        run: mkdocs build
 
-      - name: Upload site artifact
-        uses: actions/upload-pages-artifact@v4
+      - name: Deploy to GitHub Pages (testing branch)
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: _site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-        - name: Deploy to GitHub Pages
-          id: deployment
-          uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          publish_branch: gh-pages-test
+          force_orphan: true # Keeps gh-pages-test branch history clean
