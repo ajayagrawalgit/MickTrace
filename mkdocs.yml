@@ -1,1 +1,29 @@
-site_name: Micktrace - Product Documentation
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: deep orange
+    - scheme: slate
+      primary: blue
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+  font:
+    text: Roboto
+    code: Fira Mono
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Advanced Usage: advanced.md
+  - API Reference: api.md
+  - FAQ: faq.md
+  - Changelog: changelog.md
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - toc:
+      permalink: true
