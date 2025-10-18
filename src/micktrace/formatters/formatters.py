@@ -67,5 +67,6 @@ class LogfmtFormatter(Formatter):
             return record.to_logfmt()
         except Exception:
             return (
-                "level=" + getattr(record, "level", "ERROR") + " message=format_error"
+                "level=" + getattr(record, "level", "ERROR") +
+                " message=format_error"
             )

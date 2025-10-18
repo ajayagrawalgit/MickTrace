@@ -33,7 +33,8 @@ class ConsoleHandler:
 
     def emit(self, record: LogRecord) -> None:
         try:
-            message = str(record.timestamp) + " " + record.level + " " + record.message
+            message = str(record.timestamp) + " " + \
+                record.level + " " + record.message
             # Add additional data if present
             if record.data:
                 data_parts = []

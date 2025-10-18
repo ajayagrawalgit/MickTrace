@@ -63,7 +63,8 @@ class AsyncHandler(ABC):
             self._queue.put(record, timeout=1.0)
         except queue.Full:
             # Log warning about dropped records
-            print(f"Warning: Dropped log record due to full queue: {record.message}")
+            print(
+                f"Warning: Dropped log record due to full queue: {record.message}")
 
     def _should_flush(self, batch: List[LogRecord]) -> bool:
         """Check if we should flush the current batch."""

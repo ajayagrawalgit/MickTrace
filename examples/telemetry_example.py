@@ -43,7 +43,8 @@ def simulate_distributed_tracing():
 
     auth_logger.info("Authenticating user", user_id="user-67890")
     time.sleep(0.05)  # Simulate auth time
-    auth_logger.info("Authentication successful", user_id="user-67890", duration_ms=50)
+    auth_logger.info("Authentication successful",
+                     user_id="user-67890", duration_ms=50)
 
     # Service 3: Order Service
     order_logger = micktrace.get_logger("order-service").bind(
@@ -67,16 +68,20 @@ def simulate_distributed_tracing():
         parent_span_id="span-003",
     )
 
-    payment_logger.info("Processing payment", payment_id="pay-xyz789", amount=99.99)
+    payment_logger.info("Processing payment",
+                        payment_id="pay-xyz789", amount=99.99)
 
     time.sleep(0.08)  # Simulate payment processing
-    payment_logger.info("Payment completed", payment_id="pay-xyz789", status="success")
+    payment_logger.info("Payment completed",
+                        payment_id="pay-xyz789", status="success")
 
     # Complete order
-    order_logger.info("Order completed", order_id="order-abc123", status="confirmed")
+    order_logger.info("Order completed",
+                      order_id="order-abc123", status="confirmed")
 
     # Complete gateway request
-    gateway_logger.info("Request completed", status_code=201, total_duration_ms=230)
+    gateway_logger.info("Request completed",
+                        status_code=201, total_duration_ms=230)
 
     print("✅ Distributed tracing simulation completed!")
 
@@ -90,7 +95,8 @@ def simulate_metrics_collection():
     )
 
     # Simulate collecting various metrics
-    services = ["api-gateway", "auth-service", "order-service", "payment-service"]
+    services = ["api-gateway", "auth-service",
+                "order-service", "payment-service"]
 
     for service in services:
         service_logger = metrics_logger.bind(service=service)
@@ -178,7 +184,8 @@ def simulate_application_performance_monitoring():
 
         # Simulate response time variations
         base_time = endpoint["avg_response_time"]
-        actual_time = base_time + random.uniform(-base_time * 0.3, base_time * 0.5)
+        actual_time = base_time + \
+            random.uniform(-base_time * 0.3, base_time * 0.5)
 
         # Simulate different status codes
         status_codes = [200, 200, 200, 200, 201, 400, 404, 500]

@@ -282,8 +282,10 @@ def simulate_cloud_monitoring():
 
     # Simulate various cloud metrics
     metrics = [
-        {"name": "cpu_utilization", "value": 75.5, "threshold": 80, "unit": "percent"},
-        {"name": "memory_usage", "value": 68.2, "threshold": 85, "unit": "percent"},
+        {"name": "cpu_utilization", "value": 75.5,
+            "threshold": 80, "unit": "percent"},
+        {"name": "memory_usage", "value": 68.2,
+            "threshold": 85, "unit": "percent"},
         {"name": "disk_usage", "value": 45.8, "threshold": 90, "unit": "percent"},
         {"name": "network_in", "value": 1250.5, "threshold": 2000, "unit": "mbps"},
         {"name": "error_rate", "value": 2.1, "threshold": 5.0, "unit": "percent"},

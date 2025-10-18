@@ -13,7 +13,8 @@ from ..types import F
 T = TypeVar("T")
 
 # Context variables for tracking nested operations
-_operation_stack: ContextVar[list[str]] = ContextVar("operation_stack", default=[])
+_operation_stack: ContextVar[list[str]] = ContextVar(
+    "operation_stack", default=[])
 
 
 class Timer:
@@ -76,7 +77,8 @@ class Timer:
     ) -> None:
         """Log operation details."""
         context = self.extra_context.copy()
-        context.update({"operation": self._get_operation_path(), "status": status})
+        context.update(
+            {"operation": self._get_operation_path(), "status": status})
 
         if duration_ms is not None:
             context["duration_ms"] = duration_ms
@@ -85,7 +87,8 @@ class Timer:
             context.update(extra)
 
         if status == "completed":
-            self.logger.info(f"Operation {self.operation} completed", **context)
+            self.logger.info(
+                f"Operation {self.operation} completed", **context)
         elif status == "error":
             self.logger.error(f"Operation {self.operation} failed", **context)
         else:
@@ -120,7 +123,8 @@ class Timer:
             self._log_operation(
                 "error",
                 duration_ms,
-                {"error_type": exc_type.__name__, "error_message": str(exc_val)},
+                {"error_type": exc_type.__name__,
+                    "error_message": str(exc_val)},
             )
         elif self._should_log(duration_ms):
             # Log successful completion

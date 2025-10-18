@@ -70,7 +70,8 @@ def simulate_high_volume_logging():
 
     # Simulate high-volume API requests
     request_types = ["GET", "POST", "PUT", "DELETE"]
-    endpoints = ["/api/users", "/api/orders", "/api/products", "/api/analytics"]
+    endpoints = ["/api/users", "/api/orders",
+                 "/api/products", "/api/analytics"]
 
     print("🚀 Generating high-volume logs...")
 
@@ -94,7 +95,8 @@ def simulate_high_volume_logging():
         )
 
         # Add to buffer for batch processing
-        buffer.add(f"{method} {endpoint} - {status_code} ({response_time:.1f}ms)")
+        buffer.add(
+            f"{method} {endpoint} - {status_code} ({response_time:.1f}ms)")
 
         # Small delay to simulate real traffic
         if i % 20 == 0:
@@ -155,7 +157,8 @@ def simulate_batch_processing():
             records_in_batch=current_batch_size,
             total_processed=processed_records,
             batch_duration_ms=round(batch_duration * 1000, 2),
-            throughput_records_per_sec=round(current_batch_size / batch_duration, 2),
+            throughput_records_per_sec=round(
+                current_batch_size / batch_duration, 2),
         )
 
         # Log progress every 5 batches
@@ -233,7 +236,7 @@ async def simulate_async_buffering():
     # Process messages in batches of 10
     batch_size = 10
     for i in range(0, len(messages), batch_size):
-        batch = messages[i : i + batch_size]
+        batch = messages[i: i + batch_size]
 
         async_logger.info(
             "Processing message batch",
@@ -242,7 +245,8 @@ async def simulate_async_buffering():
         )
 
         # Process batch concurrently
-        tasks = [process_message(msg_id, priority) for msg_id, priority in batch]
+        tasks = [process_message(msg_id, priority)
+                 for msg_id, priority in batch]
         results = await asyncio.gather(*tasks)
 
         async_logger.info(

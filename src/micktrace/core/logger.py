@@ -27,7 +27,8 @@ class Logger:
         """Initialize a new logger instance."""
         self.name = str(name) if name else "unknown"
         self.is_library = bool(is_library)
-        self._level = self._normalize_level(level) if level else LogLevel.NOTSET
+        self._level = self._normalize_level(
+            level) if level else LogLevel.NOTSET
         self._handlers: List[Any] = []
         self._filters: List[Any] = []
         self._config_cache_time = 0.0
@@ -41,11 +42,13 @@ class Logger:
                 for handler_config in config.handlers:
                     try:
                         if hasattr(handler_config, "type"):
-                            handler = self._create_handler_from_config(handler_config)
+                            handler = self._create_handler_from_config(
+                                handler_config)
                             if handler:
                                 self._handlers.append(handler)
                         elif isinstance(handler_config, dict):
-                            handler = self._create_handler_from_dict(handler_config)
+                            handler = self._create_handler_from_dict(
+                                handler_config)
                             if handler:
                                 self._handlers.append(handler)
                     except Exception:
@@ -195,7 +198,8 @@ class Logger:
             if handler_type == "file":
                 from ..handlers.handlers import FileHandler
 
-                path = config.get("path", handler_config.get("path", "micktrace.log"))
+                path = config.get("path", handler_config.get(
+                    "path", "micktrace.log"))
                 if (
                     path == "micktrace.log"
                     and "config" in config
@@ -218,7 +222,8 @@ class Logger:
             elif handler_type == "rotating":
                 from ..handlers.rotating import RotatingFileHandler
 
-                path = config.get("path", handler_config.get("path", "micktrace.log"))
+                path = config.get("path", handler_config.get(
+                    "path", "micktrace.log"))
                 max_bytes = config.get("max_bytes", 10485760)  # 10MB
                 backup_count = config.get("backup_count", 5)
                 return RotatingFileHandler(
@@ -233,10 +238,12 @@ class Logger:
 
                     return CloudWatchHandler(
                         log_group_name=config.get(
-                            "log_group", handler_config.get("log_group", "micktrace")
+                            "log_group", handler_config.get(
+                                "log_group", "micktrace")
                         ),
                         log_stream_name=config.get(
-                            "log_stream", handler_config.get("log_stream", "default")
+                            "log_stream", handler_config.get(
+                                "log_stream", "default")
                         ),
                         region=config.get(
                             "region", handler_config.get("region", "us-east-1")
@@ -265,7 +272,8 @@ class Logger:
                             "project_id", handler_config.get("project_id", "")
                         ),
                         log_name=config.get(
-                            "log_name", handler_config.get("log_name", "micktrace")
+                            "log_name", handler_config.get(
+                                "log_name", "micktrace")
                         ),
                     )
                 except ImportError:
@@ -417,7 +425,8 @@ class Logger:
                                 "message": str(exc_value),
                             }
                 except Exception:
-                    exception_data = {"error": "Failed to process exception info"}
+                    exception_data = {
+                        "error": "Failed to process exception info"}
             return LogRecord(
                 timestamp=now,
                 level=level.name,
@@ -432,7 +441,8 @@ class Logger:
                 timestamp=time.time(),
                 level=getattr(level, "name", "INFO"),
                 logger_name=self.name,
-                message=str(message) if message else "Error creating log record",
+                message=str(
+                    message) if message else "Error creating log record",
                 data={},
                 caller={},
                 exception=None,
@@ -616,7 +626,8 @@ class BoundLogger:
     """A logger bound with additional context data."""
 
     def __init__(self, logger: Logger, context: Dict[str, Any]) -> None:
-        self._logger = logger if isinstance(logger, Logger) else Logger("bound_error")
+        self._logger = logger if isinstance(
+            logger, Logger) else Logger("bound_error")
         self._context = context if isinstance(context, dict) else {}
 
     def _merge_kwargs(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:

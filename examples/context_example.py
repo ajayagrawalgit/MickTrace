@@ -56,9 +56,11 @@ def simulate_user_service():
                 permissions=["read", "write", "moderate"],
             )
         else:
-            user_logger.info("Standard user privileges granted", permissions=["read"])
+            user_logger.info("Standard user privileges granted",
+                             permissions=["read"])
 
-        user_logger.info("User authentication completed", duration_ms=100, success=True)
+        user_logger.info("User authentication completed",
+                         duration_ms=100, success=True)
 
     print("✅ User service simulation completed!")
 

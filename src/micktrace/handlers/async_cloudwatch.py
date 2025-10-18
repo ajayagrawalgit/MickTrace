@@ -146,7 +146,8 @@ class AsyncCloudWatchHandler(AsyncBatchHandler):
                 ) as e:
                     # Update sequence token and retry
                     if hasattr(e, "response"):
-                        self._sequence_token = e.response.get("expectedSequenceToken")
+                        self._sequence_token = e.response.get(
+                            "expectedSequenceToken")
                     retry_count += 1
                     await asyncio.sleep(2**retry_count)
 

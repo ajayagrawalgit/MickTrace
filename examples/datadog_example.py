@@ -48,7 +48,8 @@ class DatadogHTTPHandler(Handler):
         try:
             payload = self._format_record(record)
             headers = {"Content-Type": "application/json"}
-            resp = requests.post(self.url, data=json.dumps(payload), headers=headers, timeout=self.timeout)
+            resp = requests.post(self.url, data=json.dumps(
+                payload), headers=headers, timeout=self.timeout)
             if resp.status_code >= 400:
                 # For demo purposes just print error
                 print(f"Datadog HTTP error: {resp.status_code} - {resp.text}")
@@ -76,7 +77,8 @@ def main() -> None:
     if not dd_api_key:
         print("DATADOG_API_KEY environment variable is not set. Skipping real send.\n")
     # Configure micktrace to use our DatadogHTTPHandler for this example
-    micktrace.configure(enabled=True, level="INFO", handlers=[{"type": "null"}])
+    micktrace.configure(enabled=True, level="INFO",
+                        handlers=[{"type": "null"}])
     # Create a logger and attach the Datadog handler directly
     logger = micktrace.get_logger("datadog-demo")
     # Clear any existing handlers and add our Datadog handler
@@ -91,9 +93,11 @@ def main() -> None:
         logger.add_handler(mem)
         print("No DATADOG_API_KEY found - logs will be kept in memory for demo.")
     # Send some structured logs
-    logger.info("Datadog integration demo - startup", environment="demo", version="1.0")
+    logger.info("Datadog integration demo - startup",
+                environment="demo", version="1.0")
     for i in range(3):
-        logger.info("processing.event", event_id=i, user=f"user-{i}", latency_ms=5 * i)
+        logger.info("processing.event", event_id=i,
+                    user=f"user-{i}", latency_ms=5 * i)
         time.sleep(0.2)
     logger.warning("Datadog integration demo - finishing", processed=3)
     print("Demo finished.")

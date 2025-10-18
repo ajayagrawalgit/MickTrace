@@ -26,7 +26,8 @@ class BufferedHandler:
         """
         self.buffer = SmartBuffer(
             max_size=max_buffer_size,
-            compression_threshold=10000 if compression_enabled else float("inf"),
+            compression_threshold=10000 if compression_enabled else float(
+                "inf"),
         )
 
         self.aggregator = LogAggregator(

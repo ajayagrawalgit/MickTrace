@@ -111,7 +111,8 @@ def test_structured_logging():
 
         # Should not raise exceptions
         logger.info("User login", user_id=123, action="login", success=True)
-        logger.error("Database error", error_code=500, table="users", retryable=True)
+        logger.error("Database error", error_code=500,
+                     table="users", retryable=True)
         return True
     except Exception as e:
         print(f"test_structured_logging failed: {e}")

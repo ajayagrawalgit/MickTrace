@@ -35,15 +35,18 @@ class DatadogHandler(Handler):
     def emit(self, record: LogRecord) -> None:
         if requests is None:
             # If requests is not available we can't send; raise for visibility
-            raise RuntimeError("`requests` is required for DatadogHandler but is not installed")
+            raise RuntimeError(
+                "`requests` is required for DatadogHandler but is not installed")
 
         payload = self._format_record(record)
         headers = {"Content-Type": "application/json"}
         try:
-            resp = requests.post(self.url, data=json.dumps(payload), headers=headers, timeout=(2.0, 6.0))
+            resp = requests.post(self.url, data=json.dumps(
+                payload), headers=headers, timeout=(2.0, 6.0))
             if resp.status_code >= 400:
                 # In library code we avoid noisy prints, but surface a RuntimeError so callers can handle it
-                raise RuntimeError(f"Datadog returned {resp.status_code}: {resp.text}")
+                raise RuntimeError(
+                    f"Datadog returned {resp.status_code}: {resp.text}")
         except Exception:
             # Do not let exceptions escape handler in production; swallow to avoid crashing app
             # Here we swallow but a real implementation should include retries and error logging
