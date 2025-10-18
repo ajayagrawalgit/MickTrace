@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/pypi/dm/micktrace.svg)](https://pypi.org/project/micktrace/)
 [![GitHub Stars](https://img.shields.io/github/stars/ajayagrawalgit/MickTrace.svg)](https://github.com/ajayagrawalgit/MickTrace)
 
-MickTrace is the world’s most advanced and high-performance Python logging library, engineered from the ground up to eliminate every pain point developers face with application, cloud, and library logging. Combining zero-configuration simplicity with production-grade features, MickTrace delivers blazing-fast async-native dispatch, seamless structured logging, automatic sensitive data masking, and native integrations with all major cloud platforms—including AWS, GCP, Azure, and Datadog—ensuring effortless scalability, security, and observability for projects of any size. Trusted by top engineering teams, battle-tested in real-world scenarios, and backed by comprehensive research, MickTrace is the definitive logging solution that empowers you to build, debug, and scale Python applications with absolute confidence.
+MickTrace is the world's most advanced and high-performance Python logging library, engineered from the ground up to eliminate every pain point developers face with application, cloud, and library logging. Combining zero-configuration simplicity with production-grade features, MickTrace delivers blazing-fast async-native dispatch, seamless structured logging, automatic sensitive data masking, and native integrations with all major cloud platforms—including [AWS](https://aws.amazon.com/) (@aws), [GCP](https://cloud.google.com/) (@GoogleCloudPlatform), [Azure](https://azure.microsoft.com/) (@Azure), and [Datadog](https://www.datadoghq.com/) (@DataDog)—ensuring effortless scalability, security, and observability for projects of any size. Trusted by top engineering teams, battle-tested in real-world scenarios, and backed by comprehensive research, MickTrace is the definitive logging solution that empowers you to build, debug, and scale Python applications with absolute confidence.
 
 > **🎯 Stop fighting with logging. Start building great software.**  
 > MickTrace delivers **zero-configuration perfection** for libraries and **infinite customization** for applications.
@@ -29,7 +29,7 @@ MickTrace is the world’s most advanced and high-performance Python logging lib
 | **🚀 Async-Native** | ✅ **Built-in async dispatch, intelligent batching** | ❌ Thread-safe only | ❌ No async support | ❌ No async support | ❌ No async support | ❌ No async support |
 | **📊 Structured Logging** | ✅ **JSON, logfmt, custom formats by default** | ⚠️ Basic structured logging | ✅ Excellent structured logging | ❌ Requires extensions | ❌ No native support | ❌ No native support |
 | **🛡️ Security & PII Masking** | ✅ **Automatic sensitive data detection & masking** | ❌ No built-in masking | ❌ No built-in masking | ❌ No built-in masking | ❌ No built-in masking | ❌ No built-in masking |
-| **☁️ Cloud Integration** | ✅ **Native DataDog, AWS, GCP, Azure, Elasticsearch** | ❌ No native cloud support | ❌ No native cloud support | ❌ No native cloud support | ❌ No native cloud support | ⚠️ Some integrations |
+| **☁️ Cloud Integration** | ✅ **Native [Datadog](https://www.datadoghq.com/) (@DataDog), [AWS](https://aws.amazon.com/) (@aws), [GCP](https://cloud.google.com/) (@GoogleCloudPlatform), [Azure](https://azure.microsoft.com/) (@Azure), [Elasticsearch](https://www.elastic.co/) (@elastic)** | ❌ No native cloud support | ❌ No native cloud support | ❌ No native cloud support | ❌ No native cloud support | ⚠️ Some integrations |
 | **🔄 Context Propagation** | ✅ **Async context propagation, distributed tracing** | ❌ Basic context support | ✅ Excellent context support | ❌ Manual context management | ❌ No context support | ❌ No context support |
 | **📈 Built-in Metrics** | ✅ **Performance monitoring, health checks** | ❌ No built-in metrics | ❌ No built-in metrics | ❌ No built-in metrics | ❌ No built-in metrics | ❌ No built-in metrics |
 | **🔧 Hot-Reload Config** | ✅ **Runtime config changes, environment detection** | ⚠️ Limited hot-reload | ❌ No hot-reload | ❌ No hot-reload | ❌ No hot-reload | ❌ No hot-reload |
@@ -48,7 +48,7 @@ MickTrace is the world’s most advanced and high-performance Python logging lib
 - **Zero Configuration Required** - Works out of the box, configure when needed
 - **Async-Native Performance** - Sub-microsecond overhead when logging disabled
 - **Structured by Default** - JSON, logfmt, and custom formats built-in
-- **Cloud-Ready** - Native AWS, Azure, GCP integrations with graceful fallbacks
+- **Cloud-Ready** - Native [AWS](https://aws.amazon.com/) (@aws), [Azure](https://azure.microsoft.com/) (@Azure), [GCP](https://cloud.google.com/) (@GoogleCloudPlatform) integrations with graceful fallbacks
 - **Memory Safe** - No memory leaks, proper cleanup, production-tested
 
 ### **For Library Developers**
@@ -75,7 +75,7 @@ Based on extensive research and production experience, here are the most painful
 - **Performance Disasters**: Standard logging can be **3-7x slower** than manual file writes, causing significant application slowdowns
 - **Configuration Hell**: Spending hours setting up handlers, formatters, and filters with complex boilerplate code
 - **Security Vulnerabilities**: Accidentally logging passwords, API keys, and PII data in production systems
-- **Cloud Integration Chaos**: Juggling multiple tools and complex configurations to ship logs to DataDog, AWS, etc.
+- **Cloud Integration Chaos**: Juggling multiple tools and complex configurations to ship logs to [Datadog](https://www.datadoghq.com/) (@DataDog), [AWS](https://aws.amazon.com/) (@aws), etc.
 - **Library Pollution**: Third-party libraries breaking your logging setup with global state modifications
 - **Async Headaches**: Blocking I/O operations that destroy async application performance
 - **Debug Nightmares**: Missing context when you need to trace issues across distributed systems
@@ -102,13 +102,13 @@ pip install micktrace
 
 ### Cloud Platform Integration
 ```bash
-# AWS CloudWatch
+# AWS CloudWatch (https://aws.amazon.com/cloudwatch/)
 pip install micktrace[aws]
 
-# Azure Monitor  
+# Azure Monitor (https://azure.microsoft.com/en-us/services/monitor/)
 pip install micktrace[azure]
 
-# Google Cloud Logging
+# Google Cloud Logging (https://cloud.google.com/logging)
 pip install micktrace[gcp]
 
 # All cloud platforms
@@ -117,13 +117,13 @@ pip install micktrace[cloud]
 
 ### Analytics & Monitoring
 ```bash
-# Datadog integration
+# Datadog integration (https://www.datadoghq.com/)
 pip install micktrace[datadog]
 
-# New Relic integration
+# New Relic integration (https://newrelic.com/)
 pip install micktrace[newrelic]
 
-# Elastic Stack integration
+# Elastic Stack integration (https://www.elastic.co/)
 pip install micktrace[elastic]
 
 # All analytics tools
@@ -138,7 +138,7 @@ pip install micktrace[rich]
 # Performance monitoring
 pip install micktrace[performance]
 
-# OpenTelemetry integration
+# OpenTelemetry integration (https://opentelemetry.io/)
 pip install micktrace[opentelemetry]
 
 # Everything included
@@ -264,10 +264,10 @@ MickTrace solves these fundamental architectural problems through intelligent de
 - **Automatic serialization** - handles complex Python objects
 
 ### **🌐 Cloud Native**
-- **AWS CloudWatch** - native integration with batching and retry
-- **Azure Monitor** - structured logging to Azure
-- **Google Cloud Logging** - GCP-native structured logs
-- **Kubernetes ready** - proper JSON output for container environments
+- **[AWS CloudWatch](https://aws.amazon.com/cloudwatch/) (@aws)** - native integration with batching and retry
+- **[Azure Monitor](https://azure.microsoft.com/en-us/services/monitor/) (@Azure)** - structured logging to Azure
+- **[Google Cloud Logging](https://cloud.google.com/logging) (@GoogleCloudPlatform)** - GCP-native structured logs
+- **[Kubernetes](https://kubernetes.io/) (@kubernetes) ready** - proper JSON output for container environments
 
 ### **🔄 Context Management**
 - **Request tracing** - automatic correlation IDs
@@ -285,7 +285,7 @@ MickTrace solves these fundamental architectural problems through intelligent de
 
 ## 🏢 Cloud Platform Integration
 
-### **AWS CloudWatch**
+### **[AWS](https://aws.amazon.com/) (@aws) CloudWatch**
 ```python
 import micktrace
 
@@ -303,7 +303,7 @@ logger = micktrace.get_logger(__name__)
 logger.info("Lambda function executed", duration_ms=150, memory_used=64)
 ```
 
-### **Azure Monitor**
+### **[Azure](https://azure.microsoft.com/) (@Azure) Monitor**
 ```python
 import micktrace
 
@@ -319,7 +319,7 @@ logger = micktrace.get_logger(__name__)
 logger.info("Azure function completed", execution_time=200)
 ```
 
-### **Google Cloud Logging**
+### **[Google Cloud](https://cloud.google.com/) (@GoogleCloudPlatform) Logging**
 ```python
 import micktrace
 
@@ -355,7 +355,7 @@ micktrace.configure(
 
 ## 📈 Analytics & Monitoring Integration
 
-### **Datadog Integration**
+### **[Datadog](https://www.datadoghq.com/) (@DataDog) Integration**
 ```python
 import micktrace
 
@@ -373,7 +373,7 @@ logger = micktrace.get_logger(__name__)
 logger.info("Payment processed", amount=100.0, currency="USD", customer_id=12345)
 ```
 
-### **New Relic Integration**
+### **[New Relic](https://newrelic.com/) (@newrelic) Integration**
 ```python
 import micktrace
 
@@ -390,7 +390,7 @@ logger = micktrace.get_logger(__name__)
 logger.info("Database query", table="users", duration_ms=45, rows_returned=150)
 ```
 
-### **Elastic Stack Integration**
+### **[Elastic Stack](https://www.elastic.co/) (@elastic) Integration**
 ```python
 import micktrace
 
@@ -414,7 +414,7 @@ logger.info("Search query", query="python logging", results=1250, response_time_
 ### **Web Applications**
 ```python
 import micktrace
-from flask import Flask, request
+from flask import Flask, request  # Flask: https://flask.palletsprojects.com/
 
 app = Flask(__name__)
 
@@ -617,7 +617,7 @@ micktrace.configure(
 ### **Testing Support**
 ```python
 import micktrace
-import pytest
+import pytest  # pytest: https://pytest.org/
 
 def test_my_function():
     # Capture logs during testing
@@ -689,8 +689,8 @@ A recent study comparing logging libraries in production environments showed:
 
 | **Scenario** | **MickTrace** | **Loguru** | **Standard Logging** |
 |--------------|---------------|------------|---------------------|
-| **Django API (1000 req/sec)** | **2ms avg response** | 4ms avg response | 8ms avg response |
-| **FastAPI async (5000 req/sec)** | **1.2ms avg response** | 3ms avg response (blocking) | N/A (breaks async) |
+| **[Django](https://www.djangoproject.com/) (@django) API (1000 req/sec)** | **2ms avg response** | 4ms avg response | 8ms avg response |
+| **[FastAPI](https://fastapi.tiangolo.com/) (@tiangolo) async (5000 req/sec)** | **1.2ms avg response** | 3ms avg response (blocking) | N/A (breaks async) |
 | **Data pipeline (100K records)** | **15 seconds** | 45 seconds | 120 seconds |
 | **Memory usage (24hr run)** | **Constant 50MB** | Growing to 200MB | Growing to 400MB |
 
@@ -769,9 +769,9 @@ pip install -e .[all]
 pytest tests/ --cov=micktrace
 
 # Check code quality
-black src/ tests/
-mypy src/
-ruff check src/ tests/
+black src/ tests/  # Black: https://black.readthedocs.io/
+mypy src/  # mypy: https://mypy-lang.org/
+ruff check src/ tests/  # Ruff: https://docs.astral.sh/ruff/
 ```
 
 ### **Test Suite**
@@ -800,6 +800,38 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - **Author**: [Ajay Agrawal](https://github.com/ajayagrawalgit)
 - **LinkedIn**: [https://www.linkedin.com/in/theajayagrawal/](https://www.linkedin.com/in/theajayagrawal/)
 - **Issues**: [https://github.com/ajayagrawalgit/MickTrace/issues](https://github.com/ajayagrawalgit/MickTrace/issues)
+
+---
+
+## 🤝 Integrated Platforms & Technologies
+
+MickTrace provides native integrations with industry-leading platforms and technologies:
+
+### **Cloud Platforms**
+- **[AWS](https://aws.amazon.com/)** (@aws) - Amazon Web Services CloudWatch integration
+- **[Microsoft Azure](https://azure.microsoft.com/)** (@Azure) - Azure Monitor integration  
+- **[Google Cloud Platform](https://cloud.google.com/)** (@GoogleCloudPlatform) - Cloud Logging integration
+
+### **Monitoring & Analytics**
+- **[Datadog](https://www.datadoghq.com/)** (@DataDog) - Application performance monitoring
+- **[New Relic](https://newrelic.com/)** (@newrelic) - Observability platform integration
+- **[Elastic](https://www.elastic.co/)** (@elastic) - Elasticsearch and Elastic Stack support
+
+### **Container & Orchestration**
+- **[Kubernetes](https://kubernetes.io/)** (@kubernetes) - Container orchestration platform
+- **[Docker](https://www.docker.com/)** (@docker) - Containerization platform
+
+### **Observability Standards**
+- **[OpenTelemetry](https://opentelemetry.io/)** (@open-telemetry) - Observability framework
+
+### **Web Frameworks**
+- **[Django](https://www.djangoproject.com/)** (@django) - Python web framework
+- **[FastAPI](https://fastapi.tiangolo.com/)** (@tiangolo) - Modern async web framework
+- **[Flask](https://flask.palletsprojects.com/)** (@pallets) - Lightweight web framework
+
+### **Development Tools**
+- **[pytest](https://pytest.org/)** (@pytest-dev) - Testing framework
+- **[mypy](https://mypy-lang.org/)** (@python/mypy) - Static type checker
 
 ---
 
