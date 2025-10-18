@@ -7,9 +7,16 @@ All notable changes to MickTrace Python logging library will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - 2025-10-18 - README Updates
+## [Unreleased] - 2025-10-18 - GCP Handler Alias & Documentation
 ### Added
-- **Acknowledgments** - Added acknowledgments section for integration mentions
+- **GCP Handler Alias** - Added `GoogleCloudHandler`, `GCPHandler`, and `AsyncGCPHandler` as user-friendly aliases for Stackdriver handlers
+- **Handler Type Support** - Added support for `"gcp"` handler type in configuration (in addition to existing `"stackdriver"`)
+- **New Handler Files** - Created `gcp.py` and `async_gcp.py` modules for better discoverability
+- **Acknowledgments** - Added professional acknowledgments section for integration mentions in README
+
+### Changed
+- **README Examples** - Updated Google Cloud Logging examples to use `"gcp"` handler type instead of `"stackdriver"`
+- **Handler Exports** - Updated `handlers/__init__.py` to export GCP handler aliases
 
 ## [Unreleased] - 2025-10-18 - CI/CD Enhancements
 ### Added
