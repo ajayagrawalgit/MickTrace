@@ -7,6 +7,20 @@ All notable changes to MickTrace Python logging library will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2025-10-18 - CI/CD Enhancements
+### Added
+- **Automated linting workflow** - GitHub Actions workflow for autopep8 linting on push and pull requests
+  - Runs autopep8 checks automatically on `main` and `add-autopep8-wf` branches
+  - Provides helpful PR comments with fix instructions when linting fails
+  - Includes pip dependency caching for faster CI runs
+  - Confirms successful linting with positive feedback comments
+
+### Changed
+- Enhanced CI/CD pipeline with automated code quality checks
+- Improved developer feedback loop with actionable linting messages
+
+---
+
 ## [1.0.1] - 2025-10-10 - PEP8 Compliance & Tooling Updates
 ### Changed
 - **PEP8 compliance improvements** - Enhanced code formatting and style consistency across the codebase
@@ -74,3 +88,4 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
 - Usage examples for all major features
 - Integration guides for libraries and applications
 - Performance optimization tips
+

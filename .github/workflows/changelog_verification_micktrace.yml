@@ -1,0 +1,56 @@
+name: Check for Changelog Update
+
+on:
+  push:
+    branches: [main, changelog-verification-wf]
+  pull_request:
+    branches: [main, changelog-verification-wf]
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check if CHANGELOG.md is modified
+        id: changelog
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+          if git diff --name-only origin/${{ github.event.pull_request.base.ref }} | grep -q '^CHANGELOG.md$'; then
+            echo "found=true" >> $GITHUB_OUTPUT
+          else
+            echo "found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Fail if changelog not updated
+        if: steps.changelog.outputs.found == 'false'
+        run: |
+          echo "ERROR: CHANGELOG.md was not modified in this PR. Please add an entry describing your changes."
+          exit 1
+
+      - name: Comment for missing changelog
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❗ **Your PR is missing a CHANGELOG.md update.**\n\nPlease add or update an entry in `CHANGELOG.md` describing your changes.\nIf this PR is docs-only or doesn\'t require a changelog entry, ask a maintainer to add the label `skip-changelog` to allow merging.'
+            })
+
+      - name: Comment for successful changelog update
+        if: success() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ **Changelog updated! Thank you for documenting your changes.**'
+            })
