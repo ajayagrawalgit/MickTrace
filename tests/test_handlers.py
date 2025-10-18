@@ -94,7 +94,8 @@ class TestHandlerCreation:
         micktrace.configure(
             level="INFO",
             handlers=[
-                {"type": "file", "path": "test1.log"}  # Direct in handler config
+                # Direct in handler config
+                {"type": "file", "path": "test1.log"}
             ],
         )
 
@@ -145,7 +146,8 @@ class TestHandlerCreation:
         try:
             micktrace.configure(
                 level="INFO",
-                handlers=[{"type": "azure", "config": {"connection_string": "test"}}],
+                handlers=[{"type": "azure", "config": {
+                    "connection_string": "test"}}],
             )
 
             logger = micktrace.get_logger("azure_test")
@@ -203,7 +205,8 @@ class TestHandlerCreation:
                 level="DEBUG",
                 handlers=[
                     {"type": "console", "level": "INFO"},
-                    {"type": "file", "level": "DEBUG", "config": {"path": tmp_path}},
+                    {"type": "file", "level": "DEBUG",
+                        "config": {"path": tmp_path}},
                 ],
             )
 
@@ -244,7 +247,8 @@ class TestHandlerErrorHandling:
         """Test that runtime handler errors don't crash logging."""
         micktrace.configure(
             level="INFO",
-            handlers=[{"type": "console"}, {"type": "memory"}],  # Fallback handler
+            handlers=[{"type": "console"}, {
+                "type": "memory"}],  # Fallback handler
         )
 
         logger = micktrace.get_logger("runtime_error_test")
@@ -320,7 +324,7 @@ class TestConsoleHandlerAdditionalParameters:
 
         # Create console handler directly
         handler = ConsoleHandler()
-        
+
         # Create log record with additional parameter
         record = LogRecord(
             timestamp=1234567890.123,
@@ -329,13 +333,13 @@ class TestConsoleHandlerAdditionalParameters:
             message="Test message",
             data={"info": "hey"}
         )
-        
+
         # Emit the record
         handler.emit(record)
-        
+
         # Capture output
         captured = capsys.readouterr()
-        
+
         # Verify output contains both message and parameter
         assert "Test message" in captured.err
         assert "info=hey" in captured.err
@@ -347,7 +351,7 @@ class TestConsoleHandlerAdditionalParameters:
         from micktrace.types import LogRecord
 
         handler = ConsoleHandler()
-        
+
         record = LogRecord(
             timestamp=1234567890.456,
             level="WARNING",
@@ -355,10 +359,10 @@ class TestConsoleHandlerAdditionalParameters:
             message="Multiple params test",
             data={"user_id": 12345, "action": "login", "success": True}
         )
-        
+
         handler.emit(record)
         captured = capsys.readouterr()
-        
+
         # Verify all parameters are present
         assert "Multiple params test" in captured.err
         assert "user_id=12345" in captured.err
@@ -371,7 +375,7 @@ class TestConsoleHandlerAdditionalParameters:
         from micktrace.types import LogRecord
 
         handler = ConsoleHandler()
-        
+
         record = LogRecord(
             timestamp=1234567890.789,
             level="ERROR",
@@ -379,10 +383,10 @@ class TestConsoleHandlerAdditionalParameters:
             message="Simple error message",
             data={}
         )
-        
+
         handler.emit(record)
         captured = capsys.readouterr()
-        
+
         # Should only contain basic log info
         assert "Simple error message" in captured.err
         assert "1234567890.789 ERROR" in captured.err
@@ -397,7 +401,7 @@ class TestConsoleHandlerAdditionalParameters:
         from micktrace.types import LogRecord
 
         handler = ConsoleHandler()
-        
+
         record = LogRecord(
             timestamp=1234567890.999,
             level="DEBUG",
@@ -409,10 +413,10 @@ class TestConsoleHandlerAdditionalParameters:
                 "user": "test"
             }
         )
-        
+
         handler.emit(record)
         captured = capsys.readouterr()
-        
+
         # Should contain visible parameters but not timestamp_iso
         assert "info=visible" in captured.err
         assert "user=test" in captured.err
@@ -424,7 +428,7 @@ class TestConsoleHandlerAdditionalParameters:
         from micktrace.types import LogRecord
 
         handler = ConsoleHandler()
-        
+
         record = LogRecord(
             timestamp=1234567890.111,
             level="INFO",
@@ -440,10 +444,10 @@ class TestConsoleHandlerAdditionalParameters:
                 "list_val": [1, 2, 3]
             }
         )
-        
+
         handler.emit(record)
         captured = capsys.readouterr()
-        
+
         # Verify all data types are converted to strings properly
         assert "string_val=hello" in captured.err
         assert "int_val=42" in captured.err
@@ -459,7 +463,7 @@ class TestConsoleHandlerAdditionalParameters:
         from micktrace.types import LogRecord
 
         handler = ConsoleHandler()
-        
+
         # Test with potentially problematic data
         record = LogRecord(
             timestamp=1234567890.222,
@@ -468,7 +472,7 @@ class TestConsoleHandlerAdditionalParameters:
             message="Error handling test",
             data={"special_chars": "üñíçødé", "large_data": "x" * 1000}
         )
-        
+
         # Should not raise exception
         try:
             handler.emit(record)
@@ -501,7 +505,7 @@ class TestHandlerConsistency:
             # Create handlers
             console_handler = ConsoleHandler()
             file_handler = FileHandler(filename=temp_file)
-            
+
             # Create test record with additional parameters
             record = LogRecord(
                 timestamp=1234567890.555,
@@ -510,27 +514,27 @@ class TestHandlerConsistency:
                 message="Consistency test message",
                 data={"param1": "value1", "param2": 42, "param3": True}
             )
-            
+
             # Emit to both handlers
             console_handler.emit(record)
             file_handler.emit(record)
-            
+
             # Read file content
             with open(temp_file, 'r') as f:
                 file_content = f.read().strip()
-            
+
             # Parse JSON from file
             file_data = json.loads(file_content)
-            
+
             # Verify file handler stored all data
             assert file_data["message"] == "Consistency test message"
             assert file_data["data"]["param1"] == "value1"
             assert file_data["data"]["param2"] == 42
             assert file_data["data"]["param3"] == True
-            
+
             # Console handler should have displayed the parameters
             # (We can't easily capture stderr in this test, but the structure is tested above)
-            
+
         finally:
             # Clean up
             import os
@@ -541,7 +545,7 @@ class TestHandlerConsistency:
         """Test integrated logger functionality with additional parameters."""
         import tempfile
         import json
-        
+
         # Create temporary file
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.log') as f:
             temp_file = f.name
@@ -552,27 +556,28 @@ class TestHandlerConsistency:
                 level="DEBUG",
                 handlers=[
                     {"type": "console", "level": "INFO"},
-                    {"type": "file", "level": "DEBUG", "config": {"path": temp_file}}
+                    {"type": "file", "level": "DEBUG",
+                        "config": {"path": temp_file}}
                 ]
             )
-            
+
             logger = micktrace.get_logger("integration_test")
-            
+
             # Test various logging scenarios
             logger.info("Simple message")
             logger.info("Message with single param", user="john")
-            logger.warning("Message with multiple params", 
-                         user_id=123, action="login", success=True, ip="192.168.1.1")
-            logger.error("Error with context", 
-                        error_code=500, module="auth", details={"reason": "timeout"})
-            
+            logger.warning("Message with multiple params",
+                           user_id=123, action="login", success=True, ip="192.168.1.1")
+            logger.error("Error with context",
+                         error_code=500, module="auth", details={"reason": "timeout"})
+
             # Verify file contains all the data
             with open(temp_file, 'r') as f:
                 lines = f.readlines()
-            
+
             # Should have 4 log entries
             assert len(lines) == 4
-            
+
             # Parse and verify each entry
             for line in lines:
                 data = json.loads(line.strip())
@@ -580,16 +585,16 @@ class TestHandlerConsistency:
                 assert "level" in data
                 assert "message" in data
                 assert "data" in data
-            
+
             # Verify specific entries
             line2_data = json.loads(lines[1].strip())
             assert line2_data["data"]["user"] == "john"
-            
+
             line3_data = json.loads(lines[2].strip())
             assert line3_data["data"]["user_id"] == 123
             assert line3_data["data"]["action"] == "login"
             assert line3_data["data"]["success"] == True
-            
+
         finally:
             # Clean up
             import os
@@ -610,7 +615,7 @@ class TestConsoleHandlerEdgeCases:
         from micktrace.types import LogRecord
 
         handler = ConsoleHandler()
-        
+
         record = LogRecord(
             timestamp=1234567890.0,
             level="INFO",
@@ -618,10 +623,10 @@ class TestConsoleHandlerEdgeCases:
             message="Empty data test",
             data={}
         )
-        
+
         handler.emit(record)
         captured = capsys.readouterr()
-        
+
         # Should only show basic log info, no extra parameters
         assert "Empty data test" in captured.err
         assert "=" not in captured.err
@@ -632,7 +637,7 @@ class TestConsoleHandlerEdgeCases:
         from micktrace.types import LogRecord
 
         handler = ConsoleHandler()
-        
+
         # Manually create record with None data (edge case)
         record = LogRecord(
             timestamp=1234567890.0,
@@ -641,7 +646,7 @@ class TestConsoleHandlerEdgeCases:
             message="None data test"
         )
         record.data = None  # Force None data
-        
+
         # Should handle gracefully without crashing
         try:
             handler.emit(record)
@@ -656,7 +661,7 @@ class TestConsoleHandlerEdgeCases:
         from micktrace.types import LogRecord
 
         handler = ConsoleHandler()
-        
+
         record = LogRecord(
             timestamp=1234567890.0,
             level="INFO",
@@ -670,10 +675,10 @@ class TestConsoleHandlerEdgeCases:
                 "newlines": "value\nwith\nnewlines"
             }
         )
-        
+
         handler.emit(record)
         captured = capsys.readouterr()
-        
+
         # Should handle all special characters without crashing
         assert "Special chars test" in captured.err
         # All parameters should be present in some form

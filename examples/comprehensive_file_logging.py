@@ -117,7 +117,8 @@ class ComprehensiveLoggingDemo:
             version=SERVICE_VERSION,
             environment=ENVIRONMENT,
             handlers=[
-                {"type": "file", "level": "DEBUG", "config": {"path": str(LOG_FILE)}}
+                {"type": "file", "level": "DEBUG",
+                    "config": {"path": str(LOG_FILE)}}
             ],
         )
 
@@ -271,7 +272,8 @@ class ComprehensiveLoggingDemo:
 
             # Simulate different outcomes
             outcome = random.choices(
-                ["success", "insufficient_funds", "fraud_detected", "network_error"],
+                ["success", "insufficient_funds",
+                    "fraud_detected", "network_error"],
                 weights=[0.7, 0.15, 0.1, 0.05],
             )[0]
 
@@ -362,7 +364,8 @@ class ComprehensiveLoggingDemo:
                 )
 
         # API endpoint monitoring
-        endpoints = ["/api/users", "/api/transactions", "/api/auth", "/api/reports"]
+        endpoints = ["/api/users", "/api/transactions",
+                     "/api/auth", "/api/reports"]
         for endpoint in endpoints:
             status_code = random.choices(
                 [200, 404, 500, 503], weights=[0.8, 0.1, 0.05, 0.05]
@@ -519,7 +522,8 @@ class ComprehensiveLoggingDemo:
                 ),
                 "success_rate_percent": (
                     round(
-                        (len(completed_transactions) / len(self.transactions)) * 100, 2
+                        (len(completed_transactions) /
+                         len(self.transactions)) * 100, 2
                     )
                     if self.transactions
                     else 0

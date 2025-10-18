@@ -187,7 +187,8 @@ def simulate_database_performance():
             operation=query.split()[0],
         )
 
-        query_logger.debug("Executing database query", query=query[:50] + "...")
+        query_logger.debug("Executing database query",
+                           query=query[:50] + "...")
 
         # Execute query
         result = database_query(query, table)

@@ -39,7 +39,8 @@ from uuid import uuid4
 T = TypeVar("T")
 
 # Global context variable for async-safe context propagation
-_context_var: ContextVar[Dict[str, Any]] = ContextVar("micktrace_context", default={})
+_context_var: ContextVar[Dict[str, Any]] = ContextVar(
+    "micktrace_context", default={})
 
 
 def get_context() -> Dict[str, Any]:

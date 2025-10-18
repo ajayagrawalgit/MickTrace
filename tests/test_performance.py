@@ -37,7 +37,8 @@ class TestLoggingPerformance:
     def test_disabled_logging_performance(self):
         """Test performance when logging is disabled."""
         micktrace.configure(
-            level="CRITICAL", handlers=[{"type": "console"}]  # Disable INFO/DEBUG logs
+            # Disable INFO/DEBUG logs
+            level="CRITICAL", handlers=[{"type": "console"}]
         )
 
         logger = micktrace.get_logger("disabled_test")
@@ -75,7 +76,8 @@ class TestLoggingPerformance:
         start_time = time.time()
 
         for i in range(1000):
-            logger.info("Complex structured message", iteration=i, **complex_data)
+            logger.info("Complex structured message",
+                        iteration=i, **complex_data)
 
         end_time = time.time()
         duration = end_time - start_time
@@ -128,7 +130,8 @@ class TestLoggingPerformance:
 
         async def log_worker(worker_id: int):
             for i in range(100):
-                logger.info("Async performance test", worker_id=worker_id, iteration=i)
+                logger.info("Async performance test",
+                            worker_id=worker_id, iteration=i)
 
         start_time = time.time()
 

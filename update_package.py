@@ -15,7 +15,8 @@ def update_version(new_version):
     # Update pyproject.toml
     pyproject_path = Path("pyproject.toml")
     content = pyproject_path.read_text()
-    content = re.sub(r'version = "[^"]*"', f'version = "{new_version}"', content)
+    content = re.sub(r'version = "[^"]*"',
+                     f'version = "{new_version}"', content)
     pyproject_path.write_text(content)
     print(f"✅ Updated pyproject.toml to version {new_version}")
     # Update __init__.py
@@ -42,7 +43,8 @@ def build_and_upload():
     )
     print("🧹 Cleaned previous builds")
     # Build package
-    result = subprocess.run(["python", "-m", "build"], capture_output=True, text=True)
+    result = subprocess.run(["python", "-m", "build"],
+                            capture_output=True, text=True)
     if result.returncode != 0:
         print(f"❌ Build failed: {result.stderr}")
         return False
@@ -83,7 +85,8 @@ def main():
     # Build and upload
     if build_and_upload():
         print(f"\n🎉 MickTrace v{new_version} is now live on PyPI!")
-        print(f"📦 Users can now install with: pip install micktrace=={new_version}")
+        print(
+            f"📦 Users can now install with: pip install micktrace=={new_version}")
     else:
         print("\n❌ Update failed. Check errors above.")
 

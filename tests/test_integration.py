@@ -42,7 +42,8 @@ class TestRealWorldScenarios:
 
             # Simulate database operations
             db_logger = logger.bind(component="database")
-            db_logger.info("Executing query", table="users", operation="INSERT")
+            db_logger.info("Executing query", table="users",
+                           operation="INSERT")
             db_logger.info("Query completed", rows_affected=1)
 
             # Simulate response
@@ -169,11 +170,13 @@ class TestRealWorldScenarios:
                 item_logger = logger.bind(item_id=item["id"])
 
                 try:
-                    item_logger.debug("Processing item", item_data=item["data"])
+                    item_logger.debug("Processing item",
+                                      item_data=item["data"])
 
                     # Simulate processing (some items fail)
                     if item["id"] % 7 == 0:  # Simulate failure
-                        raise RuntimeError(f"Processing failed for item {item['id']}")
+                        raise RuntimeError(
+                            f"Processing failed for item {item['id']}")
 
                     item_logger.info("Item processed successfully")
                     processed_count += 1
@@ -205,7 +208,8 @@ class TestRealWorldScenarios:
                 level="DEBUG",
                 handlers=[
                     {"type": "console", "level": "INFO"},
-                    {"type": "file", "level": "DEBUG", "config": {"path": tmp_path}},
+                    {"type": "file", "level": "DEBUG",
+                        "config": {"path": tmp_path}},
                     {"type": "memory", "level": "WARNING"},
                 ],
             )
@@ -298,7 +302,8 @@ class TestLibraryIntegration:
             def query(self, sql: str):
                 query_logger = self.logger.bind(operation="query")
                 query_logger.debug("Executing query", sql=sql)
-                query_logger.info("Query executed successfully", rows_returned=5)
+                query_logger.info(
+                    "Query executed successfully", rows_returned=5)
                 return ["row1", "row2", "row3", "row4", "row5"]
 
         micktrace.configure(level="DEBUG", handlers=[{"type": "memory"}])
@@ -336,7 +341,8 @@ class TestLibraryIntegration:
 
                     await asyncio.sleep(0.02)
 
-                    self.logger.info("HTTP POST request completed", status_code=201)
+                    self.logger.info(
+                        "HTTP POST request completed", status_code=201)
                     return {"status": 201, "id": "created"}
 
         micktrace.configure(level="INFO", handlers=[{"type": "memory"}])
@@ -389,7 +395,8 @@ class TestEndToEndScenarios:
             # Authentication
             auth_logger = api_logger.bind(component="auth")
             auth_logger.info("Authenticating user")
-            auth_logger.info("User authenticated successfully", auth_method="jwt")
+            auth_logger.info(
+                "User authenticated successfully", auth_method="jwt")
 
             # Business logic
             business_logger = api_logger.bind(component="business_logic")
@@ -434,7 +441,8 @@ class TestEndToEndScenarios:
                     operation="signup", correlation_id=correlation_id
                 )
 
-                signup_logger.info("User signup started", email=user_data["email"])
+                signup_logger.info("User signup started",
+                                   email=user_data["email"])
 
                 # Validate user data
                 await asyncio.sleep(0.01)
@@ -446,7 +454,8 @@ class TestEndToEndScenarios:
 
                 # Create user account
                 await asyncio.sleep(0.03)
-                signup_logger.info("User account created", user_id=user_data["id"])
+                signup_logger.info("User account created",
+                                   user_id=user_data["id"])
 
                 # Send welcome email
                 await asyncio.sleep(0.02)

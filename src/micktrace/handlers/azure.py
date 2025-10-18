@@ -97,7 +97,8 @@ class AzureMonitorHandler:
 
         # Add exception data if present
         if record.exception:
-            entry["custom_dimensions"]["exception_type"] = record.exception.get("type")
+            entry["custom_dimensions"]["exception_type"] = record.exception.get(
+                "type")
             entry["custom_dimensions"]["exception_message"] = record.exception.get(
                 "message"
             )

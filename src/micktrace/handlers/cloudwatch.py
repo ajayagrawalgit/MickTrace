@@ -136,7 +136,8 @@ class CloudWatchHandler:
             log_events = [
                 {
                     "timestamp": entry["timestamp"],
-                    "message": str(entry),  # Convert dict to string for CloudWatch
+                    # Convert dict to string for CloudWatch
+                    "message": str(entry),
                 }
                 for entry in self._buffer
             ]

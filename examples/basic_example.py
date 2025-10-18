@@ -45,13 +45,15 @@ async def demonstrate_basic_logging():
 
     # Different log levels with rich data
     logger.debug("Debug information", details="only visible in debug")
-    logger.warning("Something suspicious", threat_level="low", action_required=True)
+    logger.warning("Something suspicious",
+                   threat_level="low", action_required=True)
 
     # Error logging with exception
     try:
         raise ValueError("Database connection failed")
     except Exception as e:
-        logger.error("An error occurred", error_code=500, retryable=True, exc_info=e)
+        logger.error("An error occurred", error_code=500,
+                     retryable=True, exc_info=e)
 
     # Regular logging (async logging not available in current API)
     logger.info("Operation completed", duration=1.23, status="success")
@@ -66,7 +68,8 @@ async def demonstrate_context():
     print("=== Context and Bound Logger Demo ===")
 
     # Create bound logger with context
-    request_logger = logger.bind(request_id="req_12345", operation="get_user_profile")
+    request_logger = logger.bind(
+        request_id="req_12345", operation="get_user_profile")
 
     # Log service operations with automatic context
     request_logger.info("Processing request")

@@ -65,7 +65,8 @@ class AdaptiveSampler:
 
         if error_rate >= self.error_threshold:
             # Increase sampling rate based on how much we exceed the threshold
-            factor = 1.0 + ((error_rate - self.error_threshold) / self.error_threshold)
+            factor = 1.0 + \
+                ((error_rate - self.error_threshold) / self.error_threshold)
             return min(max_rate, base_rate * factor)
 
         return max(min_rate, base_rate)

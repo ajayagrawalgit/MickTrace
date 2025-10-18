@@ -28,7 +28,7 @@ except ImportError:
 
 __all__ = [
     "ConsoleHandler",
-    "NullHandler", 
+    "NullHandler",
     "MemoryHandler",
     "FileHandler",
     "CloudWatchHandler",

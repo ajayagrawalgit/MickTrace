@@ -63,7 +63,8 @@ class SmartBuffer:
         self.compression_level = compression_level
 
         # Initialize partitions
-        self._partitions: Dict[str, BufferPartition] = defaultdict(BufferPartition)
+        self._partitions: Dict[str, BufferPartition] = defaultdict(
+            BufferPartition)
         self._active_partition = "default"
         self._partition_lock = threading.Lock()
 
@@ -112,10 +113,12 @@ class SmartBuffer:
             ).encode("utf-8")
 
             # Compress with GZIP
-            compressed = gzip.compress(json_data, compresslevel=self.compression_level)
+            compressed = gzip.compress(
+                json_data, compresslevel=self.compression_level)
 
             # Update metrics
-            partition.metrics.compression_ratio = len(compressed) / len(json_data)
+            partition.metrics.compression_ratio = len(
+                compressed) / len(json_data)
             partition.metrics.total_bytes = len(compressed)
             partition.compressed_data = compressed
 
@@ -192,7 +195,8 @@ class SmartBuffer:
         with partition.lock:
             if partition.compressed_data and decompress:
                 # Decompress and reconstruct records
-                json_data = gzip.decompress(partition.compressed_data).decode("utf-8")
+                json_data = gzip.decompress(
+                    partition.compressed_data).decode("utf-8")
                 records_data = json.loads(json_data)
                 return [LogRecord(**data) for data in records_data]
             return partition.records.copy()

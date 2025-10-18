@@ -163,7 +163,8 @@ async def demonstrate_async_logging():
     tasks = [process_item(i) for i in range(1, 6)]
     results = await asyncio.gather(*tasks)
 
-    logger.info("Async batch completed", results_count=len(results), results=results)
+    logger.info("Async batch completed",
+                results_count=len(results), results=results)
 
     print("✅ Async logging completed!")
 
@@ -172,7 +173,8 @@ def demonstrate_performance_monitoring():
     """Demonstrate performance monitoring patterns."""
     print("\n=== Performance Monitoring ===")
 
-    logger = micktrace.get_logger("perf_demo").bind(component="performance_monitor")
+    logger = micktrace.get_logger("perf_demo").bind(
+        component="performance_monitor")
 
     # Simulate different operations with timing
     operations = [

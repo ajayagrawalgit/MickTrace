@@ -35,10 +35,12 @@ def main():
     logger = micktrace.get_logger("simple_example")
 
     # Log some messages
-    logger.info("Application started", version="1.0.0", environment="production")
+    logger.info("Application started", version="1.0.0",
+                environment="production")
     logger.info("Processing user request", user_id=12345, action="login")
     logger.warning("Rate limit approaching", current_requests=950, limit=1000)
-    logger.error("Database connection failed", error_code="DB_001", retry_count=3)
+    logger.error("Database connection failed",
+                 error_code="DB_001", retry_count=3)
     logger.info("Application shutdown", uptime_seconds=3600)
 
     print("✅ Logs written to logs/simple_example.log")

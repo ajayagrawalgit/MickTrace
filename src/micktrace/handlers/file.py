@@ -116,7 +116,8 @@ class FileHandler:
                     f.flush()
                     os.fsync(f.fileno())  # Force write to disk
             except Exception as e:
-                raise IOError(f"Failed to write to {self.filename}: {str(e)}") from e
+                raise IOError(
+                    f"Failed to write to {self.filename}: {str(e)}") from e
         except Exception as e:
             raise IOError(f"Failed to process log record: {str(e)}") from e
 

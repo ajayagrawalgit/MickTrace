@@ -59,12 +59,14 @@ class LogAggregator:
         # Initialize smart buffer
         self.buffer = SmartBuffer(
             max_size=max_buffer_size,
-            compression_threshold=10000 if compression_enabled else float("inf"),
+            compression_threshold=10000 if compression_enabled else float(
+                "inf"),
         )
 
         # Initialize aggregation state
         self._rules: List[AggregationRule] = []
-        self._metrics: Dict[str, AggregationMetrics] = defaultdict(AggregationMetrics)
+        self._metrics: Dict[str, AggregationMetrics] = defaultdict(
+            AggregationMetrics)
         self._windows: Dict[str, Dict[float, List[LogRecord]]] = defaultdict(
             lambda: defaultdict(list)
         )
@@ -165,7 +167,8 @@ class LogAggregator:
                 value = self._get_field_value(record, rule.field)
                 if value is not None:
                     group = f"{rule.field}:{value}"
-                    window_key = int(record.timestamp / rule.window) * rule.window
+                    window_key = int(record.timestamp /
+                                     rule.window) * rule.window
                     self._windows[group][window_key].append(record)
                     self._update_metrics(group, record)
 

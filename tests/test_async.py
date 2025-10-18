@@ -92,7 +92,8 @@ class TestAsyncFunctionality:
             try:
                 await self._async_operation_that_fails()
             except ValueError as e:
-                logger.exception("Async operation failed", error_type=type(e).__name__)
+                logger.exception("Async operation failed",
+                                 error_type=type(e).__name__)
                 # Test passes if exception is handled properly
 
     @pytest.mark.asyncio

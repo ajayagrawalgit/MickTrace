@@ -154,7 +154,8 @@ async def simulate_concurrent_requests():
     )
 
     # Create multiple concurrent requests
-    request_types = ["profile_update", "data_export", "preferences", "analytics"]
+    request_types = ["profile_update",
+                     "data_export", "preferences", "analytics"]
     user_ids = range(1001, 1011)  # 10 users
 
     tasks = []
@@ -176,7 +177,8 @@ async def simulate_concurrent_requests():
     total_time = time.time() - start_time
 
     # Analyze results
-    successful_requests = sum(1 for r in results if not isinstance(r, Exception))
+    successful_requests = sum(
+        1 for r in results if not isinstance(r, Exception))
     failed_requests = len(results) - successful_requests
 
     main_logger.info(
@@ -228,7 +230,8 @@ async def simulate_async_batch_processing():
         start_time = time.time()
 
         # Create tasks for all items in the batch
-        tasks = [process_batch_item(item_id, batch_id) for item_id in range(batch_size)]
+        tasks = [process_batch_item(item_id, batch_id)
+                 for item_id in range(batch_size)]
 
         # Process all items concurrently
         results = await asyncio.gather(*tasks)

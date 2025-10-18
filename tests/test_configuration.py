@@ -56,7 +56,8 @@ class TestConfiguration:
     def test_configuration_validation(self):
         """Test configuration validation and error handling."""
         # Test with invalid level (should handle gracefully)
-        micktrace.configure(level="INVALID_LEVEL", handlers=[{"type": "console"}])
+        micktrace.configure(level="INVALID_LEVEL",
+                            handlers=[{"type": "console"}])
 
         logger = micktrace.get_logger("validation_test")
         logger.info("Validation test with invalid level")
@@ -121,7 +122,8 @@ class TestConfiguration:
         """Test that configuration errors don't break the system."""
         # Try invalid configuration
         try:
-            micktrace.configure(level=None, handlers=None)  # Invalid  # Invalid
+            # Invalid  # Invalid
+            micktrace.configure(level=None, handlers=None)
         except Exception:
             pass  # Expected to handle gracefully
 
