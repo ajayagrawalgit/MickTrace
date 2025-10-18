@@ -7,6 +7,10 @@ All notable changes to MickTrace Python logging library will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2025-10-18 - README Updates
+### Added
+- **Acknowledgments** - Added acknowledgments section for integration mentions
+
 ## [Unreleased] - 2025-10-18 - CI/CD Enhancements
 ### Added
 - **Automated linting workflow** - GitHub Actions workflow for autopep8 linting on push and pull requests
