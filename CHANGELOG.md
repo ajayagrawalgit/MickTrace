@@ -13,7 +13,7 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Handler Type Support** - Added support for `"gcp"` handler type in configuration (in addition to existing `"stackdriver"`)
-- **New Handler Files** - Created `gcp.py` and `async_gcp.py` modules for better discoverability
+- **New Handler Files** - Created `gcp.py` and `async_gcp.py` modules for better discoverability and remove CNAME from the root repository
 - **Acknowledgments** - Added professional acknowledgments section for integration mentions in README
 
 ### Fixed

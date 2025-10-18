@@ -72,7 +72,7 @@ except ImportError:
     LevelFilter = None
 
 # Version and metadata
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 __author__ = "Ajay Agrawal"
 __email__ = "ajayagrawalofficial@gmail.com"
 __license__ = "MIT"

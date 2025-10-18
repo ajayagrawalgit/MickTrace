@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "micktrace"
-version = "1.0.4"
+version = "1.0.5"
 description = "Modern Python logging library for production applications - async-native, structured logging, zero-config, cloud-ready with AWS/Azure/GCP integration, context propagation, and performance optimization"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -159,14 +159,14 @@ line-length = 88
 target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
 
 [tool.mypy]
-python_version = "1.0.4"
+python_version = "1.0.5"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 
 [tool.pytest.ini_options]
-minversion = "1.0.4"
+minversion = "1.0.5"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
@@ -185,7 +185,7 @@ markers = [
 ]
 
 [tool.ruff]
-target-version = "1.0.4"
+target-version = "1.0.5"
 line-length = 88
 
 [tool.isort]
