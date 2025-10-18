@@ -95,6 +95,34 @@ Based on extensive research and production experience, here are the most painful
 
 ## 📦 Installation
 
+
+### Requirements
+
+- **Python:** 3.8 or higher  
+- **Core Dependency:**
+  - `typing-extensions>=4.0.0` *(required only for Python < 3.11)*
+
+### Optional Dependencies
+
+MickTrace provides several optional integrations that can be installed with extras:
+
+| AWS CloudWatch | `aws` | `aioboto3>=11.3.0`, `botocore>=1.31.62` |
+| Azure Monitor | `azure` | `azure-monitor-ingestion>=1.0.0b5`, `azure-core>=1.29.5` |
+| Google Cloud Logging | `gcp` | `google-cloud-logging>=3.8.0` |
+| All Cloud Platforms | `cloud` | includes all cloud dependencies (`aws`, `azure`, `gcp`) |
+| Datadog Integration | `datadog` | `datadog>=0.44.0`, `requests>=2.28.0` |
+| New Relic Monitoring | `newrelic` | `newrelic>=8.0.0` |
+| Elastic Stack | `elastic` | `elasticsearch>=8.0.0` |
+| Prometheus Metrics | `prometheus` | `prometheus-client>=0.16.0` |
+| Sentry Logging | `sentry` | `sentry-sdk>=1.0.0` |
+| Analytics Suite | `analytics` | includes Datadog, New Relic, Elastic, Prometheus, and Sentry |
+| Performance Boost | `performance` | `orjson>=3.8.0`, `msgpack>=1.0.0`, `lz4>=4.0.0` |
+| Rich Console Output | `rich` | `rich>=13.0.0` |
+| OpenTelemetry Support | `opentelemetry` | `opentelemetry-api>=1.15.0`, `opentelemetry-sdk>=1.15.0` |
+| Development Tools | `dev` | `pytest>=7.0`, `pytest-asyncio>=0.21.0`, `pytest-cov>=4.0`, `black>=22.0`, `mypy>=1.0`, `ruff>=0.1.0`, `isort>=5.0` |
+| All Integrations | `all` | includes all optional dependencies |
+
+
 ### Basic Installation
 ```bash
 pip install micktrace
