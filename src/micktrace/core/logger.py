@@ -167,7 +167,7 @@ class Logger:
                     )
                 except ImportError:
                     return None
-            elif handler_type == "stackdriver":
+            elif handler_type == "stackdriver" or handler_type == "gcp":
                 try:
                     from ..handlers.stackdriver import StackdriverHandler
 
@@ -263,7 +263,7 @@ class Logger:
                     )
                 except ImportError:
                     return None
-            elif handler_type == "stackdriver":
+            elif handler_type == "stackdriver" or handler_type == "gcp":
                 try:
                     from ..handlers.stackdriver import StackdriverHandler
 

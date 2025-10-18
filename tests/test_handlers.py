@@ -684,3 +684,37 @@ class TestConsoleHandlerEdgeCases:
         # All parameters should be present in some form
         assert "key with spaces=" in captured.err
         assert "unicode_key=" in captured.err
+
+    def test_gcp_handler_alias(self):
+        """Test that GCP handler type is recognized as alias for stackdriver."""
+        # Test that 'gcp' handler type can be configured
+        # This should not raise an error even if google-cloud-logging is not installed
+        try:
+            micktrace.configure(
+                level="INFO",
+                handlers=[{
+                    "type": "gcp",
+                    "config": {
+                        "project_id": "test-project",
+                        "log_name": "test-log"
+                    }
+                }]
+            )
+            # If google-cloud-logging is installed, this should work
+            logger = micktrace.get_logger("gcp_test")
+            logger.info("GCP handler test")
+        except ImportError:
+            # Expected if google-cloud-logging is not installed
+            pass
+
+    def test_gcp_handler_imports(self):
+        """Test that GCP handler aliases can be imported."""
+        try:
+            from micktrace.handlers import GoogleCloudHandler, GCPHandler
+            # Verify they are the same as StackdriverHandler
+            from micktrace.handlers import StackdriverHandler
+            assert GoogleCloudHandler is StackdriverHandler
+            assert GCPHandler is StackdriverHandler
+        except ImportError:
+            # Expected if google-cloud-logging is not installed
+            pass

@@ -326,7 +326,7 @@ import micktrace
 micktrace.configure(
     level="INFO",
     handlers=[{
-        "type": "stackdriver",
+        "type": "gcp",
         "project_id": "my-gcp-project",
         "log_name": "my-app-log"
     }]
