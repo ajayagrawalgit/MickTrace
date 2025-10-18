@@ -2,9 +2,9 @@ name: Lint and Clean - autopep8
 
 on:
   push:
-    branches: [main, add-autopep8-wf]
+    branches: [main]
   pull_request:
-    branches: [main, add-autopep8-wf]
+    branches: [main]
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.14'
       - name: Get pip cache dir
         id: pip-cache
         run: |
